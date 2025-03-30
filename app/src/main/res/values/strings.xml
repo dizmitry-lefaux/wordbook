@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Wordbook</string>
+    <string name="home_label">Home</string>
+    <string name="sources_label">Sources</string>
+    <string name="session_label">Session</string>
+    <string name="session.title">Session</string>
+</resources>
