@@ -13,23 +13,22 @@ sealed class Screen(
     val icon: ImageVector,
     @StringRes
     val labelResourceId: Int
-)
-{
+) {
     data object Home: Screen(
         route = "home",
         icon = Icons.Filled.Home,
         labelResourceId = R.string.home_label
-    )
-    data object Sources: Screen(
-        route = "sources",
-        icon = Icons.Filled.Edit,
-        labelResourceId = R.string.sources_label
     )
     data object Session: Screen(
         route = "session",
         icon = Icons.Filled.Face,
         labelResourceId = R.string.session_label
     )
+    data object Sources: Screen(
+        route = "sources",
+        icon = Icons.Filled.Edit,
+        labelResourceId = R.string.sources_label
+    )
 }
 
-val screens = listOf(Screen.Home, Screen.Sources, Screen.Session)
+val screens = listOf(Screen.Home, Screen.Session, Screen.Sources)

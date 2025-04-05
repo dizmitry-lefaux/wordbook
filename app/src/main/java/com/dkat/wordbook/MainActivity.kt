@@ -60,7 +60,6 @@ fun WordbookApp()
                 BottomBar(
                     navController = navController,
                     currentDestination = currentDestination,
-                    viewModel = viewModel
                 )
             }
         ) { innerPadding ->

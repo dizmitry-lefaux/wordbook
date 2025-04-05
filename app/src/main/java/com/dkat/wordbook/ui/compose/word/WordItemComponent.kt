@@ -1,4 +1,4 @@
-package com.dkat.wordbook.ui.compose.screen.home
+package com.dkat.wordbook.ui.compose.word
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -24,8 +24,7 @@ fun WordItem(
     word: Word,
     onDeleteWordItemClick: (word: Word) -> Unit,
     modifier: Modifier
-)
-{
+) {
     Row(
         modifier
             .padding(4.dp)

@@ -1,6 +1,5 @@
 package com.dkat.wordbook
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -24,12 +23,6 @@ class MainViewModel(
 {
     val random = Random(0)
 
-    private val _selectedSource = MutableStateFlow<String>("")
-    val selectedSource: StateFlow<String> = _selectedSource
-
-    private val _selectedSourceWords = MutableStateFlow<List<Word>>(emptyList())
-    val selectedSourceWords: StateFlow<List<Word>> = _selectedSourceWords
-
     private val _sessionWords = MutableStateFlow<List<Word>>(emptyList())
     val sessionWords: StateFlow<List<Word>> = wordRepository.getSessionWordsFlow().stateIn(
         scope = viewModelScope,
@@ -48,21 +41,6 @@ class MainViewModel(
         started = SharingStarted.WhileSubscribed(5_000),
         initialValue = emptyList()
     )
-
-    fun selectSource(sourceName: String)
-    {
-        _selectedSource.value = sourceName
-        Log.i(TAG, "Selected source: $sourceName")
-
-        // using suspend function returning not flow direct value
-        viewModelScope.launch(Dispatchers.Main) {
-            _selectedSourceWords.value = wordRepository.getSourceWords(sourceName = sourceName)
-        }.invokeOnCompletion(handler = {
-            selectedSourceWords.value.forEach { words ->
-                Log.i(TAG, "Words: $words")
-            }
-        })
-    }
 
     fun updateSession()
     {

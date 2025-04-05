@@ -1,4 +1,6 @@
-package com.dkat.wordbook.data
+package com.dkat.wordbook.ui.compose.source
+
+import com.dkat.wordbook.data.Word
 
 data class SourceWithWordsData(
     val sourceName: String,
