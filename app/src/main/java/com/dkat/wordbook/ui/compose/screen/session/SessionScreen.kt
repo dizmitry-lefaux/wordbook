@@ -29,8 +29,7 @@ fun SessionScreen(
     onRestartSessionClick: () -> Unit,
     onUpdateSessionClick: () -> Unit,
     modifier: Modifier = Modifier
-)
-{
+) {
     Column() {
         Column(Modifier.fillMaxWidth()) {
             Row(Modifier.fillMaxWidth()) {

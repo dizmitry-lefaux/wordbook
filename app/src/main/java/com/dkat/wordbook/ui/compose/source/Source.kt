@@ -1,44 +1,37 @@
-package com.dkat.wordbook.ui.compose.screen.home
+package com.dkat.wordbook.ui.compose.source
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.dkat.wordbook.data.SourceWithWordsData
 import com.dkat.wordbook.data.Word
+import com.dkat.wordbook.ui.compose.expandable.ExpandableSection
+import com.dkat.wordbook.ui.compose.word.WordsList
 
 @Composable
-fun SourceWithWords(
+fun Source(
     onDeleteWordClick: (word: Word) -> Unit,
     sourceWithWordsData: SourceWithWordsData,
     modifier: Modifier = Modifier,
-)
-{
-    Column(
-        modifier = modifier
-            .fillMaxSize()
+) {
+    ExpandableSection(
+        modifier = modifier,
+        title = sourceWithWordsData.sourceName
     ) {
-        Text(
-            "Source: ${sourceWithWordsData.sourceName}",
-            modifier = modifier.padding(8.dp),
-            style = MaterialTheme.typography.titleMedium,
-            fontWeight = FontWeight.Bold,
-            textAlign = TextAlign.Left
-        )
-        HorizontalDivider(thickness = 2.dp)
-        WordsList(
-            words = sourceWithWordsData.words,
-            onDeleteWordClick = onDeleteWordClick,
-            modifier = modifier,
-        )
+        Column(
+            modifier = modifier
+                .fillMaxWidth()
+        ) {
+            HorizontalDivider(thickness = 2.dp)
+            WordsList(
+                words = sourceWithWordsData.words,
+                onDeleteWordClick = onDeleteWordClick,
+                modifier = modifier,
+            )
+        }
         HorizontalDivider(thickness = 8.dp)
     }
 }
@@ -64,7 +57,7 @@ fun SourceWithWordsPreview()
         sourceName = sourceName,
         words = words
     )
-    SourceWithWords(
+    Source(
         sourceWithWordsData = sourceWithWordsData,
         onDeleteWordClick = {},
     )
