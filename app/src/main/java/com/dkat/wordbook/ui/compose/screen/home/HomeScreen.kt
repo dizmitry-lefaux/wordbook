@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -16,23 +17,69 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.dkat.wordbook.data.Word
+import com.dkat.wordbook.data.entity.Source
+import com.dkat.wordbook.data.entity.Word
 import com.dkat.wordbook.ui.compose.source.ListOfSources
 import com.dkat.wordbook.ui.theme.AppTheme
 
 @Composable
 fun HomeScreen(
-    sources: List<String>,
+    sources: List<Source>,
     words: List<Word>,
     modifier: Modifier = Modifier,
     addWord: (word: Word) -> Unit,
     onDeleteWordItemClick: (word: Word) -> Unit,
+    onDeleteSourceItemClick: (source: Source) -> Unit,
+    onClickMigrateSources: () -> Unit,
+    onClickMigrateLanguages: () -> Unit,
+    onClickMigrateWords: () -> Unit,
+    onClickMigrateTranslations: () -> Unit,
     scrollState: ScrollState = rememberScrollState()
 ) {
     Column(
         modifier = modifier.fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
+        Button(
+            enabled = false,
+            modifier = modifier.padding(4.dp),
+            onClick = onClickMigrateSources
+        ) {
+            Text(
+                text = "MIGRATE SOURCES",
+                style = MaterialTheme.typography.titleMedium
+            )
+        }
+        Button(
+            enabled = false,
+            modifier = modifier.padding(4.dp),
+            onClick = onClickMigrateLanguages
+        ) {
+            Text(
+                text = "MIGRATE LANGUAGES",
+                style = MaterialTheme.typography.titleMedium
+            )
+        }
+        Button(
+            enabled = false,
+            modifier = modifier.padding(4.dp),
+            onClick = onClickMigrateWords
+        ) {
+            Text(
+                text = "MIGRATE WORDS",
+                style = MaterialTheme.typography.titleMedium
+            )
+        }
+        Button(
+            enabled = false,
+            modifier = modifier.padding(4.dp),
+            onClick = onClickMigrateTranslations
+        ) {
+            Text(
+                text = "MIGRATE TRANSLATIONS",
+                style = MaterialTheme.typography.titleMedium
+            )
+        }
         InputWord(addWord = addWord)
         HorizontalDivider(thickness = 4.dp, color = Color.Black)
         Column {
@@ -47,6 +94,7 @@ fun HomeScreen(
                 sources = sources,
                 words = words,
                 onDeleteWordItemClick = onDeleteWordItemClick,
+                onDeleteSourceItemClick = onDeleteSourceItemClick,
                 modifier = modifier
             )
         }
@@ -57,7 +105,20 @@ fun HomeScreen(
 @Composable
 fun HomeScreenPreview()
 {
-    val sources = listOf("source1", "source2")
+    val sources = listOf(
+        Source(
+            id = 1344,
+            name = "Woodrow Dale",
+            mainOrigLangId = 6470,
+            mainTranslationLangId = 6769
+        ),
+        Source(
+            id = 1268,
+            name = "Latisha Page",
+            mainOrigLangId = 7452,
+            mainTranslationLangId = 3542
+        )
+    )
     val words = listOf(
         Word(
             engValue = "engValue1",
@@ -76,6 +137,11 @@ fun HomeScreenPreview()
             words = words,
             addWord = {},
             onDeleteWordItemClick = {},
+            onClickMigrateSources = {},
+            onClickMigrateLanguages = {},
+            onClickMigrateWords = {},
+            onClickMigrateTranslations = {},
+            onDeleteSourceItemClick = {},
         )
     }
 }

@@ -1,7 +1,10 @@
 <resources>
     <string name="app_name">Wordbook</string>
+<!--    Labels    -->
     <string name="home_label">Home</string>
     <string name="sources_label">Sources</string>
     <string name="session_label">Session</string>
+    <string name="languages_label">Languages</string>
+<!--    Screen titles    -->
     <string name="session.title">Session</string>
 </resources>

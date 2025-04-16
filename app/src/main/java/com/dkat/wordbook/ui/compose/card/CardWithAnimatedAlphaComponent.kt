@@ -21,7 +21,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.dkat.wordbook.data.Word
+import com.dkat.wordbook.data.entity.Word
 
 @Composable
 fun CardWithAnimatedAlpha(

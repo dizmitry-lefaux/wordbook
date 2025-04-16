@@ -1,5 +1,6 @@
 #### TODO:
 * extract database table: source
+* add possibility to remove source with words
 * extract database table: session
 * make sessions multiple
 * make sessions switchable

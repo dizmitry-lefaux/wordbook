@@ -1,15 +1,17 @@
-package com.dkat.wordbook.data
+package com.dkat.wordbook.data.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
+import com.dkat.wordbook.data.entity.Language
+import com.dkat.wordbook.data.entity.Word
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface WordDao
 {
     @Insert
-    suspend fun insertWord(word: Word)
+    suspend fun createWord(word: Word)
 
     @Insert
     fun insertWords(words: List<Word>)
@@ -24,7 +26,10 @@ interface WordDao
     suspend fun deleteWordById(id: Int)
 
     @Query("SELECT DISTINCT sourceName from words")
-    fun getSources(): Flow<List<String>>
+    fun readSources(): Flow<List<String>>
+
+    @Query("SELECT * from language")
+    fun readLanguages(): Flow<List<Language>>
 
     @Query("SELECT * FROM words WHERE sourceName = :sourceName")
     fun getSourceWordsFlowList(sourceName: String): Flow<List<Word>>

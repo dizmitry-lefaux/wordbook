@@ -3,7 +3,7 @@ package com.dkat.wordbook.ui.compose.word
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.dkat.wordbook.data.Word
+import com.dkat.wordbook.data.entity.Word
 
 @Composable
 fun WordsList(
@@ -11,8 +11,7 @@ fun WordsList(
     onDeleteWordClick: (word: Word) -> Unit,
     modifier: Modifier,
 ) {
-    for (word in words)
-    {
+    for (word in words) {
         WordItem(
             word = word,
             onDeleteWordItemClick = onDeleteWordClick,

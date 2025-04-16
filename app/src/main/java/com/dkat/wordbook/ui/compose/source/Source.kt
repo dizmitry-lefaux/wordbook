@@ -7,7 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.dkat.wordbook.data.Word
+import com.dkat.wordbook.data.entity.Word
 import com.dkat.wordbook.ui.compose.expandable.ExpandableSection
 import com.dkat.wordbook.ui.compose.word.WordsList
 
@@ -21,10 +21,7 @@ fun Source(
         modifier = modifier,
         title = sourceWithWordsData.sourceName
     ) {
-        Column(
-            modifier = modifier
-                .fillMaxWidth()
-        ) {
+        Column(modifier = modifier.fillMaxWidth()) {
             HorizontalDivider(thickness = 2.dp)
             WordsList(
                 words = sourceWithWordsData.words,
