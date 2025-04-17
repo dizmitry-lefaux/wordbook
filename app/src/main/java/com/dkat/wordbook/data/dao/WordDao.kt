@@ -3,15 +3,21 @@ package com.dkat.wordbook.data.dao
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Transaction
 import com.dkat.wordbook.data.entity.Language
 import com.dkat.wordbook.data.entity.Word
+import com.dkat.wordbook.data.entity.WordWithTranslations
+import com.dkat.wordbook.data.entity.Word_B
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface WordDao
 {
     @Insert
-    suspend fun createWord(word: Word)
+    suspend fun createWordOld(word: Word)
+
+    @Insert
+    suspend fun createWord(word: Word_B): Long
 
     @Insert
     fun insertWords(words: List<Word>)
@@ -23,6 +29,9 @@ interface WordDao
     fun getWords(): Flow<List<Word>>
 
     @Query("DELETE FROM words WHERE id = :id")
+    suspend fun deleteWordByIdOld(id: Int)
+
+    @Query("DELETE FROM word WHERE id = :id")
     suspend fun deleteWordById(id: Int)
 
     @Query("SELECT DISTINCT sourceName from words")
@@ -60,4 +69,9 @@ interface WordDao
 
     @Query("UPDATE words SET isInSession = :isInSession WHERE id IN (:ids)")
     suspend fun updateIsInSessionForList(isInSession: Boolean, ids: List<Int>)
+
+    // TODO: check functionality
+    @Transaction
+    @Query("SELECT * FROM word INNER JOIN translation ON word.id = translation.word_id")
+    fun readWordsWithTranslations(): Flow<List<WordWithTranslations>>
 }

@@ -1,77 +1,106 @@
 package com.dkat.wordbook.ui.compose.screen.home
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.Button
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.dkat.wordbook.data.entity.Word
+import androidx.compose.ui.unit.toSize
+import com.dkat.wordbook.data.entity.Source
+import com.dkat.wordbook.data.entity.Translation
+import com.dkat.wordbook.data.entity.Word_B
 
 @Composable
 fun InputWord(
-    addWord:(word: Word) -> Unit,
+    sources: List<Source>,
+    addWord: (word: Word_B) -> Long,
+    addTranslation: (translation: Translation) -> Long,
     modifier: Modifier = Modifier,
-)
-{
-    var rusInput by remember { mutableStateOf("") }
-    var engInput by remember { mutableStateOf("") }
-    var sourceInput by remember { mutableStateOf("") }
-    var word by remember { mutableStateOf(Word()) }
+) {
+    var origInput by remember { mutableStateOf("") }
+    var translationInput by remember { mutableStateOf("") }
+    var source by remember { mutableStateOf(Source()) }
+    var word by remember { mutableStateOf(Word_B()) }
+    var translation by remember { mutableStateOf(Translation()) }
+    var wordId by remember { mutableIntStateOf(0) }
+    var sourceSelected by remember { mutableStateOf(false) }
 
     Column {
         TextField(
-            value = rusInput,
+            value = origInput,
             onValueChange = {
-                rusInput = it
+                origInput = it
             },
             placeholder = {
-                Text("input rus word here")
+                Text("original")
             },
             modifier = modifier.padding(8.dp)
         )
         TextField(
-            value = engInput,
+            value = translationInput,
             onValueChange = {
-                engInput = it
+                translationInput = it
             },
             placeholder = {
-                Text("input eng word here")
+                Text("translation")
             },
             modifier = modifier.padding(8.dp)
         )
-        TextField(
-            value = sourceInput,
-            onValueChange = {
-                sourceInput = it
-            },
-            placeholder = {
-                Text("input source name here")
-            },
-            modifier = modifier.padding(8.dp)
+        SourcesDropdown(
+            sources = sources,
+            label = "select source",
+            onSelect = {
+                source = it.first
+                sourceSelected = it.second
+            }
         )
         Button(
             modifier = modifier.padding(8.dp),
             onClick = {
-                word = Word(
-                    rusValue = rusInput,
-                    engValue = engInput,
-                    sourceName = sourceInput
-                )
-                rusInput = ""
-                engInput = ""
-                sourceInput = sourceInput
-                addWord(word)
+                if (sourceSelected) {
+                    word = Word_B(
+                        sourceId = source.id,
+                        languageId = 0,
+                        value = origInput
+                    )
+                    origInput = ""
+                    wordId = addWord(word).toInt()
+                    translation = Translation(
+                        wordId = wordId,
+                        value = translationInput,
+                        languageId = source.mainTranslationLangId
+                    )
+                    translationInput = ""
+                    addTranslation(translation)
+                } else {
+//                    dkat: TODO: error warning
+                }
             }
         ) {
             Text(
@@ -84,10 +113,69 @@ fun InputWord(
     }
 }
 
+@Composable
+fun SourcesDropdown(
+    sources: List<Source>,
+    label: String,
+    onSelect: (Pair<Source, Boolean>) -> Unit
+) {
+    var expanded by remember { mutableStateOf(false) }
+    var selectedText by remember { mutableStateOf("") }
+    var textFieldSize by remember { mutableStateOf(Size.Zero) }
+
+    val icon = if (expanded) {
+        Icons.Filled.ArrowDropDown
+    } else {
+        Icons.Filled.KeyboardArrowUp
+    }
+
+    Box(modifier = Modifier.padding(8.dp)) {
+        OutlinedTextField(
+            value = selectedText,
+            onValueChange = {
+                selectedText = it
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .onGloballyPositioned { layoutCoordinates ->
+                    textFieldSize = layoutCoordinates.size.toSize()
+                },
+            label = { Text(label) },
+            trailingIcon = {
+                Icon(icon,
+                    "contentDescription",
+                    Modifier.clickable { expanded = !expanded }
+                )
+            }
+        )
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false },
+            modifier = Modifier
+                .width(with(LocalDensity.current) {textFieldSize.width.toDp()} )
+        ) {
+            sources.forEach { source ->
+                DropdownMenuItem(
+                    onClick = {
+                        selectedText = source.name
+                        onSelect(Pair(source, true))
+                    },
+                    text = { source.name },
+                )
+            }
+        }
+    }
+}
+
 @Preview(showBackground = true)
 @Composable
 fun InputWordPreview() {
     InputWord(
-        addWord = {}
+        sources = listOf(
+            Source(id = 3368, name = "Chuck Leonard", mainOrigLangId = 6743, mainTranslationLangId = 9292),
+            Source(id = 5360, name = "Wendell Patrick", mainOrigLangId = 7709, mainTranslationLangId = 6304)
+        ),
+        addWord = {0},
+        addTranslation = {0},
     )
 }

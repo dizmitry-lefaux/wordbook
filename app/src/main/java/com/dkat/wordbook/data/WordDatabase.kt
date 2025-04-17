@@ -9,6 +9,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import com.dkat.wordbook.data.dao.DataMigrationDao
 import com.dkat.wordbook.data.dao.LanguageDao
 import com.dkat.wordbook.data.dao.SourceDao
+import com.dkat.wordbook.data.dao.TranslationDao
 import com.dkat.wordbook.data.dao.WordDao
 import com.dkat.wordbook.data.entity.Language
 import com.dkat.wordbook.data.entity.SessionSourceCrossRef
@@ -26,6 +27,7 @@ import com.dkat.wordbook.data.entity.Word_B
 )
 abstract class WordDatabase : RoomDatabase() {
     abstract fun wordDao(): WordDao
+    abstract fun translationDao(): TranslationDao
     abstract fun dataMigrationDao(): DataMigrationDao
     abstract fun sourceDao(): SourceDao
     abstract fun languageDao(): LanguageDao
@@ -58,26 +60,26 @@ abstract class WordDatabase : RoomDatabase() {
 }
 
 private val MIGRATION_1_2 = object : Migration(1, 2) {
-    override fun migrate(database: SupportSQLiteDatabase) {
-        database.execSQL("ALTER TABLE words ADD isInSession INTEGER NOT NULL DEFAULT(0)")
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL("ALTER TABLE words ADD isInSession INTEGER NOT NULL DEFAULT(0)")
     }
 }
 
 private val MIGRATION_2_3 = object : Migration(2, 3) {
-    override fun migrate(database: SupportSQLiteDatabase) {
-        database.execSQL("ALTER TABLE words ADD sessionWeight REAL NOT NULL DEFAULT(1)")
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL("ALTER TABLE words ADD sessionWeight REAL NOT NULL DEFAULT(1)")
     }
 }
 
 private val MIGRATION_3_4 = object : Migration(3, 4) {
-    override fun migrate(database: SupportSQLiteDatabase) {
-        database.execSQL("ALTER TABLE words RENAME COLUMN setName TO sourceName")
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL("ALTER TABLE words RENAME COLUMN setName TO sourceName")
     }
 }
 
 private val MIGRATION_4_5 = object : Migration(3, 4) {
-    override fun migrate(database: SupportSQLiteDatabase) {
-        database.execSQL(
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL(
             """
                 CREATE TABLE IF NOT EXISTS word(
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -129,13 +131,13 @@ private val MIGRATION_4_5 = object : Migration(3, 4) {
 }
 
 private val MIGRATION_5_6 = object : Migration(5, 6) {
-    override fun migrate(database: SupportSQLiteDatabase) {
-        database.execSQL("ALTER TABLE source ADD main_orig_lang_id INTEGER NOT NULL DEFAULT(0)")
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL("ALTER TABLE source ADD main_orig_lang_id INTEGER NOT NULL DEFAULT(0)")
     }
 }
 
 private val MIGRATION_6_7 = object : Migration(6, 7) {
-    override fun migrate(database: SupportSQLiteDatabase) {
-        database.execSQL("ALTER TABLE source ADD main_translation_lang_id INTEGER NOT NULL DEFAULT(0)")
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL("ALTER TABLE source ADD main_translation_lang_id INTEGER NOT NULL DEFAULT(0)")
     }
 }

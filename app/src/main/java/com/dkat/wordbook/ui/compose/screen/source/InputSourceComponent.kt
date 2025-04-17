@@ -20,6 +20,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -46,7 +47,7 @@ fun InputSource(
     var origLangInput by remember { mutableStateOf("")}
     var translationLangInput by remember { mutableStateOf("")}
     var origLangId by remember { mutableStateOf(0)}
-    var translationLangId by remember { mutableStateOf(0)}
+    var translationLangId by remember { mutableIntStateOf(0) }
     var source by remember { mutableStateOf(Source()) }
 
     Column {
@@ -82,7 +83,7 @@ fun InputSource(
                     translationLangId = 0
                     createSource(source)
                 } else {
-                    // dkat: TODO: show error
+                    // TODO: show error
                 }
             }
         ) {

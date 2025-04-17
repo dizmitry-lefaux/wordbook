@@ -18,17 +18,22 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.dkat.wordbook.data.entity.Source
-import com.dkat.wordbook.data.entity.Word
+import com.dkat.wordbook.data.entity.SourceWithWords
+import com.dkat.wordbook.data.entity.Translation
+import com.dkat.wordbook.data.entity.WordWithTranslations
+import com.dkat.wordbook.data.entity.Word_B
 import com.dkat.wordbook.ui.compose.source.ListOfSources
 import com.dkat.wordbook.ui.theme.AppTheme
 
 @Composable
 fun HomeScreen(
     sources: List<Source>,
-    words: List<Word>,
+    sourcesWithWords: List<SourceWithWords>,
+    wordsWithTranslations: List<WordWithTranslations>,
     modifier: Modifier = Modifier,
-    addWord: (word: Word) -> Unit,
-    onDeleteWordItemClick: (word: Word) -> Unit,
+    addWord: (word: Word_B) -> Long,
+    addTranslation: (translation: Translation) -> Long,
+    onDeleteWordItemClick: (word: Word_B) -> Unit,
     onDeleteSourceItemClick: (source: Source) -> Unit,
     onClickMigrateSources: () -> Unit,
     onClickMigrateLanguages: () -> Unit,
@@ -80,7 +85,11 @@ fun HomeScreen(
                 style = MaterialTheme.typography.titleMedium
             )
         }
-        InputWord(addWord = addWord)
+        InputWord(
+            addWord = addWord,
+            sources = sources,
+            addTranslation = addTranslation,
+        )
         HorizontalDivider(thickness = 4.dp, color = Color.Black)
         Column {
             Text(
@@ -91,8 +100,8 @@ fun HomeScreen(
                 textAlign = TextAlign.Left
             )
             ListOfSources(
-                sources = sources,
-                words = words,
+                sourcesWithWords = sourcesWithWords,
+                wordsWithTranslations = wordsWithTranslations,
                 onDeleteWordItemClick = onDeleteWordItemClick,
                 onDeleteSourceItemClick = onDeleteSourceItemClick,
                 modifier = modifier
@@ -103,45 +112,89 @@ fun HomeScreen(
 
 @Preview(showBackground = true)
 @Composable
-fun HomeScreenPreview()
-{
-    val sources = listOf(
-        Source(
-            id = 1344,
-            name = "Woodrow Dale",
-            mainOrigLangId = 6470,
-            mainTranslationLangId = 6769
-        ),
-        Source(
-            id = 1268,
-            name = "Latisha Page",
-            mainOrigLangId = 7452,
-            mainTranslationLangId = 3542
-        )
-    )
-    val words = listOf(
-        Word(
-            engValue = "engValue1",
-            rusValue = "rusValue1",
-            sourceName = "source1"
-        ),
-        Word(
-            engValue = "engValue1",
-            rusValue = "rusValue1",
-            sourceName = "source2"
-        )
-    )
+fun HomeScreenPreview() {
     AppTheme {
         HomeScreen(
-            sources = sources,
-            words = words,
-            addWord = {},
+            sourcesWithWords = listOf(
+                SourceWithWords(
+                    source = Source(
+                        id = 1845,
+                        name = "Tony Marquez",
+                        mainOrigLangId = 5432,
+                        mainTranslationLangId = 4679
+                    ),
+                    words = listOf(
+                        Word_B(id = 4428, sourceId = 4887, languageId = 9685, value = "dictas"),
+                        Word_B(id = 6426, sourceId = 9615, languageId = 7799, value = "nullam"),
+                        Word_B(id = 6426, sourceId = 9615, languageId = 7799, value = "nullam"),
+                    )
+                )
+            ),
+            wordsWithTranslations = listOf(
+                WordWithTranslations(
+                    word = Word_B(id = 4428, sourceId = 4887, languageId = 9685, value = "dictas"),
+                    translations = listOf(
+                        Translation(
+                            id = 5050,
+                            wordId = 3924,
+                            value = "detraxit",
+                            languageId = 2641
+                        ),
+                        Translation(
+                            id = 3907,
+                            wordId = 7219,
+                            value = "hendrerit",
+                            languageId = 5243
+                        )
+                    )
+                ),
+                WordWithTranslations(
+                    word = Word_B(id = 6426, sourceId = 9615, languageId = 7799, value = "nullam"),
+                    translations = listOf(
+                        Translation(
+                            id = 1393,
+                            wordId = 2937,
+                            value = "consequat",
+                            languageId = 4081
+                        ),
+                        Translation(id = 6075, wordId = 2539, value = "tellus", languageId = 3243),
+                        Translation(
+                            id = 6495,
+                            wordId = 7035,
+                            value = "consequat",
+                            languageId = 9676
+                        )
+                    )
+                ),
+                WordWithTranslations(
+                    word = Word_B(id = 6426, sourceId = 9615, languageId = 7799, value = "nullam"),
+                    translations = listOf(
+                        Translation(
+                            id = 1393,
+                            wordId = 2937,
+                            value = "consequat",
+                            languageId = 4081
+                        ),
+                        Translation(id = 6075, wordId = 2539, value = "tellus", languageId = 3243)
+                    )
+                )
+            ),
+            addWord = {0},
+            addTranslation = {0},
             onDeleteWordItemClick = {},
             onClickMigrateSources = {},
             onClickMigrateLanguages = {},
             onClickMigrateWords = {},
             onClickMigrateTranslations = {},
             onDeleteSourceItemClick = {},
+            sources = listOf(
+                Source(
+                    id = 1845,
+                    name = "Tony Marquez",
+                    mainOrigLangId = 5432,
+                    mainTranslationLangId = 4679
+                )
+            ),
         )
     }
 }

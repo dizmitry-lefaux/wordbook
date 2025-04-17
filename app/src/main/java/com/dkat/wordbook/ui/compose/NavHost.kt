@@ -10,8 +10,10 @@ import androidx.navigation.compose.composable
 import com.dkat.wordbook.MainViewModel
 import com.dkat.wordbook.data.entity.Language
 import com.dkat.wordbook.data.entity.Source
+import com.dkat.wordbook.data.entity.Translation
 import com.dkat.wordbook.ui.compose.screen.Screen
 import com.dkat.wordbook.data.entity.Word
+import com.dkat.wordbook.data.entity.Word_B
 import com.dkat.wordbook.ui.compose.screen.home.HomeScreen
 import com.dkat.wordbook.ui.compose.screen.langauge.LanguagesScreen
 import com.dkat.wordbook.ui.compose.screen.session.SessionScreen
@@ -24,8 +26,8 @@ fun WordbookNavHost(
     modifier: Modifier
 ) {
     val sources by viewModel.sources.collectAsStateWithLifecycle()
-    val words by viewModel.words.collectAsStateWithLifecycle()
-//    val sourcesStrings by viewModel.sourcesStrings.collectAsStateWithLifecycle()
+    val sourcesWithWords by viewModel.sourcesWithWords.collectAsStateWithLifecycle()
+    val wordsWithTranslations by viewModel.wordsWithTranslations.collectAsStateWithLifecycle()
     val languages by viewModel.languages.collectAsStateWithLifecycle()
     val sessionWords by viewModel.sessionWords.collectAsStateWithLifecycle()
 
@@ -37,12 +39,14 @@ fun WordbookNavHost(
         composable(route = Screen.Home.route) {
             HomeScreen(
                 sources = sources,
-                words = words,
-                onDeleteWordItemClick = { word: Word ->
+                onDeleteWordItemClick = { word: Word_B ->
                     viewModel.deleteWord(word)
                 },
-                addWord = { word: Word ->
-                    viewModel.addWord(word)
+                addWord = { word: Word_B ->
+                    viewModel.createWord(word)
+                },
+                addTranslation = { translation: Translation ->
+                    viewModel.createTranslation(translation)
                 },
                 onClickMigrateSources = {
                     viewModel.migrateSources()
@@ -56,27 +60,27 @@ fun WordbookNavHost(
                 onClickMigrateTranslations = {
                     viewModel.migrateTranslations()
                 },
-//                modifier = TODO(),
                 onDeleteSourceItemClick = { source: Source ->
                     viewModel.deleteSource(source)
                 },
-//                scrollState = TODO()
+                sourcesWithWords = sourcesWithWords,
+                wordsWithTranslations = wordsWithTranslations,
             )
         }
         composable(route = Screen.Sources.route) {
             SourcesScreen(
-                sources = sources,
-                words = words,
                 onDeleteSourceItemClick = { source: Source ->
                     viewModel.deleteSource(source)
                 },
-                onDeleteWordItemClick = { word: Word ->
+                onDeleteWordItemClick = { word: Word_B ->
                     viewModel.deleteWord(word)
                 },
                 createSource = { source: Source ->
                     viewModel.createSource(source)
                 },
-                languages = languages
+                sourcesWithWords = sourcesWithWords,
+                wordsWithTranslations = wordsWithTranslations,
+                languages = languages,
             )
         }
         composable(route = Screen.Session.route) {

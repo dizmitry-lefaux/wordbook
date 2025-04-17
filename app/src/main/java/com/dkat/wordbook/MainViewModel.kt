@@ -7,6 +7,10 @@ import com.dkat.wordbook.data.entity.Word
 import com.dkat.wordbook.data.WordRepository
 import com.dkat.wordbook.data.entity.Language
 import com.dkat.wordbook.data.entity.Source
+import com.dkat.wordbook.data.entity.SourceWithWords
+import com.dkat.wordbook.data.entity.Translation
+import com.dkat.wordbook.data.entity.WordWithTranslations
+import com.dkat.wordbook.data.entity.Word_B
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -22,7 +26,7 @@ private const val SESSION_SIZE = 3
 class MainViewModel(
     private val wordRepository: WordRepository
 ) : ViewModel() {
-    val random = Random(0)
+    private val random = Random(0)
 
     private val _sessionWords = MutableStateFlow<List<Word>>(emptyList())
     val sessionWords: StateFlow<List<Word>> = wordRepository.getSessionWordsFlow().stateIn(
@@ -37,7 +41,13 @@ class MainViewModel(
         initialValue = emptyList()
     )
 
-    val sourcesStrings: StateFlow<List<String>> = wordRepository.readSourcesStrings().stateIn(
+    val sourcesWithWords: StateFlow<List<SourceWithWords>> = wordRepository.readSourcesWithWords().stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5_000),
+        initialValue = emptyList()
+    )
+
+    val wordsWithTranslations: StateFlow<List<WordWithTranslations>> = wordRepository.readWordsWithTranslations().stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5_000),
         initialValue = emptyList()
@@ -49,14 +59,14 @@ class MainViewModel(
         initialValue = emptyList()
     )
 
-    val words: StateFlow<List<Word>> = wordRepository.getWords().stateIn(
+    val wordsOld: StateFlow<List<Word>> = wordRepository.getWords().stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5_000),
         initialValue = emptyList()
     )
 
     fun updateSession() {
-        val wordsList = words.value.filter { word: Word ->
+        val wordsList = wordsOld.value.filter { word: Word ->
             word.sessionWeight > 0
         }
         updateSession(wordsList)
@@ -86,7 +96,7 @@ class MainViewModel(
     }
 
     private fun startNewSession() {
-        updateSession(words.value)
+        updateSession(wordsOld.value)
     }
 
     private fun updateSession(wordList: List<Word>) {
@@ -118,21 +128,23 @@ class MainViewModel(
         }
     }
 
-    // dkat: TODO
-    fun addWord(word: Word) {
+    fun createWord(word: Word_B): Long {
+        var wordId: Long = 0
         viewModelScope.launch {
-            wordRepository.createWord(word)
+            wordId = wordRepository.createWord(word)
         }
+        return wordId
     }
 
-    // dkat: in progress
-    fun addSource(source: Source) {
+    fun createTranslation(translation: Translation): Long {
+        var translationId: Long = 0
         viewModelScope.launch {
-            wordRepository.createSource(source)
+            translationId = wordRepository.createTranslation(translation)
         }
+        return translationId
     }
 
-    fun deleteWord(word: Word) {
+    fun deleteWord(word: Word_B) {
         viewModelScope.launch {
             wordRepository.deleteWord(word)
         }
@@ -168,10 +180,12 @@ class MainViewModel(
         }
     }
 
-    fun createSource(source: Source) {
+    fun createSource(source: Source): Long {
+        var sourceId: Long = 0
         viewModelScope.launch {
-            wordRepository.createSource(source)
+            sourceId = wordRepository.createSource(source)
         }
+        return sourceId
     }
 
     fun createLanguage(language: Language) {

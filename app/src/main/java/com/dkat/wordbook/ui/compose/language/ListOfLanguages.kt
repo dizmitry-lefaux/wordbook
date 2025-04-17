@@ -10,8 +10,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.dkat.wordbook.data.entity.Language
-import com.dkat.wordbook.data.entity.Word
 
+// TODO: check why it is a ListOfSources, not ListOfLanguages
 @Composable
 fun ListOfSources(
     languages: List<Language>,
@@ -25,13 +25,6 @@ fun ListOfSources(
         horizontalArrangement = Arrangement.spacedBy(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-//        val listOfSources = mutableListOf<Language>()
-//        for (language in languages)
-//        {
-//            val wordsSubList: List<Word> =
-//                words.filter { word -> word.sourceName == source }.toList()
-//            listOfSources.add(SourceWithWordsData(sourceName = source, words = wordsSubList))
-//        }
         items(languages) {
             LanguageItem(
                 onDeleteLanguageItemClick = onDeleteLanguageItemClick,
