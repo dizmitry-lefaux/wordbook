@@ -1,5 +1,6 @@
 package com.dkat.wordbook
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -128,19 +129,15 @@ class MainViewModel(
         }
     }
 
-    fun createWord(word: Word_B): Long {
+    private suspend fun createWord(word: Word_B): Long {
         var wordId: Long = 0
-        viewModelScope.launch {
-            wordId = wordRepository.createWord(word)
-        }
+        viewModelScope.launch { wordId = wordRepository.createWord(word) }.join()
         return wordId
     }
 
-    fun createTranslation(translation: Translation): Long {
+    private suspend fun createTranslation(translation: Translation): Long {
         var translationId: Long = 0
-        viewModelScope.launch {
-            translationId = wordRepository.createTranslation(translation)
-        }
+        viewModelScope.launch { translationId = wordRepository.createTranslation(translation) }.join()
         return translationId
     }
 
@@ -197,6 +194,22 @@ class MainViewModel(
     fun deleteLanguage(language: Language) {
         viewModelScope.launch {
             wordRepository.deleteLanguage(language)
+        }
+    }
+
+    fun createWordWithTranslation(word: Word_B, translation: Translation) {
+        viewModelScope.launch {
+            var wordId = 0
+            launch { wordId = createWord(word).toInt() }.join()
+            Log.i(TAG, "Word created: $word; id: $wordId")
+            val translationUpdated = Translation(
+                wordId = wordId,
+                value = translation.value,
+                languageId = translation.languageId
+            )
+            var translationId = 0;
+            launch { translationId = createTranslation(translationUpdated).toInt() }.join()
+            Log.i(TAG, "Translation created: $translationUpdated; id: $translationId")
         }
     }
 }

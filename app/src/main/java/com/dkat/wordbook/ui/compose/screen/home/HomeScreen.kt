@@ -4,6 +4,7 @@ import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.Button
@@ -31,8 +32,7 @@ fun HomeScreen(
     sourcesWithWords: List<SourceWithWords>,
     wordsWithTranslations: List<WordWithTranslations>,
     modifier: Modifier = Modifier,
-    addWord: (word: Word_B) -> Long,
-    addTranslation: (translation: Translation) -> Long,
+    createWordWithTranslation: (word: Word_B, translation: Translation) -> Unit,
     onDeleteWordItemClick: (word: Word_B) -> Unit,
     onDeleteSourceItemClick: (source: Source) -> Unit,
     onClickMigrateSources: () -> Unit,
@@ -47,7 +47,8 @@ fun HomeScreen(
     ) {
         Button(
             enabled = false,
-            modifier = modifier.padding(4.dp),
+            modifier = modifier.padding(0.dp)
+                .height(0.dp),
             onClick = onClickMigrateSources
         ) {
             Text(
@@ -57,7 +58,8 @@ fun HomeScreen(
         }
         Button(
             enabled = false,
-            modifier = modifier.padding(4.dp),
+            modifier = modifier.padding(0.dp)
+                .height(0.dp),
             onClick = onClickMigrateLanguages
         ) {
             Text(
@@ -67,7 +69,8 @@ fun HomeScreen(
         }
         Button(
             enabled = false,
-            modifier = modifier.padding(4.dp),
+            modifier = modifier.padding(0.dp)
+                .height(0.dp),
             onClick = onClickMigrateWords
         ) {
             Text(
@@ -77,7 +80,8 @@ fun HomeScreen(
         }
         Button(
             enabled = false,
-            modifier = modifier.padding(4.dp),
+            modifier = modifier.padding(0.dp)
+                .height(0.dp),
             onClick = onClickMigrateTranslations
         ) {
             Text(
@@ -86,9 +90,8 @@ fun HomeScreen(
             )
         }
         InputWord(
-            addWord = addWord,
+            createWordWithTranslation = createWordWithTranslation,
             sources = sources,
-            addTranslation = addTranslation,
         )
         HorizontalDivider(thickness = 4.dp, color = Color.Black)
         Column {
@@ -179,8 +182,7 @@ fun HomeScreenPreview() {
                     )
                 )
             ),
-            addWord = {0},
-            addTranslation = {0},
+            createWordWithTranslation = { _, _ -> },
             onDeleteWordItemClick = {},
             onClickMigrateSources = {},
             onClickMigrateLanguages = {},

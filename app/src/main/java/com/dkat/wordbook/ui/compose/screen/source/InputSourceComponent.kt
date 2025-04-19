@@ -1,5 +1,6 @@
 package com.dkat.wordbook.ui.compose.screen.source
 
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -36,6 +37,8 @@ import androidx.compose.ui.unit.toSize
 import com.dkat.wordbook.data.entity.Language
 import com.dkat.wordbook.data.entity.Source
 
+private const val TAG = "InputSource"
+
 @Composable
 fun InputSource(
     sources: List<Source>,
@@ -46,7 +49,7 @@ fun InputSource(
     var nameInput by remember { mutableStateOf("") }
     var origLangInput by remember { mutableStateOf("")}
     var translationLangInput by remember { mutableStateOf("")}
-    var origLangId by remember { mutableStateOf(0)}
+    var origLangId by remember { mutableIntStateOf(0) }
     var translationLangId by remember { mutableIntStateOf(0) }
     var source by remember { mutableStateOf(Source()) }
 
@@ -62,10 +65,22 @@ fun InputSource(
             modifier = modifier.padding(8.dp)
         )
         Row {
-            LanguagesDropdown(languages = languages, label = "source original language")
+            LanguagesDropdown(
+                languages = languages,
+                label = "source original language",
+                onSelect = {
+                    origLangId = it
+                }
+            )
         }
         Row {
-            LanguagesDropdown(languages = languages, label = "source translation language")
+            LanguagesDropdown(
+                languages = languages,
+                label = "source translation language",
+                onSelect = {
+                    translationLangId = it
+                }
+            )
         }
         Button(
             modifier = modifier.padding(8.dp),
@@ -83,6 +98,7 @@ fun InputSource(
                     translationLangId = 0
                     createSource(source)
                 } else {
+                    Log.e(TAG, "trying to create source with non unique name: $nameInput")
                     // TODO: show error
                 }
             }
@@ -98,7 +114,11 @@ fun InputSource(
 }
 
 @Composable
-fun LanguagesDropdown(languages: List<Language>, label: String) {
+fun LanguagesDropdown(
+    languages: List<Language>,
+    label: String,
+    onSelect: (Int) -> Unit
+) {
     var expanded by remember { mutableStateOf(false) }
     var selectedText by remember { mutableStateOf("") }
     var textFieldSize by remember { mutableStateOf(Size.Zero) }
@@ -136,8 +156,9 @@ fun LanguagesDropdown(languages: List<Language>, label: String) {
                 DropdownMenuItem(
                     onClick = {
                         selectedText = language.name
+                        onSelect(language.id)
                     },
-                    text = { language.name },
+                    text = { language.name }
                 )
             }
         }
@@ -147,7 +168,7 @@ fun LanguagesDropdown(languages: List<Language>, label: String) {
 @Preview(showBackground = true)
 @Composable
 fun LanguageDropdownPreview() {
-    LanguagesDropdown(languages = emptyList(), "label")
+    LanguagesDropdown(languages = emptyList(), "label", {})
 }
 
 @Preview(showBackground = true)

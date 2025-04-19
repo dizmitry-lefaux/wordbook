@@ -1,5 +1,6 @@
 package com.dkat.wordbook.ui.compose.screen.home
 
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,7 +20,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -36,11 +36,12 @@ import com.dkat.wordbook.data.entity.Source
 import com.dkat.wordbook.data.entity.Translation
 import com.dkat.wordbook.data.entity.Word_B
 
+private const val TAG = "InputWord"
+
 @Composable
 fun InputWord(
     sources: List<Source>,
-    addWord: (word: Word_B) -> Long,
-    addTranslation: (translation: Translation) -> Long,
+    createWordWithTranslation: (word: Word_B, translation: Translation) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     var origInput by remember { mutableStateOf("") }
@@ -48,7 +49,6 @@ fun InputWord(
     var source by remember { mutableStateOf(Source()) }
     var word by remember { mutableStateOf(Word_B()) }
     var translation by remember { mutableStateOf(Translation()) }
-    var wordId by remember { mutableIntStateOf(0) }
     var sourceSelected by remember { mutableStateOf(false) }
 
     Column {
@@ -85,21 +85,17 @@ fun InputWord(
             onClick = {
                 if (sourceSelected) {
                     word = Word_B(
-                        sourceId = source.id,
-                        languageId = 0,
-                        value = origInput
+                        sourceId = source.id, languageId = source.mainOrigLangId, value = origInput
                     )
-                    origInput = ""
-                    wordId = addWord(word).toInt()
                     translation = Translation(
-                        wordId = wordId,
-                        value = translationInput,
-                        languageId = source.mainTranslationLangId
+                        value = translationInput, languageId = source.mainTranslationLangId
                     )
+                    createWordWithTranslation(word, translation)
+                    origInput = ""
                     translationInput = ""
-                    addTranslation(translation)
                 } else {
-//                    dkat: TODO: error warning
+                    Log.e(TAG, "Source is not selected")
+                    // TODO: show error warning
                 }
             }
         ) {
@@ -112,6 +108,8 @@ fun InputWord(
         }
     }
 }
+
+private const val TAG_2 = "SourcesDropdown"
 
 @Composable
 fun SourcesDropdown(
@@ -157,6 +155,7 @@ fun SourcesDropdown(
             sources.forEach { source ->
                 DropdownMenuItem(
                     onClick = {
+                        Log.i(TAG_2, "Source selected: $source")
                         selectedText = source.name
                         onSelect(Pair(source, true))
                     },
@@ -175,7 +174,6 @@ fun InputWordPreview() {
             Source(id = 3368, name = "Chuck Leonard", mainOrigLangId = 6743, mainTranslationLangId = 9292),
             Source(id = 5360, name = "Wendell Patrick", mainOrigLangId = 7709, mainTranslationLangId = 6304)
         ),
-        addWord = {0},
-        addTranslation = {0},
+        createWordWithTranslation = {_, _ ->}
     )
 }

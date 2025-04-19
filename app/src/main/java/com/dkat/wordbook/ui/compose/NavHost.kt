@@ -12,7 +12,6 @@ import com.dkat.wordbook.data.entity.Language
 import com.dkat.wordbook.data.entity.Source
 import com.dkat.wordbook.data.entity.Translation
 import com.dkat.wordbook.ui.compose.screen.Screen
-import com.dkat.wordbook.data.entity.Word
 import com.dkat.wordbook.data.entity.Word_B
 import com.dkat.wordbook.ui.compose.screen.home.HomeScreen
 import com.dkat.wordbook.ui.compose.screen.langauge.LanguagesScreen
@@ -38,15 +37,12 @@ fun WordbookNavHost(
     ) {
         composable(route = Screen.Home.route) {
             HomeScreen(
+                createWordWithTranslation = { word: Word_B, translation: Translation ->
+                    viewModel.createWordWithTranslation(word, translation)
+                },
                 sources = sources,
                 onDeleteWordItemClick = { word: Word_B ->
                     viewModel.deleteWord(word)
-                },
-                addWord = { word: Word_B ->
-                    viewModel.createWord(word)
-                },
-                addTranslation = { translation: Translation ->
-                    viewModel.createTranslation(translation)
                 },
                 onClickMigrateSources = {
                     viewModel.migrateSources()

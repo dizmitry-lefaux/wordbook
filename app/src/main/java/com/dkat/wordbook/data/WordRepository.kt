@@ -27,6 +27,7 @@ class WordRepository(private val context: Context)
         return wordDao.createWord(word)
     }
 
+    // TODO: move to separate repository
     suspend fun createTranslation(translation: Translation): Long {
         return translationDao.createTranslation(translation)
     }

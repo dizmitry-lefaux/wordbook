@@ -6,6 +6,10 @@
 * make session size configurable
 * add 'Properties' screen
 * change animated card design
+* add possibility to add multiple translations to one word
+* add possibility to create word with multiple translations
+* think about combining 'Sources' and 'Languages' screens
+* think about adding 'Words' screen
 
 #### ISSUES:
 
@@ -13,9 +17,7 @@
   * screen is scrollable only for "sources" part
   * input word section:
     * source value is invisible in the expanded dropdown
-    * word has lang_id 0 after form submit
-    * translation has word_id 0 after form submit
-    * translation has lang_id 0 after form submit
+    * source dropdown should close on value select
 * sources screen:
   * screen is scrollable only for "sources" part
   * sources section:
@@ -24,3 +26,5 @@
     * can't remove source
   * input source section:
     * language value is invisible in the expanded dropdown
+    * language dropdown should close on value select
+    * languages should not be allowed to be the same
