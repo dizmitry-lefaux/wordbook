@@ -14,7 +14,7 @@ import com.dkat.wordbook.data.entity.Translation
 import com.dkat.wordbook.ui.compose.screen.Screen
 import com.dkat.wordbook.data.entity.Word_B
 import com.dkat.wordbook.ui.compose.screen.home.HomeScreen
-import com.dkat.wordbook.ui.compose.screen.langauge.LanguagesScreen
+import com.dkat.wordbook.ui.compose.screen.language.LanguagesScreen
 import com.dkat.wordbook.ui.compose.screen.session.SessionScreen
 import com.dkat.wordbook.ui.compose.screen.source.SourcesScreen
 
@@ -43,18 +43,6 @@ fun WordbookNavHost(
                 sources = sources,
                 onDeleteWordItemClick = { word: Word_B ->
                     viewModel.deleteWord(word)
-                },
-                onClickMigrateSources = {
-                    viewModel.migrateSources()
-                },
-                onClickMigrateLanguages = {
-                    viewModel.migrateLanguages()
-                },
-                onClickMigrateWords = {
-                    viewModel.migrateWords()
-                },
-                onClickMigrateTranslations = {
-                    viewModel.migrateTranslations()
                 },
                 onDeleteSourceItemClick = { source: Source ->
                     viewModel.deleteSource(source)

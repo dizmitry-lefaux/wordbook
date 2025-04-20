@@ -6,7 +6,6 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
-import com.dkat.wordbook.data.dao.DataMigrationDao
 import com.dkat.wordbook.data.dao.LanguageDao
 import com.dkat.wordbook.data.dao.SourceDao
 import com.dkat.wordbook.data.dao.TranslationDao
@@ -28,7 +27,6 @@ import com.dkat.wordbook.data.entity.Word_B
 abstract class WordDatabase : RoomDatabase() {
     abstract fun wordDao(): WordDao
     abstract fun translationDao(): TranslationDao
-    abstract fun dataMigrationDao(): DataMigrationDao
     abstract fun sourceDao(): SourceDao
     abstract fun languageDao(): LanguageDao
 

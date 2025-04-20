@@ -1,5 +1,6 @@
 package com.dkat.wordbook.ui.compose.source
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,6 +16,8 @@ import com.dkat.wordbook.data.entity.SourceWithWords
 import com.dkat.wordbook.data.entity.Translation
 import com.dkat.wordbook.data.entity.WordWithTranslations
 import com.dkat.wordbook.data.entity.Word_B
+
+private const val TAG = "ListOfSources"
 
 @Composable
 fun ListOfSources(
@@ -39,12 +42,13 @@ fun ListOfSources(
                 }.toList()
             mapOfSources[sourceWithWords.source] = wordsWithTranslationsSubList
         }
-        items(sourcesWithWords) {
+        val sourcesList = mapOfSources.keys.toList()
+        items(sourcesList) {
             SourceItem(
                 onDeleteSourceClick = onDeleteSourceItemClick,
                 onDeleteWordClick = onDeleteWordItemClick,
-                source = it.source,
-                wordsWithTranslations = mapOfSources.get(it.source)
+                source = it,
+                wordsWithTranslations = mapOfSources[it]
             )
         }
     }

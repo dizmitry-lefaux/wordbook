@@ -4,9 +4,10 @@ import androidx.room.Embedded
 import androidx.room.Relation
 
 data class TranslationLanguageWithSources(
-    @Embedded
-    val word: Language,
+    @Embedded val word: Language,
+
     @Relation(
+        entity = Source::class,
         parentColumn = "id",
         entityColumn = "main_translation_lang_id"
     )

@@ -147,30 +147,6 @@ class MainViewModel(
         }
     }
 
-    fun migrateSources() {
-        viewModelScope.launch {
-            wordRepository.migrateSources()
-        }
-    }
-
-    fun migrateLanguages() {
-        viewModelScope.launch {
-            wordRepository.migrateLanguages()
-        }
-    }
-
-    fun migrateWords() {
-        viewModelScope.launch {
-            wordRepository.migrateWords()
-        }
-    }
-
-    fun migrateTranslations() {
-        viewModelScope.launch {
-            wordRepository.migrateTranslations()
-        }
-    }
-
     fun deleteSource(source: Source) {
         viewModelScope.launch {
             wordRepository.deleteSource(source)
@@ -218,10 +194,8 @@ class MainViewModelFactory(
     private val wordRepository: WordRepository
 ) : ViewModelProvider.Factory {
     @Suppress
-    override fun <T : ViewModel> create(modelClass: Class<T>): T
-    {
-        if (modelClass.isAssignableFrom(MainViewModel::class.java))
-        {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(MainViewModel::class.java)) {
             return MainViewModel(wordRepository) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")

@@ -20,8 +20,7 @@ interface SourceDao {
     @Query("SELECT * FROM source")
     fun readSources(): Flow<List<Source>>
 
-    // TODO: check functionality
     @Transaction
-    @Query("SELECT * FROM source INNER JOIN word ON source.id = word.source_id")
+    @Query("SELECT * FROM source")
     fun readSourcesWithWords(): Flow<List<SourceWithWords>>
 }

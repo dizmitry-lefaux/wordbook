@@ -19,7 +19,6 @@ class WordRepository(private val context: Context)
 {
     private val wordDao = WordDatabase.getDatabase(context).wordDao()
     private val translationDao = WordDatabase.getDatabase(context).translationDao()
-    private val dataMigrationDao = WordDatabase.getDatabase(context).dataMigrationDao()
     private val sourceDao = WordDatabase.getDatabase(context).sourceDao()
     private val languageDao = WordDatabase.getDatabase(context).languageDao()
 
@@ -51,8 +50,7 @@ class WordRepository(private val context: Context)
     fun readLanguages(): Flow<List<Language>> = wordDao.readLanguages()
 
     // could be used to run inside of coroutine returning value
-    suspend fun getSourceWords(sourceName: String): List<Word>
-    {
+    suspend fun getSourceWords(sourceName: String): List<Word> {
         val words = mutableListOf<Word>()
         withContext(Dispatchers.Default) {
             // using suspend function inside
@@ -61,14 +59,12 @@ class WordRepository(private val context: Context)
         return words
     }
 
-    suspend fun resetSession()
-    {
+    suspend fun resetSession() {
         Log.i(TAG, "resetting session")
         wordDao.resetSession();
     }
 
-    suspend fun resetIsInSession()
-    {
+    suspend fun resetIsInSession() {
         Log.i(TAG, "resetting isInSession")
         wordDao.resetIsInSession()
     }
@@ -93,22 +89,6 @@ class WordRepository(private val context: Context)
     }
 
     fun getSessionWordsFlow(): Flow<List<Word>> = wordDao.getSessionWordsFlow()
-
-    suspend fun migrateSources() {
-        dataMigrationDao.migrateSources()
-    }
-
-    suspend fun migrateLanguages() {
-        dataMigrationDao.migrateLanguages()
-    }
-
-    suspend fun migrateWords() {
-        dataMigrationDao.migrateWords()
-    }
-
-    suspend fun migrateTranslations() {
-        dataMigrationDao.migrateTranslations()
-    }
 
     // TODO: move to separate repository
     suspend fun deleteSource(source: Source) {

@@ -1,4 +1,4 @@
-package com.dkat.wordbook.ui.compose.screen.langauge
+package com.dkat.wordbook.ui.compose.screen.language
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding

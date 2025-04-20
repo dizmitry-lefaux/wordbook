@@ -4,10 +4,8 @@ import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -35,60 +33,12 @@ fun HomeScreen(
     createWordWithTranslation: (word: Word_B, translation: Translation) -> Unit,
     onDeleteWordItemClick: (word: Word_B) -> Unit,
     onDeleteSourceItemClick: (source: Source) -> Unit,
-    onClickMigrateSources: () -> Unit,
-    onClickMigrateLanguages: () -> Unit,
-    onClickMigrateWords: () -> Unit,
-    onClickMigrateTranslations: () -> Unit,
     scrollState: ScrollState = rememberScrollState()
 ) {
     Column(
         modifier = modifier.fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        Button(
-            enabled = false,
-            modifier = modifier.padding(0.dp)
-                .height(0.dp),
-            onClick = onClickMigrateSources
-        ) {
-            Text(
-                text = "MIGRATE SOURCES",
-                style = MaterialTheme.typography.titleMedium
-            )
-        }
-        Button(
-            enabled = false,
-            modifier = modifier.padding(0.dp)
-                .height(0.dp),
-            onClick = onClickMigrateLanguages
-        ) {
-            Text(
-                text = "MIGRATE LANGUAGES",
-                style = MaterialTheme.typography.titleMedium
-            )
-        }
-        Button(
-            enabled = false,
-            modifier = modifier.padding(0.dp)
-                .height(0.dp),
-            onClick = onClickMigrateWords
-        ) {
-            Text(
-                text = "MIGRATE WORDS",
-                style = MaterialTheme.typography.titleMedium
-            )
-        }
-        Button(
-            enabled = false,
-            modifier = modifier.padding(0.dp)
-                .height(0.dp),
-            onClick = onClickMigrateTranslations
-        ) {
-            Text(
-                text = "MIGRATE TRANSLATIONS",
-                style = MaterialTheme.typography.titleMedium
-            )
-        }
         InputWord(
             createWordWithTranslation = createWordWithTranslation,
             sources = sources,
@@ -184,10 +134,6 @@ fun HomeScreenPreview() {
             ),
             createWordWithTranslation = { _, _ -> },
             onDeleteWordItemClick = {},
-            onClickMigrateSources = {},
-            onClickMigrateLanguages = {},
-            onClickMigrateWords = {},
-            onClickMigrateTranslations = {},
             onDeleteSourceItemClick = {},
             sources = listOf(
                 Source(

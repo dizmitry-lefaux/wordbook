@@ -1,5 +1,6 @@
 #### TODO:
 
+* check replacement of LazyColumn to forEach + Column
 * add possibility to remove source with words
 * make sessions multiple
 * make sessions switchable
@@ -21,8 +22,6 @@
 * sources screen:
   * screen is scrollable only for "sources" part
   * sources section:
-    * source duplicates displayed
-    * source do not have content
     * can't remove source
   * input source section:
     * language value is invisible in the expanded dropdown

@@ -1,4 +1,4 @@
-package com.dkat.wordbook.ui.compose.language
+package com.dkat.wordbook.ui.compose.screen.language
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

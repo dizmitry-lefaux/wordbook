@@ -2,15 +2,10 @@ package com.dkat.wordbook.ui.compose.word
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.Button
@@ -60,21 +55,14 @@ fun WordWithTranslationsItem(
             }
         }
         Column {
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(1),
-                contentPadding = PaddingValues(8.dp),
-                horizontalArrangement = Arrangement.spacedBy(16.dp),
-                verticalArrangement = Arrangement.spacedBy(2.dp)
-            ) {
-                item {
+            Text(
+                text = "Translations:",
+                modifier.padding(2.dp)
+            )
+            Column(modifier = Modifier.padding(8.dp)) {
+                translations.forEach { translation ->
                     Text(
-                        text = "Translations:",
-                        modifier.padding(2.dp)
-                    )
-                }
-                items(translations) {
-                    Text(
-                        text = it.value,
+                        text = translation.value,
                         modifier = modifier.padding(2.dp),
                     )
                 }

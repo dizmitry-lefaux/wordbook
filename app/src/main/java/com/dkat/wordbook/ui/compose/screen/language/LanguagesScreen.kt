@@ -1,4 +1,4 @@
-package com.dkat.wordbook.ui.compose.screen.langauge
+package com.dkat.wordbook.ui.compose.screen.language
 
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Arrangement
@@ -19,7 +19,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.dkat.wordbook.data.entity.Language
-import com.dkat.wordbook.ui.compose.language.LanguageItem
 
 @Composable
 fun LanguagesScreen(

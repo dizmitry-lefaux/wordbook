@@ -70,8 +70,7 @@ interface WordDao
     @Query("UPDATE words SET isInSession = :isInSession WHERE id IN (:ids)")
     suspend fun updateIsInSessionForList(isInSession: Boolean, ids: List<Int>)
 
-    // TODO: check functionality
     @Transaction
-    @Query("SELECT * FROM word INNER JOIN translation ON word.id = translation.word_id")
+    @Query("SELECT * FROM word")
     fun readWordsWithTranslations(): Flow<List<WordWithTranslations>>
 }
