@@ -1,10 +1,10 @@
-package com.dkat.wordbook.data
+package com.dkat.wordbook.data.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "words")
- data class Word(
+data class Word(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
     val rusValue: String = "",

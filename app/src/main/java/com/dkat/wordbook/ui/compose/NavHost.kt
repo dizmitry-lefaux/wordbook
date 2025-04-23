@@ -8,9 +8,13 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.dkat.wordbook.MainViewModel
+import com.dkat.wordbook.data.entity.Language
+import com.dkat.wordbook.data.entity.Source
+import com.dkat.wordbook.data.entity.Translation
 import com.dkat.wordbook.ui.compose.screen.Screen
-import com.dkat.wordbook.data.Word
+import com.dkat.wordbook.data.entity.Word_B
 import com.dkat.wordbook.ui.compose.screen.home.HomeScreen
+import com.dkat.wordbook.ui.compose.screen.language.LanguagesScreen
 import com.dkat.wordbook.ui.compose.screen.session.SessionScreen
 import com.dkat.wordbook.ui.compose.screen.source.SourcesScreen
 
@@ -20,8 +24,10 @@ fun WordbookNavHost(
     viewModel: MainViewModel,
     modifier: Modifier
 ) {
-    val words by viewModel.words.collectAsStateWithLifecycle()
     val sources by viewModel.sources.collectAsStateWithLifecycle()
+    val sourcesWithWords by viewModel.sourcesWithWords.collectAsStateWithLifecycle()
+    val wordsWithTranslations by viewModel.wordsWithTranslations.collectAsStateWithLifecycle()
+    val languages by viewModel.languages.collectAsStateWithLifecycle()
     val sessionWords by viewModel.sessionWords.collectAsStateWithLifecycle()
 
     NavHost(
@@ -31,23 +37,37 @@ fun WordbookNavHost(
     ) {
         composable(route = Screen.Home.route) {
             HomeScreen(
+                readSource = { id: Int ->
+                    viewModel.readSource(id)
+                },
+                createWordWithTranslation = { word: Word_B, translation: Translation ->
+                    viewModel.createWordWithTranslation(word, translation)
+                },
                 sources = sources,
-                words = words,
-                onDeleteWordItemClick = { word: Word ->
+                onDeleteWordItemClick = { word: Word_B ->
                     viewModel.deleteWord(word)
                 },
-                addWord = { word: Word ->
-                    viewModel.addWord(word)
-                }
+                onDeleteSourceItemClick = { source: Source ->
+                    viewModel.deleteSource(source)
+                },
+                sourcesWithWords = sourcesWithWords,
+                wordsWithTranslations = wordsWithTranslations,
             )
         }
         composable(route = Screen.Sources.route) {
             SourcesScreen(
-                sources = sources,
-                words = words,
-                onDeleteWordItemClick = { word: Word ->
+                onDeleteSourceItemClick = { source: Source ->
+                    viewModel.deleteSource(source)
+                },
+                onDeleteWordItemClick = { word: Word_B ->
                     viewModel.deleteWord(word)
-                }
+                },
+                createSource = { source: Source ->
+                    viewModel.createSource(source)
+                },
+                sourcesWithWords = sourcesWithWords,
+                wordsWithTranslations = wordsWithTranslations,
+                languages = languages,
             )
         }
         composable(route = Screen.Session.route) {
@@ -58,6 +78,17 @@ fun WordbookNavHost(
                 },
                 onRestartSessionClick = {
                     viewModel.restartSession()
+                }
+            )
+        }
+        composable(route = Screen.Languages.route) {
+            LanguagesScreen(
+                languages = languages,
+                createLanguage = { language: Language ->
+                    viewModel.createLanguage(language)
+                },
+                onDeleteLanguageItemClick = { language: Language ->
+                    viewModel.deleteLanguage(language)
                 }
             )
         }

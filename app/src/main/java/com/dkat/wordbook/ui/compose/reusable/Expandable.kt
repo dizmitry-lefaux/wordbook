@@ -1,4 +1,4 @@
-package com.dkat.wordbook.ui.compose.expandable
+package com.dkat.wordbook.ui.compose.reusable
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image

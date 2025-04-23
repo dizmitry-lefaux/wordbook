@@ -65,6 +65,8 @@ dependencies {
     implementation(libs.androidx.preferences.datastore)
 
     implementation(libs.androidx.room.ktx)
+    // TODO: check do we need this dependency
+//    implementation(libs.androidx.compose.testing)
     ksp(libs.androidx.room.compiler)
 
     testImplementation(libs.junit)
@@ -73,6 +75,7 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
+//    androidTestImplementation "androidx.test.ext:junit:1.1.3"
 
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
