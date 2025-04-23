@@ -22,43 +22,34 @@ import com.dkat.wordbook.data.entity.WordWithTranslations
 import com.dkat.wordbook.data.entity.Word_B
 
 @Composable
-fun WordWithTranslationsItem(
-    wordWithTranslations: WordWithTranslations,
-    onDeleteWordItemClick: (word: Word_B) -> Unit,
-    modifier: Modifier
+fun WordWithTranslationsItem(wordWithTranslations: WordWithTranslations,
+                             onDeleteWordItemClick: (word: Word_B) -> Unit,
+                             modifier: Modifier
 ) {
     val word = wordWithTranslations.word
     val translations = wordWithTranslations.translations
+
     Column {
         Row {
             Column {
-                Text(
-                    text = word.value,
-                    modifier.padding(8.dp)
-                )
+                Text(text = word.value, modifier.padding(8.dp))
             }
-            Column(
-                modifier.fillMaxWidth(),
-                horizontalAlignment = Alignment.End
+            Column(modifier = modifier.fillMaxWidth(),
+                   horizontalAlignment = Alignment.End
             ) {
                 Button(
                     onClick = { onDeleteWordItemClick(word) },
                     colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
                 ) {
-                    Image(
-                        imageVector = Icons.Filled.Clear,
-                        contentDescription = "",
-                        modifier
-                            .background(color = Color.LightGray)
+                    Image(imageVector = Icons.Filled.Clear,
+                          contentDescription = "",
+                          modifier = modifier.background(color = Color.LightGray)
                     )
                 }
             }
         }
         Column {
-            Text(
-                text = "Translations:",
-                modifier.padding(2.dp)
-            )
+            Text(text = "Translations:", modifier.padding(2.dp))
             Column(modifier = Modifier.padding(8.dp)) {
                 translations.forEach { translation ->
                     Text(
@@ -73,19 +64,33 @@ fun WordWithTranslationsItem(
 
 @Preview(showBackground = true)
 @Composable
-fun WordItemPreview()
-{
+fun WordItemPreview() {
     val wordWithTranslations = WordWithTranslations(
-        word = Word_B(id = 6850, sourceId = 1486, languageId = 3567, value = "efficiantur"),
+        word = Word_B(id = 6850,
+                      sourceId = 1486,
+                      languageId = 3567,
+                      value = "efficiantur"
+        ),
         translations = listOf(
-            Translation(id = 2203, wordId = 7627, value = "duo", languageId = 4738),
-            Translation(id = 8867, wordId = 5186, value = "necessitatibus", languageId = 6808),
-            Translation(id = 7213, wordId = 5834, value = "deterruisset", languageId = 7215)
+            Translation(id = 2203,
+                        wordId = 7627,
+                        value = "duo",
+                        languageId = 4738
+            ),
+            Translation(id = 8867,
+                        wordId = 5186,
+                        value = "necessitatibus",
+                        languageId = 6808
+            ),
+            Translation(id = 7213,
+                        wordId = 5834,
+                        value = "deterruisset",
+                        languageId = 7215
+            )
         )
     )
-    WordWithTranslationsItem(
-        wordWithTranslations = wordWithTranslations,
-        onDeleteWordItemClick = {},
-        modifier = Modifier
+    WordWithTranslationsItem(wordWithTranslations = wordWithTranslations,
+                             onDeleteWordItemClick = {},
+                             modifier = Modifier
     )
 }

@@ -20,7 +20,7 @@ import com.dkat.wordbook.data.entity.Source
 import com.dkat.wordbook.data.entity.Translation
 import com.dkat.wordbook.data.entity.WordWithTranslations
 import com.dkat.wordbook.data.entity.Word_B
-import com.dkat.wordbook.ui.compose.expandable.ExpandableSection
+import com.dkat.wordbook.ui.compose.reusable.ExpandableSection
 import com.dkat.wordbook.ui.compose.word.WordsWithTranslationsList
 
 @Composable
@@ -52,6 +52,7 @@ fun SourceItem(
             modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.End
         ) {
+            // TODO: make 'Clear' image visible
             Button(
                 onClick = { onDeleteSourceClick(source) },
                 colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),

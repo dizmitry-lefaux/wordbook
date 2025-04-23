@@ -14,6 +14,10 @@ interface SourceDao {
     @Insert
     suspend fun createSource(source: Source): Long
 
+    // blocking request
+    @Query("SELECT * FROM source WHERE id = :id")
+    fun readSourceById(id: Int): Source
+
     @Query("DELETE FROM source WHERE id = :id")
     suspend fun deleteSourceById(id: Int)
 

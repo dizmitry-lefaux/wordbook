@@ -48,6 +48,8 @@ abstract class WordDatabase : RoomDatabase() {
                         .addMigrations(MIGRATION_4_5)
                         .addMigrations(MIGRATION_5_6)
                         .addMigrations(MIGRATION_6_7)
+                        // allowing to get direct requests blocking UI
+                        .allowMainThreadQueries()
                         .fallbackToDestructiveMigration()
                         .build()
                 }

@@ -101,6 +101,11 @@ class WordRepository(private val context: Context)
     }
 
     // TODO: move to separate repository
+    fun readSource(id: Int): Source {
+        return sourceDao.readSourceById(id = id)
+    }
+
+    // TODO: move to separate repository
     fun readSources(): Flow<List<Source>> = sourceDao.readSources()
 
     fun readSourcesWithWords(): Flow<List<SourceWithWords>> = sourceDao.readSourcesWithWords()

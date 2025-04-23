@@ -15,22 +15,25 @@ sealed class Screen(
     @StringRes
     val labelResourceId: Int
 ) {
-    data object Home: Screen(
+    data object Home : Screen(
         route = "home",
         icon = Icons.Filled.Home,
         labelResourceId = R.string.home_label
     )
-    data object Session: Screen(
+
+    data object Session : Screen(
         route = "session",
         icon = Icons.Filled.Face,
         labelResourceId = R.string.session_label
     )
-    data object Sources: Screen(
+
+    data object Sources : Screen(
         route = "sources",
         icon = Icons.Filled.Edit,
         labelResourceId = R.string.sources_label
     )
-    data object Languages: Screen(
+
+    data object Languages : Screen(
         route = "languages",
         icon = Icons.Filled.Create,
         labelResourceId = R.string.languages_label

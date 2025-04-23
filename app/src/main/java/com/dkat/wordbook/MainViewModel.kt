@@ -141,6 +141,11 @@ class MainViewModel(
         return translationId
     }
 
+    // blocking read
+    fun readSource(id: Int): Source {
+        return wordRepository.readSource(id)
+    }
+
     fun deleteWord(word: Word_B) {
         viewModelScope.launch {
             wordRepository.deleteWord(word)

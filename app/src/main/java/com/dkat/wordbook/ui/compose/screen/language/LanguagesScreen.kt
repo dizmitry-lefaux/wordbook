@@ -21,31 +21,26 @@ import androidx.compose.ui.unit.dp
 import com.dkat.wordbook.data.entity.Language
 
 @Composable
-fun LanguagesScreen(
-    languages: List<Language>,
-    createLanguage: (language: Language) -> Unit,
-    onDeleteLanguageItemClick: (language: Language) -> Unit,
-    modifier: Modifier = Modifier,
-    scrollState: ScrollState = rememberScrollState()
+fun LanguagesScreen(languages: List<Language>,
+                    createLanguage: (language: Language) -> Unit,
+                    onDeleteLanguageItemClick: (language: Language) -> Unit,
+                    modifier: Modifier = Modifier,
+                    scrollState: ScrollState = rememberScrollState()
 ) {
     Column {
-        InputLanguage(
-            createLanguage = createLanguage,
-            languages = languages
+        InputLanguage(createLanguage = createLanguage, languages = languages)
+        Text(modifier = modifier.padding(16.dp),
+            // TODO: Move text to string resources
+             text = "Languages:",
+             style = MaterialTheme.typography.titleLarge,
+             fontWeight = FontWeight.Bold,
+             textAlign = TextAlign.Left
         )
-        Text(
-            modifier = modifier.padding(16.dp),
-            text = "Languages:",
-            style = MaterialTheme.typography.titleLarge,
-            fontWeight = FontWeight.Bold,
-            textAlign = TextAlign.Left
-        )
-        LazyVerticalGrid(
-            modifier = modifier.fillMaxSize(),
-            columns = GridCells.Fixed(1),
-            contentPadding = PaddingValues(16.dp),
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+        LazyVerticalGrid(modifier = modifier.fillMaxSize(),
+                         columns = GridCells.Fixed(1),
+                         contentPadding = PaddingValues(16.dp),
+                         horizontalArrangement = Arrangement.spacedBy(16.dp),
+                         verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             items(languages) {
                 LanguageItem(
@@ -60,16 +55,14 @@ fun LanguagesScreen(
 
 @Preview(showBackground = true)
 @Composable
-fun SourceScreenPreview()
-{
+fun SourceScreenPreview() {
     val languages = listOf(
         Language(id = 4426, name = "English"),
         Language(id = 4427, name = "Russian"),
     )
-    LanguagesScreen(
-        languages = languages,
-        createLanguage = {},
-        onDeleteLanguageItemClick = {},
-        modifier = Modifier
+    LanguagesScreen(languages = languages,
+                    createLanguage = {},
+                    onDeleteLanguageItemClick = {},
+                    modifier = Modifier
     )
 }

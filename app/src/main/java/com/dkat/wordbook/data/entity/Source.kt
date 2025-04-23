@@ -7,8 +7,8 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "source")
 data class Source(
     @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "id")                       val id: Int = 0,
-    @ColumnInfo(name = "name")                     val name: String = "",
-    @ColumnInfo(name = "main_orig_lang_id")        val mainOrigLangId: Int = 0,
-    @ColumnInfo(name = "main_translation_lang_id") val mainTranslationLangId: Int = 0,
-)
+    @ColumnInfo(name = "id")                       override val id: Int = 0,
+    @ColumnInfo(name = "name")                     override val name: String = "",
+    @ColumnInfo(name = "main_orig_lang_id")                 val mainOrigLangId: Int = 0,
+    @ColumnInfo(name = "main_translation_lang_id")          val mainTranslationLangId: Int = 0,
+) : NamedEntity

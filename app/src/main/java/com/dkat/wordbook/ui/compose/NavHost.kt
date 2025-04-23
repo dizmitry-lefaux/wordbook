@@ -37,6 +37,9 @@ fun WordbookNavHost(
     ) {
         composable(route = Screen.Home.route) {
             HomeScreen(
+                readSource = { id: Int ->
+                    viewModel.readSource(id)
+                },
                 createWordWithTranslation = { word: Word_B, translation: Translation ->
                     viewModel.createWordWithTranslation(word, translation)
                 },

@@ -22,10 +22,8 @@ import com.dkat.wordbook.ui.compose.bar.BottomBar
 import com.dkat.wordbook.ui.compose.bar.TopAppBar
 import com.dkat.wordbook.ui.theme.AppTheme
 
-class MainActivity : ComponentActivity()
-{
-    override fun onCreate(savedInstanceState: Bundle?)
-    {
+class MainActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
@@ -35,49 +33,37 @@ class MainActivity : ComponentActivity()
 }
 
 @Composable
-fun WordbookApp()
-{
+fun WordbookApp() {
     AppTheme {
         val navController = rememberNavController()
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentDestination = navBackStackEntry?.destination
         val context = LocalContext.current
 
-        val viewModel: MainViewModel = viewModel(
-            factory = MainViewModelFactory(
-                WordRepository(context = context)
-            )
-        )
+        val viewModel: MainViewModel =
+            viewModel(factory = MainViewModelFactory(WordRepository(context = context)))
 
-        Scaffold(
-            modifier = Modifier.fillMaxSize(),
-            topBar = {
-                TopAppBar(
-                    appName = R.string.app_name
-                )
-            },
-            bottomBar = {
-                BottomBar(
-                    navController = navController,
-                    currentDestination = currentDestination,
-                )
-            }
+        Scaffold(modifier = Modifier.fillMaxSize(),
+                 topBar = {
+                     TopAppBar(appName = R.string.app_name)
+                 },
+                 bottomBar = {
+                     BottomBar(
+                         navController = navController,
+                         currentDestination = currentDestination,
+                     )
+                 }
         ) { innerPadding ->
-            WordbookNavHost(
-                navController = navController,
-                viewModel = viewModel,
-                modifier = Modifier.padding(innerPadding)
+            WordbookNavHost(navController = navController,
+                            viewModel = viewModel,
+                            modifier = Modifier.padding(innerPadding)
             )
         }
     }
 }
 
-@Preview(
-    showBackground = true,
-    device = PIXEL_5
-)
+@Preview(showBackground = true, device = PIXEL_5)
 @Composable
-fun MainActivityPreview()
-{
+fun MainActivityPreview() {
     WordbookApp()
 }

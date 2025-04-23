@@ -16,14 +16,9 @@
 
 * home screen:
   * screen is scrollable only for "sources" part
-  * input word section:
-    * source value is invisible in the expanded dropdown
-    * source dropdown should close on value select
 * sources screen:
   * screen is scrollable only for "sources" part
   * sources section:
     * can't remove source
   * input source section:
-    * language value is invisible in the expanded dropdown
-    * language dropdown should close on value select
-    * languages should not be allowed to be the same
+

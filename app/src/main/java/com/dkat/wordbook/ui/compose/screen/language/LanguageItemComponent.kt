@@ -23,36 +23,30 @@ import androidx.compose.ui.unit.dp
 import com.dkat.wordbook.data.entity.Language
 
 @Composable
-fun LanguageItem(
-    language: Language,
-    onDeleteLanguageItemClick: (language: Language) -> Unit,
-    modifier: Modifier
+fun LanguageItem(language: Language,
+                 onDeleteLanguageItemClick: (language: Language) -> Unit,
+                 modifier: Modifier
 ) {
-    Row(modifier.padding(4.dp).fillMaxWidth()) {
-        Column(
-            modifier.padding(4.dp)
+    Row(modifier
+            .padding(4.dp)
+            .fillMaxWidth()) {
+        Column(modifier.padding(4.dp)
         ) {
-            Text(
-                modifier = modifier.padding(2.dp),
-                text = language.name,
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold,
-                textAlign = TextAlign.Left
+            Text(modifier = modifier.padding(2.dp),
+                 text = language.name,
+                 style = MaterialTheme.typography.titleMedium,
+                 fontWeight = FontWeight.Bold,
+                 textAlign = TextAlign.Left
             )
         }
-        Column(
-            modifier.fillMaxWidth(),
-            horizontalAlignment = Alignment.End
+        Column(modifier.fillMaxWidth(), horizontalAlignment = Alignment.End
         ) {
-            Button(
-                onClick = { onDeleteLanguageItemClick(language) },
-                colors = ButtonDefaults.buttonColors(containerColor = Color.White),
+            Button(onClick = { onDeleteLanguageItemClick(language) },
+                   colors = ButtonDefaults.buttonColors(containerColor = Color.White),
             ) {
-                Image(
-                    imageVector = Icons.Filled.Clear,
-                    contentDescription = "",
-                    modifier
-                        .background(color = Color.LightGray)
+                Image(imageVector = Icons.Filled.Clear,
+                      contentDescription = "",
+                      modifier.background(color = Color.LightGray)
                 )
             }
         }
@@ -61,15 +55,7 @@ fun LanguageItem(
 
 @Preview(showBackground = true)
 @Composable
-fun WordItemPreview()
-{
-    val language = Language(
-        id = 6491, name = "English"
-
-    )
-    LanguageItem(
-        language = language,
-        onDeleteLanguageItemClick = {},
-        modifier = Modifier
-    )
+fun WordItemPreview() {
+    val language = Language(id = 6491, name = "English")
+    LanguageItem(language = language, onDeleteLanguageItemClick = {}, modifier = Modifier)
 }
