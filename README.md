@@ -11,6 +11,7 @@
 * add possibility to create word with multiple translations
 * think about combining 'Sources' and 'Languages' screens
 * think about adding 'Words' screen
+* update bottom bar icons
 
 #### ISSUES:
 

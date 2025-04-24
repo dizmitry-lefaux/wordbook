@@ -1,13 +1,16 @@
 package com.dkat.wordbook.ui.compose.bar
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavHostController
@@ -19,17 +22,16 @@ fun BottomBar(
     currentDestination: NavDestination?,
     modifier: Modifier = Modifier,
 ) {
-    NavigationBar(
-        modifier = modifier
-    ) {
+    NavigationBar {
         screens.forEach { screen ->
             val label = stringResource(screen.labelResourceId)
             NavigationBarItem(
                 icon = {
-                    Box() {
+                    Box {
                         Icon(
-                            imageVector = screen.icon,
-                            contentDescription = label
+                            painterResource(screen.icon),
+                            contentDescription = stringResource(screen.labelResourceId),
+                            modifier = Modifier.size(30.dp)
                         )
                     }
                 },

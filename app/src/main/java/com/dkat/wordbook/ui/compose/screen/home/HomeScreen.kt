@@ -66,30 +66,31 @@ fun HomeScreen(sources: List<Source>,
 fun HomeScreenPreview() {
     AppTheme {
         HomeScreen(
-            sourcesWithWords = listOf(SourceWithWords(
-                source = Source(id = 1845,
-                                name = "Tony Marquez",
-                                mainOrigLangId = 5432,
-                                mainTranslationLangId = 4679
-                ),
-                words = listOf(
-                    Word_B(id = 4428,
-                           sourceId = 4887,
-                           languageId = 9685,
-                           value = "dictas"
+            sourcesWithWords = listOf(
+                SourceWithWords(
+                    source = Source(id = 1845,
+                                    name = "Tony Marquez",
+                                    mainOrigLangId = 5432,
+                                    mainTranslationLangId = 4679
                     ),
-                    Word_B(id = 6426,
-                           sourceId = 9615,
-                           languageId = 7799,
-                           value = "nullam"
-                    ),
-                    Word_B(id = 6426,
-                           sourceId = 9615,
-                           languageId = 7799,
-                           value = "nullam"
-                    ),
+                    words = listOf(
+                        Word_B(id = 4428,
+                               sourceId = 4887,
+                               languageId = 9685,
+                               value = "dictas"
+                        ),
+                        Word_B(id = 6426,
+                               sourceId = 9615,
+                               languageId = 7799,
+                               value = "nullam"
+                        ),
+                        Word_B(id = 6426,
+                               sourceId = 9615,
+                               languageId = 7799,
+                               value = "nullam"
+                        ),
+                    )
                 )
-            )
             ),
             wordsWithTranslations = listOf(
                 WordWithTranslations(
@@ -165,7 +166,7 @@ fun HomeScreenPreview() {
                        mainOrigLangId = 5432,
                        mainTranslationLangId = 4679
                 )
-            ),
+            )
         )
     }
 }
