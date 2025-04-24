@@ -1,16 +1,9 @@
 package com.dkat.wordbook.ui.compose.source
 
-import android.util.Log
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.dkat.wordbook.data.entity.Source
 import com.dkat.wordbook.data.entity.SourceWithWords
 import com.dkat.wordbook.data.entity.Translation
@@ -27,13 +20,7 @@ fun ListOfSources(
     onDeleteSourceItemClick: (source: Source) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    LazyVerticalGrid(
-        modifier = modifier.fillMaxSize(),
-        columns = GridCells.Fixed(1),
-        contentPadding = PaddingValues(16.dp),
-        horizontalArrangement = Arrangement.spacedBy(16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
+    Column {
         val mapOfSources: MutableMap<Source, List<WordWithTranslations>> = mutableMapOf()
         for (sourceWithWords in sourcesWithWords) {
             val wordsWithTranslationsSubList: List<WordWithTranslations> =
@@ -43,13 +30,15 @@ fun ListOfSources(
             mapOfSources[sourceWithWords.source] = wordsWithTranslationsSubList
         }
         val sourcesList = mapOfSources.keys.toList()
-        items(sourcesList) {
-            SourceItem(
-                onDeleteSourceClick = onDeleteSourceItemClick,
-                onDeleteWordClick = onDeleteWordItemClick,
-                source = it,
-                wordsWithTranslations = mapOfSources[it]
-            )
+        sourcesList.forEach { source ->
+            Column {
+                SourceItem(
+                    onDeleteSourceClick = onDeleteSourceItemClick,
+                    onDeleteWordClick = onDeleteWordItemClick,
+                    source = source,
+                    wordsWithTranslations = mapOfSources[source]
+                )
+            }
         }
     }
 }

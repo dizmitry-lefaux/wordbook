@@ -5,6 +5,8 @@
     <string name="sources_label">Sources</string>
     <string name="session_label">Session</string>
     <string name="languages_label">Languages</string>
+    <string name="books">Books</string>
+    <string name="words">Words</string>
 <!--    Screen titles    -->
     <string name="session.title">Session</string>
 </resources>

@@ -13,10 +13,9 @@ import com.dkat.wordbook.data.entity.Source
 import com.dkat.wordbook.data.entity.Translation
 import com.dkat.wordbook.ui.compose.screen.Screen
 import com.dkat.wordbook.data.entity.Word_B
+import com.dkat.wordbook.ui.compose.screen.books.BooksScreen
 import com.dkat.wordbook.ui.compose.screen.home.HomeScreen
-import com.dkat.wordbook.ui.compose.screen.language.LanguagesScreen
 import com.dkat.wordbook.ui.compose.screen.session.SessionScreen
-import com.dkat.wordbook.ui.compose.screen.source.SourcesScreen
 
 @Composable
 fun WordbookNavHost(
@@ -54,22 +53,6 @@ fun WordbookNavHost(
                 wordsWithTranslations = wordsWithTranslations,
             )
         }
-        composable(route = Screen.Sources.route) {
-            SourcesScreen(
-                onDeleteSourceItemClick = { source: Source ->
-                    viewModel.deleteSource(source)
-                },
-                onDeleteWordItemClick = { word: Word_B ->
-                    viewModel.deleteWord(word)
-                },
-                createSource = { source: Source ->
-                    viewModel.createSource(source)
-                },
-                sourcesWithWords = sourcesWithWords,
-                wordsWithTranslations = wordsWithTranslations,
-                languages = languages,
-            )
-        }
         composable(route = Screen.Session.route) {
             SessionScreen(
                 sessionWords = sessionWords,
@@ -81,9 +64,20 @@ fun WordbookNavHost(
                 }
             )
         }
-        composable(route = Screen.Languages.route) {
-            LanguagesScreen(
+        composable(route = Screen.Books.route) {
+            BooksScreen(
+                sourcesWithWords = sourcesWithWords,
+                wordsWithTranslations = wordsWithTranslations,
                 languages = languages,
+                onDeleteSourceItemClick = { source: Source ->
+                    viewModel.deleteSource(source)
+                },
+                onDeleteWordItemClick = { word: Word_B ->
+                    viewModel.deleteWord(word)
+                },
+                createSource = { source: Source ->
+                    viewModel.createSource(source)
+                },
                 createLanguage = { language: Language ->
                     viewModel.createLanguage(language)
                 },

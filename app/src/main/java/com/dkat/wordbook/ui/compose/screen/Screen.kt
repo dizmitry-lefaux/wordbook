@@ -1,43 +1,37 @@
 package com.dkat.wordbook.ui.compose.screen
 
 import androidx.annotation.StringRes
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Create
-import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.Face
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.ui.graphics.vector.ImageVector
 import com.dkat.wordbook.R
 
 sealed class Screen(
     val route: String,
-    val icon: ImageVector,
+    val icon: Int,
     @StringRes
     val labelResourceId: Int
 ) {
     data object Home : Screen(
         route = "home",
-        icon = Icons.Filled.Home,
+        icon = R.drawable.home3,
         labelResourceId = R.string.home_label
     )
 
     data object Session : Screen(
         route = "session",
-        icon = Icons.Filled.Face,
+        icon = R.drawable.session,
         labelResourceId = R.string.session_label
     )
 
-    data object Sources : Screen(
-        route = "sources",
-        icon = Icons.Filled.Edit,
-        labelResourceId = R.string.sources_label
+    data object Words : Screen(
+        route = "words",
+        icon = R.drawable.book,
+        labelResourceId = R.string.words
     )
 
-    data object Languages : Screen(
-        route = "languages",
-        icon = Icons.Filled.Create,
-        labelResourceId = R.string.languages_label
+    data object Books : Screen(
+        route = "books",
+        icon = R.drawable.books,
+        labelResourceId = R.string.books
     )
 }
 
-val screens = listOf(Screen.Home, Screen.Session, Screen.Sources, Screen.Languages)
+val screens = listOf(Screen.Home, Screen.Session, Screen.Books)
