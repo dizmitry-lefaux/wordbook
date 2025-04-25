@@ -32,7 +32,7 @@ fun ListOfSources(
         val sourcesList = mapOfSources.keys.toList()
         sourcesList.forEach { source ->
             Column {
-                SourceItem(
+                ExpandableSourceItem(
                     onDeleteSourceClick = onDeleteSourceItemClick,
                     onDeleteWordClick = onDeleteWordItemClick,
                     source = source,

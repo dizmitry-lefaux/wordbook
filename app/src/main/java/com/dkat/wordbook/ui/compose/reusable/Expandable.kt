@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.dp
 fun ExpandableSection(
     modifier: Modifier = Modifier,
     title: String,
+    isHideTitleOnExpand: Boolean = false,
     content: @Composable () -> Unit
 ) {
     var isExpanded by rememberSaveable { mutableStateOf(false) }
@@ -38,7 +39,11 @@ fun ExpandableSection(
             .background(color = MaterialTheme.colorScheme.primaryContainer)
             .fillMaxWidth()
     ) {
-        ExpandableSectionTitle(isExpanded = isExpanded, title = title)
+        ExpandableSectionTitle(
+            isExpanded = isExpanded,
+            title = title,
+            isHideTitleOnExpand = isHideTitleOnExpand
+        )
 
         AnimatedVisibility(
             modifier = Modifier
@@ -55,6 +60,7 @@ fun ExpandableSection(
 private fun ExpandableSectionTitle(
     modifier: Modifier = Modifier,
     isExpanded: Boolean,
+    isHideTitleOnExpand: Boolean,
     title: String
 ) {
     val icon = if (isExpanded) Icons.Rounded.KeyboardArrowUp else Icons.Rounded.KeyboardArrowDown
@@ -69,10 +75,12 @@ private fun ExpandableSectionTitle(
             colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.onPrimaryContainer),
             contentDescription = "expanded or collapsed"
         )
-        Text(
-            text = title,
-            style = MaterialTheme.typography.headlineSmall
-        )
+        if (!(isExpanded && isHideTitleOnExpand)) {
+            Text(
+                text = title,
+                style = MaterialTheme.typography.headlineSmall
+            )
+        }
     }
 }
 
