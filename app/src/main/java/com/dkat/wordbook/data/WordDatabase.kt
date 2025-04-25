@@ -21,7 +21,7 @@ import com.dkat.wordbook.data.entity.Word_B
 @Database(
     entities = [Word::class, Language::class, SessionSourceCrossRef::class,
         SessionWordCrossRef::class, Source::class, Translation::class, Word_B::class],
-    version = 7,
+    version = 8,
     exportSchema = false,
 )
 abstract class WordDatabase : RoomDatabase() {

@@ -1,11 +1,11 @@
 package com.dkat.wordbook.ui.compose.screen.home
 
-import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -33,9 +33,8 @@ fun HomeScreen(sources: List<Source>,
                createWordWithTranslation: (word: Word_B, translation: Translation) -> Unit,
                onDeleteWordItemClick: (word: Word_B) -> Unit,
                onDeleteSourceItemClick: (source: Source) -> Unit,
-               scrollState: ScrollState = rememberScrollState()
 ) {
-    Column(modifier = modifier.fillMaxSize(),
+    Column(modifier = modifier.fillMaxSize().verticalScroll(rememberScrollState()),
            verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         InputWord(
