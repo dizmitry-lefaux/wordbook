@@ -1,4 +1,4 @@
-package com.dkat.wordbook.ui.compose.screen.source
+package com.dkat.wordbook.ui.compose.source
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding

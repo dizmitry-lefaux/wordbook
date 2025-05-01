@@ -1,0 +1,77 @@
+package com.dkat.wordbook.ui.compose.screen.words
+
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import com.dkat.wordbook.data.PreviewData
+import com.dkat.wordbook.data.entity.Source
+import com.dkat.wordbook.data.entity.Translation
+import com.dkat.wordbook.data.entity.WordWithTranslations
+import com.dkat.wordbook.data.entity.Word_B
+import com.dkat.wordbook.ui.compose.reusable.EntityDropdownMenu
+import com.dkat.wordbook.ui.compose.screen.home.InputWordWithoutSource
+import com.dkat.wordbook.ui.compose.word.WordsWithTranslationsList
+
+@Composable
+fun WordsScreen(
+    sources: List<Source>,
+    wordsWithTranslations: List<WordWithTranslations>,
+    readSource: (id: Int) -> Source,
+    createWordWithTranslations: (word: Word_B, translations: List<Translation>) -> Unit,
+    onDeleteWordItemClick: (word: Word_B) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    var selectedSource by remember { mutableStateOf<Source?>(null) }
+    var selectedSourceId by remember { mutableStateOf<Int?>(null) }
+    var isSelectSourceError by remember { mutableStateOf(false) }
+
+    Column(modifier = modifier.fillMaxSize().verticalScroll(rememberScrollState()),
+           verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        EntityDropdownMenu(
+            list = sources,
+            defaultValue = "Select source",
+            onSelect = {
+                selectedSourceId = it.id
+                selectedSource = readSource(selectedSourceId!!)
+            },
+            resetErrorStateOnClick = { isSelectSourceError = it },
+        )
+        HorizontalDivider(thickness = 4.dp, color = Color.Black)
+        InputWordWithoutSource(
+            createWordWithTranslations = createWordWithTranslations,
+            source = selectedSource,
+        )
+        HorizontalDivider(thickness = 4.dp, color = Color.Black)
+        WordsWithTranslationsList(
+            wordsWithTranslations = wordsWithTranslations.filter { wordWithTranslations ->
+                wordWithTranslations.word.sourceId == selectedSourceId
+            }.toList(),
+            onDeleteWordClick = onDeleteWordItemClick,
+            modifier = modifier,
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun WordsScreenPreview() {
+    WordsScreen(wordsWithTranslations = PreviewData.wordsWithTranslations,
+                sources = PreviewData.sources,
+                readSource = { _ -> Source() },
+                createWordWithTranslations = { _, _ -> },
+                onDeleteWordItemClick = {},
+    )
+}

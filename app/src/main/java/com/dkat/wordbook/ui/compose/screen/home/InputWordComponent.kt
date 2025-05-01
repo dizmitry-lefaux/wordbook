@@ -13,6 +13,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.dkat.wordbook.data.PreviewData
 import com.dkat.wordbook.data.entity.Source
 import com.dkat.wordbook.data.entity.Translation
 import com.dkat.wordbook.data.entity.Word_B
@@ -140,20 +141,7 @@ fun InputWord(
 fun InputWordPreview()
 {
     InputWord(
-        sources = listOf(
-            Source(
-                id = 3368,
-                name = "Chuck Leonard",
-                mainOrigLangId = 6743,
-                mainTranslationLangId = 9292
-            ),
-            Source(
-                id = 5360,
-                name = "Wendell Patrick",
-                mainOrigLangId = 7709,
-                mainTranslationLangId = 6304
-            )
-        ),
+        sources = PreviewData.sources,
         readSourceById = {_ -> Source()},
         createWordWithTranslation = { _, _ -> }
     )
