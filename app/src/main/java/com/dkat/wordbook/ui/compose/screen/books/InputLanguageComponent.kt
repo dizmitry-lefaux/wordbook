@@ -1,4 +1,4 @@
-package com.dkat.wordbook.ui.compose.screen.language
+package com.dkat.wordbook.ui.compose.screen.books
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -13,6 +13,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.dkat.wordbook.data.PreviewData
 import com.dkat.wordbook.data.entity.Language
 import com.dkat.wordbook.ui.compose.reusable.ButtonText
 import com.dkat.wordbook.ui.compose.reusable.ErrorSupportingText
@@ -68,5 +69,5 @@ fun InputLanguage(
 @Preview(showBackground = true)
 @Composable
 fun InputLanguagePreview() {
-    InputLanguage(languages = listOf(Language(id = 9419, name = "English")), createLanguage = {})
+    InputLanguage(languages = PreviewData.languages, createLanguage = {})
 }

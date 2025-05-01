@@ -17,13 +17,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.dkat.wordbook.data.entity.Translation
+import com.dkat.wordbook.data.PreviewData
 import com.dkat.wordbook.data.entity.WordWithTranslations
 import com.dkat.wordbook.data.entity.Word_B
 
 @Composable
 fun WordWithTranslationsItem(wordWithTranslations: WordWithTranslations,
-                             onDeleteWordItemClick: (word: Word_B) -> Unit,
+                             onDeleteWordItemClick: ((word: Word_B) -> Unit)?,
                              modifier: Modifier
 ) {
     val word = wordWithTranslations.word
@@ -34,17 +34,19 @@ fun WordWithTranslationsItem(wordWithTranslations: WordWithTranslations,
             Column {
                 Text(text = word.value, modifier.padding(8.dp))
             }
-            Column(modifier = modifier.fillMaxWidth(),
-                   horizontalAlignment = Alignment.End
-            ) {
-                Button(
-                    onClick = { onDeleteWordItemClick(word) },
-                    colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
+            if (onDeleteWordItemClick  != null) {
+                Column(modifier = modifier.fillMaxWidth(),
+                       horizontalAlignment = Alignment.End
                 ) {
-                    Image(imageVector = Icons.Filled.Clear,
-                          contentDescription = "",
-                          modifier = modifier.background(color = Color.LightGray)
-                    )
+                    Button(
+                        onClick = { onDeleteWordItemClick(word) },
+                        colors = ButtonDefaults.buttonColors(containerColor = Color.White),
+                    ) {
+                        Image(imageVector = Icons.Filled.Clear,
+                              contentDescription = "",
+                              modifier = modifier.background(color = Color.LightGray)
+                        )
+                    }
                 }
             }
         }
@@ -64,33 +66,18 @@ fun WordWithTranslationsItem(wordWithTranslations: WordWithTranslations,
 
 @Preview(showBackground = true)
 @Composable
-fun WordItemPreview() {
-    val wordWithTranslations = WordWithTranslations(
-        word = Word_B(id = 6850,
-                      sourceId = 1486,
-                      languageId = 3567,
-                      value = "efficiantur"
-        ),
-        translations = listOf(
-            Translation(id = 2203,
-                        wordId = 7627,
-                        value = "duo",
-                        languageId = 4738
-            ),
-            Translation(id = 8867,
-                        wordId = 5186,
-                        value = "necessitatibus",
-                        languageId = 6808
-            ),
-            Translation(id = 7213,
-                        wordId = 5834,
-                        value = "deterruisset",
-                        languageId = 7215
-            )
-        )
-    )
-    WordWithTranslationsItem(wordWithTranslations = wordWithTranslations,
+fun WordItemPreview1() {
+    WordWithTranslationsItem(wordWithTranslations = PreviewData.wordWithTranslations1,
                              onDeleteWordItemClick = {},
+                             modifier = Modifier
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun WordItemPreview2() {
+    WordWithTranslationsItem(wordWithTranslations = PreviewData.wordWithTranslations1,
+                             onDeleteWordItemClick = null,
                              modifier = Modifier
     )
 }

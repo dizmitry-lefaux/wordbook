@@ -34,4 +34,4 @@ sealed class Screen(
     )
 }
 
-val screens = listOf(Screen.Home, Screen.Session, Screen.Books)
+val screens = listOf(Screen.Home, Screen.Session, Screen.Words, Screen.Books)

@@ -7,6 +7,7 @@
     <string name="languages_label">Languages</string>
     <string name="books">Books</string>
     <string name="words">Words</string>
+    <string name="experimental">Experimental</string>
 <!--    Screen titles    -->
     <string name="session.title">Session</string>
 </resources>

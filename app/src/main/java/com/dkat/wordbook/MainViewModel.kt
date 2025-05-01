@@ -188,9 +188,32 @@ class MainViewModel(
                 value = translation.value,
                 languageId = translation.languageId
             )
-            var translationId = 0;
+            var translationId = 0
             launch { translationId = createTranslation(translationUpdated).toInt() }.join()
             Log.i(TAG, "Translation created: $translationUpdated; id: $translationId")
+        }
+    }
+
+    fun createWordWithTranslations(word: Word_B, translations: List<Translation>) {
+        Log.i(TAG, "Creating word: $word")
+        Log.i(TAG, "Creating translations: ${translations.joinToString { translation -> translation.toString() }}")
+        viewModelScope.launch {
+            var wordId = 0
+            launch {
+                wordId = createWord(word).toInt() }.join()
+            Log.i(TAG, "Word created: $word; id: $wordId")
+            val translationsUpdated = translations.map {
+                Translation(
+                    wordId = wordId,
+                    value = it.value,
+                    languageId = it.languageId
+                )
+            }.toList()
+            translationsUpdated.forEach {
+                var translationId = 0
+                launch { translationId = createTranslation(it).toInt() }.join()
+                Log.i(TAG, "Translation created: $translationId; id: $translationId")
+            }
         }
     }
 }

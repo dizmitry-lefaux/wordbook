@@ -11,11 +11,12 @@ import com.dkat.wordbook.MainViewModel
 import com.dkat.wordbook.data.entity.Language
 import com.dkat.wordbook.data.entity.Source
 import com.dkat.wordbook.data.entity.Translation
-import com.dkat.wordbook.ui.compose.screen.Screen
 import com.dkat.wordbook.data.entity.Word_B
+import com.dkat.wordbook.ui.compose.screen.Screen
 import com.dkat.wordbook.ui.compose.screen.books.BooksScreen
 import com.dkat.wordbook.ui.compose.screen.home.HomeScreen
 import com.dkat.wordbook.ui.compose.screen.session.SessionScreen
+import com.dkat.wordbook.ui.compose.screen.words.WordsScreen
 
 @Composable
 fun WordbookNavHost(
@@ -62,6 +63,21 @@ fun WordbookNavHost(
                 onRestartSessionClick = {
                     viewModel.restartSession()
                 }
+            )
+        }
+        composable(route = Screen.Words.route) {
+            WordsScreen(
+                readSource = { id: Int ->
+                    viewModel.readSource(id)
+                },
+                createWordWithTranslations = { word: Word_B, translations: List<Translation> ->
+                    viewModel.createWordWithTranslations(word, translations)
+                },
+                sources = sources,
+                onDeleteWordItemClick = { word: Word_B ->
+                    viewModel.deleteWord(word)
+                },
+                wordsWithTranslations = wordsWithTranslations,
             )
         }
         composable(route = Screen.Books.route) {
