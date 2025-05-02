@@ -21,7 +21,7 @@ import com.dkat.wordbook.data.entity.Translation
 import com.dkat.wordbook.data.entity.WordWithTranslations
 import com.dkat.wordbook.data.entity.Word_B
 import com.dkat.wordbook.ui.compose.reusable.EntityDropdownMenu
-import com.dkat.wordbook.ui.compose.screen.home.InputWordWithoutSource
+import com.dkat.wordbook.ui.compose.screen.home.InputWord
 import com.dkat.wordbook.ui.compose.word.WordsWithTranslationsList
 
 @Composable
@@ -50,7 +50,7 @@ fun WordsScreen(
             resetErrorStateOnClick = { isSelectSourceError = it },
         )
         HorizontalDivider(thickness = 4.dp, color = Color.Black)
-        InputWordWithoutSource(
+        InputWord(
             createWordWithTranslations = createWordWithTranslations,
             source = selectedSource,
         )
