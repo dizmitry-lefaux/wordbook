@@ -45,6 +45,12 @@ fun WordbookNavHost(
                 },
                 sourcesWithWords = sourcesWithWords,
                 wordsWithTranslations = wordsWithTranslations,
+                readSource = { id: Int ->
+                    viewModel.readSource(id)
+                },
+                updateWordWithTranslations = { word: Word_B, translations: List<Translation> ->
+                    viewModel.updateWordWithTranslations(word, translations)
+                },
             )
         }
         composable(route = Screen.Session.route) {
@@ -71,6 +77,9 @@ fun WordbookNavHost(
                     viewModel.deleteWord(word)
                 },
                 wordsWithTranslations = wordsWithTranslations,
+                updateWordWithTranslations = { word: Word_B, translations: List<Translation> ->
+                    viewModel.updateWordWithTranslations(word, translations)
+                },
             )
         }
         composable(route = Screen.Books.route) {
@@ -92,7 +101,13 @@ fun WordbookNavHost(
                 },
                 onDeleteLanguageItemClick = { language: Language ->
                     viewModel.deleteLanguage(language)
-                }
+                },
+                readSource = { id: Int ->
+                    viewModel.readSource(id)
+                },
+                updateWordWithTranslations = { word: Word_B, translations: List<Translation> ->
+                    viewModel.updateWordWithTranslations(word, translations)
+                },
             )
         }
     }

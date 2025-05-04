@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import com.dkat.wordbook.data.PreviewData
 import com.dkat.wordbook.data.entity.Source
 import com.dkat.wordbook.data.entity.SourceWithWords
+import com.dkat.wordbook.data.entity.Translation
 import com.dkat.wordbook.data.entity.WordWithTranslations
 import com.dkat.wordbook.data.entity.Word_B
 import com.dkat.wordbook.ui.compose.source.ListOfSources
@@ -28,8 +29,12 @@ fun HomeScreen(sourcesWithWords: List<SourceWithWords>,
                modifier: Modifier = Modifier,
                onDeleteWordItemClick: (word: Word_B) -> Unit,
                onDeleteSourceItemClick: (source: Source) -> Unit,
+               readSource: (sourceId: Int) -> Source,
+               updateWordWithTranslations: (word: Word_B, translations: List<Translation>) -> Unit,
 ) {
-    Column(modifier = modifier.fillMaxSize().verticalScroll(rememberScrollState()),
+    Column(modifier = modifier
+        .fillMaxSize()
+        .verticalScroll(rememberScrollState()),
            verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         Column {
@@ -43,6 +48,8 @@ fun HomeScreen(sourcesWithWords: List<SourceWithWords>,
                           wordsWithTranslations = wordsWithTranslations,
                           onDeleteWordItemClick = onDeleteWordItemClick,
                           onDeleteSourceItemClick = onDeleteSourceItemClick,
+                          readSource = readSource,
+                          updateWordWithTranslations = updateWordWithTranslations,
                           modifier = modifier
             )
         }
@@ -57,7 +64,9 @@ fun HomeScreenPreview() {
             sourcesWithWords = PreviewData.sourcesWithWords,
             wordsWithTranslations = PreviewData.wordsWithTranslations,
             onDeleteWordItemClick = {},
-            onDeleteSourceItemClick = {}
+            onDeleteSourceItemClick = {},
+            readSource = { _ -> Source() },
+            updateWordWithTranslations = { _, _ -> }
         )
     }
 }

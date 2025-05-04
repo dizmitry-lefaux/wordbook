@@ -28,6 +28,9 @@ interface WordDao
     @Query("SELECT * from words")
     fun getWords(): Flow<List<Word>>
 
+    @Query("UPDATE word SET value = :value WHERE id = :id")
+    suspend fun updateWord(id: Int, value: String)
+
     @Query("DELETE FROM words WHERE id = :id")
     suspend fun deleteWordByIdOld(id: Int)
 

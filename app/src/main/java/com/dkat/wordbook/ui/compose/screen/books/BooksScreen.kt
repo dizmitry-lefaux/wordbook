@@ -20,6 +20,7 @@ import com.dkat.wordbook.data.PreviewData
 import com.dkat.wordbook.data.entity.Language
 import com.dkat.wordbook.data.entity.Source
 import com.dkat.wordbook.data.entity.SourceWithWords
+import com.dkat.wordbook.data.entity.Translation
 import com.dkat.wordbook.data.entity.WordWithTranslations
 import com.dkat.wordbook.data.entity.Word_B
 import com.dkat.wordbook.ui.compose.reusable.PillData
@@ -37,6 +38,8 @@ fun BooksScreen(
     createSource: (source: Source) -> Unit,
     createLanguage: (language: Language) -> Unit,
     onDeleteLanguageItemClick: (language: Language) -> Unit,
+    readSource: (sourceId: Int) -> Source,
+    updateWordWithTranslations: (word: Word_B, translations: List<Translation>) -> Unit,
     modifier: Modifier = Modifier
 ) {
 
@@ -85,7 +88,9 @@ fun BooksScreen(
                     onDeleteSourceItemClick = onDeleteSourceItemClick,
                     modifier = modifier,
                     sourcesWithWords = sourcesWithWords,
-                    wordsWithTranslations = wordsWithTranslations
+                    wordsWithTranslations = wordsWithTranslations,
+                    readSource = readSource,
+                    updateWordWithTranslations = updateWordWithTranslations
                 )
             }
             if (!isBooksOpen) {
@@ -119,6 +124,8 @@ fun BooksScreenPreview() {
         createSource = {},
         createLanguage = {},
         onDeleteLanguageItemClick = {},
+        readSource = { _ -> Source() },
+        updateWordWithTranslations = { _, _ -> },
         modifier = Modifier
     )
 }

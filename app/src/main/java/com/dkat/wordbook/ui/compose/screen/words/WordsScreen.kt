@@ -21,7 +21,7 @@ import com.dkat.wordbook.data.entity.Translation
 import com.dkat.wordbook.data.entity.WordWithTranslations
 import com.dkat.wordbook.data.entity.Word_B
 import com.dkat.wordbook.ui.compose.reusable.EntityDropdownMenu
-import com.dkat.wordbook.ui.compose.screen.home.InputWord
+import com.dkat.wordbook.ui.compose.word.InputWordWithTranslations
 import com.dkat.wordbook.ui.compose.word.WordsWithTranslationsList
 
 @Composable
@@ -30,6 +30,7 @@ fun WordsScreen(
     wordsWithTranslations: List<WordWithTranslations>,
     readSource: (id: Int) -> Source,
     createWordWithTranslations: (word: Word_B, translations: List<Translation>) -> Unit,
+    updateWordWithTranslations: (word: Word_B, translations: List<Translation>) -> Unit,
     onDeleteWordItemClick: (word: Word_B) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -50,7 +51,7 @@ fun WordsScreen(
             resetErrorStateOnClick = { isSelectSourceError = it },
         )
         HorizontalDivider(thickness = 4.dp, color = Color.Black)
-        InputWord(
+        InputWordWithTranslations(
             createWordWithTranslations = createWordWithTranslations,
             source = selectedSource,
         )
@@ -60,6 +61,8 @@ fun WordsScreen(
                 wordWithTranslations.word.sourceId == selectedSourceId
             }.toList(),
             onDeleteWordClick = onDeleteWordItemClick,
+            readSourceById = readSource,
+            updateWordWithTranslations = updateWordWithTranslations,
             modifier = modifier,
         )
     }
@@ -68,10 +71,12 @@ fun WordsScreen(
 @Preview(showBackground = true)
 @Composable
 fun WordsScreenPreview() {
-    WordsScreen(wordsWithTranslations = PreviewData.wordsWithTranslations,
-                sources = PreviewData.sources,
-                readSource = { _ -> Source() },
-                createWordWithTranslations = { _, _ -> },
-                onDeleteWordItemClick = {},
+    WordsScreen(
+        wordsWithTranslations = PreviewData.wordsWithTranslations,
+        sources = PreviewData.sources,
+        readSource = { _ -> Source() },
+        createWordWithTranslations = { _, _ -> },
+        updateWordWithTranslations = { _, _ -> },
+        onDeleteWordItemClick = {},
     )
 }

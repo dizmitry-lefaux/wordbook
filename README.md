@@ -5,13 +5,14 @@
 * make session size configurable
 * add 'Properties' screen
 * change animated card design
-* add possibility to edit word
+* move word edit to separate sub-screen instead of inlined form
 * add possibility to edit source
 * add possibility to edit language
 * add validations for multiple translations inputs
 * warning for delete actions: language, source
 * messages on adding items: language, source, word
 * messages on delete items: language, source, word
+* move strings to resources
 * update bottom bar icons
 * remember selected source on words screen
 * make languages sortable or movable
