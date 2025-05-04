@@ -135,6 +135,12 @@ class MainViewModel(
         return wordId
     }
 
+    private suspend fun updateWord(word: Word_B) {
+        viewModelScope.launch {
+            wordRepository.updateWord(word)
+        }.join()
+    }
+
     private suspend fun createTranslation(translation: Translation): Long {
         var translationId: Long = 0
         viewModelScope.launch { translationId = wordRepository.createTranslation(translation) }.join()
@@ -149,6 +155,12 @@ class MainViewModel(
     fun deleteWord(word: Word_B) {
         viewModelScope.launch {
             wordRepository.deleteWord(word)
+        }
+    }
+
+    private fun deleteTranslationsByWordId(word: Word_B) {
+        viewModelScope.launch {
+            wordRepository.deleteTranslationsByWordId(word)
         }
     }
 
@@ -205,6 +217,35 @@ class MainViewModel(
             val translationsUpdated = translations.map {
                 Translation(
                     wordId = wordId,
+                    value = it.value,
+                    languageId = it.languageId
+                )
+            }.toList()
+            translationsUpdated.forEach {
+                var translationId = 0
+                launch { translationId = createTranslation(it).toInt() }.join()
+                Log.i(TAG, "Translation created: $translationId; id: $translationId")
+            }
+        }
+    }
+
+    fun updateWordWithTranslations(word: Word_B, translations: List<Translation>) {
+        Log.i(TAG, "Updating word: $word")
+        Log.i(TAG, "Updating translations: ${translations.joinToString { translation -> translation.toString() }}")
+        viewModelScope.launch {
+            launch {
+                updateWord(word)
+            }.join()
+            Log.i(TAG, "Word updated: $word")
+
+            launch {
+                deleteTranslationsByWordId(word)
+            }.join()
+            Log.i(TAG, "Translations deleted: ${translations.joinToString { translation -> translation.toString() }}")
+
+            val translationsUpdated = translations.map {
+                Translation(
+                    wordId = word.id,
                     value = it.value,
                     languageId = it.languageId
                 )

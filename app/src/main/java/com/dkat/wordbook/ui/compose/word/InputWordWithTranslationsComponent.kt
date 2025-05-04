@@ -1,12 +1,12 @@
-package com.dkat.wordbook.ui.compose.screen.home
+package com.dkat.wordbook.ui.compose.word
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.Button
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -32,10 +32,10 @@ import com.dkat.wordbook.ui.compose.reusable.ErrorSupportingText
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-private const val TAG = "InputWordWithoutSource"
+private const val TAG = "InputWord"
 
 @Composable
-fun InputWord(
+fun InputWordWithTranslations(
     source: Source?,
     createWordWithTranslations: (word: Word_B, translations: List<Translation>) -> Unit,
     modifier: Modifier = Modifier,
@@ -61,30 +61,41 @@ fun InputWord(
 
     if (source != null) {
         Column {
-            TextField(
-                value = origInput,
-                onValueChange = {
-                    origInput = it
-                    isOriginalInputError = false
-                },
-                placeholder = {
-                    // TODO: move to string resources
-                    Text("input original")
-                },
-                modifier = modifier.padding(8.dp),
-                isError = isOriginalInputError,
-                supportingText = {
-                    if (isOriginalInputError) {
-                        ErrorSupportingText(errorText = originalInputErrorText)
-                    }
-                },
-            )
+            Column {
+                Text(modifier = modifier.padding(start = 8.dp, top = 8.dp),
+                     text = "original:"
+                )
+                TextField(
+                    value = origInput,
+                    onValueChange = {
+                        origInput = it
+                        isOriginalInputError = false
+                    },
+                    placeholder = {
+                        // TODO: move to string resources
+                        Text("input original")
+                    },
+                    modifier = modifier.padding(8.dp),
+                    isError = isOriginalInputError,
+                    supportingText = {
+                        if (isOriginalInputError) {
+                            ErrorSupportingText(errorText = originalInputErrorText)
+                        }
+                    },
+                )
+            }
 
             Column {
+                HorizontalDivider(thickness = 2.dp)
+                // TODO: move to string resources
+                Text(modifier = modifier.padding(start = 8.dp, top = 8.dp),
+                     text = "translations:"
+                )
+
                 if (isExpanded) {
                     translationInputs.entries.forEach { entry ->
                         Row {
-                            TranslationInput(
+                            InputTranslation(
                                 id = entry.key,
                                 value = entry.value,
                                 getIdOnRemoveClick = {
@@ -101,16 +112,32 @@ fun InputWord(
                             )
                         }
                     }
+                }
+                if (!isExpanded) {
+                    translationInputs.entries.forEach { entry ->
+                        Row {
+                            InputTranslation(id = entry.key,
+                                             value = entry.value,
+                                             getIdOnRemoveClick = {},
+                                             getValueOnChange = {}
+                            )
+                        }
+                    }
+                }
+
+                Column {
                     IconButton(onClick = {
-                        lastInputFieldId += 1
-                        translationInputs[lastInputFieldId] = ""
-                    }) {
+                                   lastInputFieldId += 1
+                                   translationInputs[lastInputFieldId] = ""
+                               }
+                    ) {
                         Icon(imageVector = Icons.Filled.Add,
                              tint = Color.Black,
                             // TODO: move to string resources
                              contentDescription = "Add translation field"
                         )
                     }
+                    // TODO: possibly move out of conditional 'if(isExpanded)'
                     Button(modifier = modifier.padding(8.dp),
                            onClick = {
                                if (origInput.isEmpty()) {
@@ -133,99 +160,28 @@ fun InputWord(
                                }
                                if (!isOriginalInputError) {
                                    createWordWithTranslations(word, translations.toList())
-                               } else {
-                                   translations.clear()
-                                   translationInputs.clear()
                                    origInput = ""
+                                   translationInputs.clear()
+                                   translations.clear()
                                    isOriginalInputError = false
+                               } else {
+                                   // TODO
                                }
                            }
                     ) {
                         // TODO: move to string resources
-                        ButtonText(buttonText = "Submit values")
-                    }
-                }
-                if (!isExpanded) {
-                    translationInputs.entries.forEach { entry ->
-                        Row {
-                            TranslationInput(id = entry.key,
-                                             value = entry.value,
-                                             getIdOnRemoveClick = {},
-                                             getValueOnChange = {}
-                            )
-                        }
-                    }
-                    IconButton(onClick = {}) {
-                        Icon(imageVector = Icons.Filled.Add,
-                             tint = Color.Black,
-                            // TODO: move to string resources
-                             contentDescription = "Add translation field"
-                        )
-                    }
-                    Button(modifier = modifier.padding(8.dp),
-                           onClick = {}
-                    ) {
-                        // TODO: move to string resources
-                        ButtonText(buttonText = "Submit values")
+                        ButtonText(buttonText = "Submit")
                     }
                 }
             }
-        }
-    }
-}
-
-@Composable
-fun TranslationInput(
-    id: Int,
-    value: String,
-    getIdOnRemoveClick: (id: Int) -> Unit,
-    getValueOnChange: (value: String) -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    var translationInput by remember { mutableStateOf(value) }
-    var isTranslationInputError by remember { mutableStateOf(false) }
-    var translationInputErrorText by remember { mutableStateOf("") }
-
-    Row {
-        TextField(
-            value = translationInput,
-            onValueChange = {
-                translationInput = it
-                isTranslationInputError = false
-                getValueOnChange(it)
-            },
-            placeholder = {
-                // TODO: move to string resources
-                Text("input translation")
-            },
-            modifier = modifier.padding(8.dp),
-            isError = isTranslationInputError,
-            supportingText = {
-                if (isTranslationInputError) {
-                    ErrorSupportingText(errorText = translationInputErrorText)
-                }
-            },
-        )
-        IconButton(
-            onClick = {
-                getIdOnRemoveClick(id)
-            }
-        ) {
-            Icon(
-                imageVector = Icons.Filled.Clear,
-                tint = Color.Black,
-                // TODO: move to string resources
-                contentDescription = "Remove translation field"
-            )
         }
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-fun InputWordWithoutSourcePreview() {
-    InputWord(
-        source = PreviewData.source1,
-        createWordWithTranslations = { _, _ -> }
+fun InputWordWithTranslationsPreview() {
+    InputWordWithTranslations(source = PreviewData.source1,
+                              createWordWithTranslations = { _, _ -> }
     )
 }

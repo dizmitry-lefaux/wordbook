@@ -26,9 +26,18 @@ class WordRepository(private val context: Context)
         return wordDao.createWord(word)
     }
 
+    suspend fun updateWord(word: Word_B) {
+        wordDao.updateWord(word.id, word.value)
+    }
+
     // TODO: move to separate repository
     suspend fun createTranslation(translation: Translation): Long {
         return translationDao.createTranslation(translation)
+    }
+
+    // TODO: move to separate repository
+    suspend fun deleteTranslationsByWordId(word: Word_B) {
+        return translationDao.deleteTranslationsByWordId(wordId = word.id)
     }
 
     // TODO: move to separate repository
