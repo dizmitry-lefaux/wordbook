@@ -42,6 +42,7 @@ fun WordbookApp() {
 
         val viewModel: MainViewModel =
             viewModel(factory = MainViewModelFactory(WordRepository(context = context)))
+        val editWordViewModel: EditWordViewModel = viewModel()
 
         Scaffold(modifier = Modifier.fillMaxSize(),
                  topBar = {
@@ -56,6 +57,7 @@ fun WordbookApp() {
         ) { innerPadding ->
             WordbookNavHost(navController = navController,
                             viewModel = viewModel,
+                            editWordViewModel = editWordViewModel,
                             modifier = Modifier.padding(innerPadding)
             )
         }

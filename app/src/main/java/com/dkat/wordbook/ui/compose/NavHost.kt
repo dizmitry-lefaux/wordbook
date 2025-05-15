@@ -7,6 +7,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.dkat.wordbook.EditWordState
+import com.dkat.wordbook.EditWordViewModel
 import com.dkat.wordbook.MainViewModel
 import com.dkat.wordbook.data.entity.Language
 import com.dkat.wordbook.data.entity.Source
@@ -17,11 +19,13 @@ import com.dkat.wordbook.ui.compose.screen.books.BooksScreen
 import com.dkat.wordbook.ui.compose.screen.home.HomeScreen
 import com.dkat.wordbook.ui.compose.screen.session.SessionScreen
 import com.dkat.wordbook.ui.compose.screen.words.WordsScreen
+import com.dkat.wordbook.ui.compose.screen.dialog.EditWordWithTranslationsPopupScreen
 
 @Composable
 fun WordbookNavHost(
     navController: NavHostController,
     viewModel: MainViewModel,
+    editWordViewModel: EditWordViewModel,
     modifier: Modifier
 ) {
     val sources by viewModel.sources.collectAsStateWithLifecycle()
@@ -30,6 +34,8 @@ fun WordbookNavHost(
     val languages by viewModel.languages.collectAsStateWithLifecycle()
     val sessionWords by viewModel.sessionWords.collectAsStateWithLifecycle()
 
+    val editWordState by editWordViewModel.editWordState.collectAsStateWithLifecycle()
+
     NavHost(
         navController = navController,
         startDestination = Screen.Home.route,
@@ -37,6 +43,7 @@ fun WordbookNavHost(
     ) {
         composable(route = Screen.Home.route) {
             HomeScreen(
+                navController = navController,
                 onDeleteWordItemClick = { word: Word_B ->
                     viewModel.deleteWord(word)
                 },
@@ -48,9 +55,9 @@ fun WordbookNavHost(
                 readSource = { id: Int ->
                     viewModel.readSource(id)
                 },
-                updateWordWithTranslations = { word: Word_B, translations: List<Translation> ->
-                    viewModel.updateWordWithTranslations(word, translations)
-                },
+                updateEditWordState = { editWordState: EditWordState ->
+                    editWordViewModel.updateEditWordState(editWordState)
+                }
             )
         }
         composable(route = Screen.Session.route) {
@@ -66,6 +73,7 @@ fun WordbookNavHost(
         }
         composable(route = Screen.Words.route) {
             WordsScreen(
+                navController = navController,
                 readSource = { id: Int ->
                     viewModel.readSource(id)
                 },
@@ -76,14 +84,15 @@ fun WordbookNavHost(
                 onDeleteWordItemClick = { word: Word_B ->
                     viewModel.deleteWord(word)
                 },
-                wordsWithTranslations = wordsWithTranslations,
-                updateWordWithTranslations = { word: Word_B, translations: List<Translation> ->
-                    viewModel.updateWordWithTranslations(word, translations)
+                updateEditWordState = { editWordState: EditWordState ->
+                    editWordViewModel.updateEditWordState(editWordState)
                 },
+                wordsWithTranslations = wordsWithTranslations,
             )
         }
         composable(route = Screen.Books.route) {
             BooksScreen(
+                navController = navController,
                 sourcesWithWords = sourcesWithWords,
                 wordsWithTranslations = wordsWithTranslations,
                 languages = languages,
@@ -105,7 +114,16 @@ fun WordbookNavHost(
                 readSource = { id: Int ->
                     viewModel.readSource(id)
                 },
-                updateWordWithTranslations = { word: Word_B, translations: List<Translation> ->
+                updateEditWordState = { editWordState: EditWordState ->
+                    editWordViewModel.updateEditWordState(editWordState)
+                }
+            )
+        }
+        composable(route = Screen.EditWord.route) {
+            EditWordWithTranslationsPopupScreen(
+                navController = navController,
+                editWordState = editWordState,
+                editWordWithTranslations = { word: Word_B, translations: List<Translation> ->
                     viewModel.updateWordWithTranslations(word, translations)
                 },
             )

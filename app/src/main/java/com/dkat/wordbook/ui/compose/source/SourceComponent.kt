@@ -19,9 +19,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import com.dkat.wordbook.EditWordState
 import com.dkat.wordbook.data.PreviewData
 import com.dkat.wordbook.data.entity.Source
-import com.dkat.wordbook.data.entity.Translation
 import com.dkat.wordbook.data.entity.WordWithTranslations
 import com.dkat.wordbook.data.entity.Word_B
 import com.dkat.wordbook.ui.compose.reusable.ExpandableSection
@@ -29,12 +31,13 @@ import com.dkat.wordbook.ui.compose.word.WordsWithTranslationsList
 
 @Composable
 fun ExpandableSourceItem(
+    navController: NavController,
     onDeleteSourceClick: (source: Source) -> Unit,
     onDeleteWordClick: (word: Word_B) -> Unit,
     source: Source,
     wordsWithTranslations: List<WordWithTranslations>?,
     readSourceById: (sourceId: Int) -> Source,
-    updateWordWithTranslations: (word: Word_B, translations: List<Translation>) -> Unit,
+    updateEditWordState: (editWordState: EditWordState) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column {
@@ -45,13 +48,14 @@ fun ExpandableSourceItem(
         ) {
             Column {
                 SourceItem(
+                    navController = navController,
                     modifier = modifier,
                     source = source,
                     onDeleteSourceClick = onDeleteSourceClick,
                     wordsWithTranslations = wordsWithTranslations,
                     onDeleteWordClick = onDeleteWordClick,
                     readSource = readSourceById,
-                    updateWordWithTranslations = updateWordWithTranslations,
+                    updateEditWordState = updateEditWordState,
                 )
                 HorizontalDivider(thickness = 8.dp)
             }
@@ -61,13 +65,14 @@ fun ExpandableSourceItem(
 
 @Composable
 private fun SourceItem(
+    navController: NavController,
     modifier: Modifier,
     source: Source,
     onDeleteSourceClick: ((source: Source) -> Unit)?,
     wordsWithTranslations: List<WordWithTranslations>?,
     onDeleteWordClick: ((word: Word_B) -> Unit)?,
     readSource: (sourceId: Int) -> Source,
-    updateWordWithTranslations: (word: Word_B, translations: List<Translation>) -> Unit,
+    updateEditWordState: (editWordState: EditWordState) -> Unit,
 ) {
     Column {
         Row {
@@ -97,10 +102,11 @@ private fun SourceItem(
         Column {
             HorizontalDivider(thickness = 2.dp)
             WordsWithTranslationsList(
+                navController = navController,
                 wordsWithTranslations = wordsWithTranslations,
                 onDeleteWordClick = onDeleteWordClick,
                 readSourceById = readSource,
-                updateWordWithTranslations = updateWordWithTranslations,
+                updateEditWordState = updateEditWordState,
                 modifier = modifier,
             )
         }
@@ -110,25 +116,27 @@ private fun SourceItem(
 @Preview(showBackground = true)
 @Composable
 fun SourceItemPreview() {
-    SourceItem(modifier = Modifier,
+    SourceItem(navController = rememberNavController(),
+               modifier = Modifier,
                source = PreviewData.source1,
                wordsWithTranslations = PreviewData.wordsWithTranslations,
                onDeleteSourceClick = {},
                onDeleteWordClick = {},
                readSource = { _ -> Source() },
-               updateWordWithTranslations = { _, _ -> }
+               updateEditWordState = { _ -> },
     )
 }
 
 @Preview(showBackground = true)
 @Composable
 fun ExpandableSourceItemPreview() {
-    ExpandableSourceItem(modifier = Modifier,
+    ExpandableSourceItem(navController = rememberNavController(),
+                         modifier = Modifier,
                          source = PreviewData.source1,
                          wordsWithTranslations = PreviewData.wordsWithTranslations,
                          onDeleteWordClick = {},
                          onDeleteSourceClick = {},
                          readSourceById = { _ -> Source() },
-                         updateWordWithTranslations = { _, _ -> }
+                         updateEditWordState = { _ -> },
     )
 }

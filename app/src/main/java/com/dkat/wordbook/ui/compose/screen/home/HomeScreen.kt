@@ -3,34 +3,33 @@ package com.dkat.wordbook.ui.compose.screen.home
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import com.dkat.wordbook.EditWordState
 import com.dkat.wordbook.data.PreviewData
 import com.dkat.wordbook.data.entity.Source
 import com.dkat.wordbook.data.entity.SourceWithWords
-import com.dkat.wordbook.data.entity.Translation
 import com.dkat.wordbook.data.entity.WordWithTranslations
 import com.dkat.wordbook.data.entity.Word_B
+import com.dkat.wordbook.ui.compose.reusable.TitleText
 import com.dkat.wordbook.ui.compose.source.ListOfSources
 import com.dkat.wordbook.ui.theme.AppTheme
 
 @Composable
-fun HomeScreen(sourcesWithWords: List<SourceWithWords>,
+fun HomeScreen(navController: NavController,
+               sourcesWithWords: List<SourceWithWords>,
                wordsWithTranslations: List<WordWithTranslations>,
                modifier: Modifier = Modifier,
                onDeleteWordItemClick: (word: Word_B) -> Unit,
                onDeleteSourceItemClick: (source: Source) -> Unit,
                readSource: (sourceId: Int) -> Source,
-               updateWordWithTranslations: (word: Word_B, translations: List<Translation>) -> Unit,
+               updateEditWordState: (editWordState: EditWordState) -> Unit,
 ) {
     Column(modifier = modifier
         .fillMaxSize()
@@ -38,18 +37,15 @@ fun HomeScreen(sourcesWithWords: List<SourceWithWords>,
            verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         Column {
-            Text(text = "Words grouped by sources:",
-                 modifier = modifier.padding(12.dp),
-                 style = MaterialTheme.typography.titleLarge,
-                 fontWeight = FontWeight.Bold,
-                 textAlign = TextAlign.Left
-            )
-            ListOfSources(sourcesWithWords = sourcesWithWords,
+            // TODO: move to string resources
+            TitleText(text = "Words grouped by resources")
+            ListOfSources(navController = navController,
+                          sourcesWithWords = sourcesWithWords,
                           wordsWithTranslations = wordsWithTranslations,
                           onDeleteWordItemClick = onDeleteWordItemClick,
                           onDeleteSourceItemClick = onDeleteSourceItemClick,
                           readSource = readSource,
-                          updateWordWithTranslations = updateWordWithTranslations,
+                          updateEditWordState = updateEditWordState,
                           modifier = modifier
             )
         }
@@ -61,12 +57,13 @@ fun HomeScreen(sourcesWithWords: List<SourceWithWords>,
 fun HomeScreenPreview() {
     AppTheme {
         HomeScreen(
+            navController = rememberNavController(),
             sourcesWithWords = PreviewData.sourcesWithWords,
             wordsWithTranslations = PreviewData.wordsWithTranslations,
             onDeleteWordItemClick = {},
             onDeleteSourceItemClick = {},
             readSource = { _ -> Source() },
-            updateWordWithTranslations = { _, _ -> }
+            updateEditWordState = { _ -> }
         )
     }
 }

@@ -5,7 +5,7 @@ import com.dkat.wordbook.R
 
 sealed class Screen(
     val route: String,
-    val icon: Int,
+    val icon: Int?,
     @StringRes
     val labelResourceId: Int
 ) {
@@ -32,6 +32,12 @@ sealed class Screen(
         icon = R.drawable.books,
         labelResourceId = R.string.books
     )
+
+    data object EditWord: Screen(
+        route = "editWord",
+        icon = null,
+        labelResourceId = R.string.edit_word
+    )
 }
 
-val screens = listOf(Screen.Home, Screen.Session, Screen.Words, Screen.Books)
+val bottomBarScreens = listOf(Screen.Home, Screen.Session, Screen.Words, Screen.Books)

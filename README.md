@@ -5,7 +5,6 @@
 * make session size configurable
 * add 'Properties' screen
 * change animated card design
-* move word edit to separate sub-screen instead of inlined form
 * add possibility to edit source
 * add possibility to edit language
 * add validations for multiple translations inputs
