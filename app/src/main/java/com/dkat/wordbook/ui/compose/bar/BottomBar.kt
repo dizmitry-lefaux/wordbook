@@ -14,7 +14,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavHostController
-import com.dkat.wordbook.ui.compose.screen.screens
+import com.dkat.wordbook.ui.compose.screen.bottomBarScreens
 
 @Composable
 fun BottomBar(
@@ -23,13 +23,13 @@ fun BottomBar(
     modifier: Modifier = Modifier,
 ) {
     NavigationBar {
-        screens.forEach { screen ->
+        bottomBarScreens.forEach { screen ->
             val label = stringResource(screen.labelResourceId)
             NavigationBarItem(
                 icon = {
                     Box {
                         Icon(
-                            painterResource(screen.icon),
+                            painterResource(screen.icon!!),
                             contentDescription = stringResource(screen.labelResourceId),
                             modifier = Modifier.size(30.dp)
                         )

@@ -15,6 +15,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import com.dkat.wordbook.EditWordState
 import com.dkat.wordbook.data.PreviewData
 import com.dkat.wordbook.data.entity.Source
 import com.dkat.wordbook.data.entity.Translation
@@ -26,11 +29,12 @@ import com.dkat.wordbook.ui.compose.word.WordsWithTranslationsList
 
 @Composable
 fun WordsScreen(
+    navController: NavController,
     sources: List<Source>,
     wordsWithTranslations: List<WordWithTranslations>,
     readSource: (id: Int) -> Source,
     createWordWithTranslations: (word: Word_B, translations: List<Translation>) -> Unit,
-    updateWordWithTranslations: (word: Word_B, translations: List<Translation>) -> Unit,
+    updateEditWordState: (editWordState: EditWordState) -> Unit,
     onDeleteWordItemClick: (word: Word_B) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -57,12 +61,13 @@ fun WordsScreen(
         )
         HorizontalDivider(thickness = 4.dp, color = Color.Black)
         WordsWithTranslationsList(
+            navController = navController,
             wordsWithTranslations = wordsWithTranslations.filter { wordWithTranslations ->
                 wordWithTranslations.word.sourceId == selectedSourceId
             }.toList(),
             onDeleteWordClick = onDeleteWordItemClick,
             readSourceById = readSource,
-            updateWordWithTranslations = updateWordWithTranslations,
+            updateEditWordState = updateEditWordState,
             modifier = modifier,
         )
     }
@@ -72,11 +77,12 @@ fun WordsScreen(
 @Composable
 fun WordsScreenPreview() {
     WordsScreen(
+        navController = rememberNavController(),
         wordsWithTranslations = PreviewData.wordsWithTranslations,
         sources = PreviewData.sources,
         readSource = { _ -> Source() },
         createWordWithTranslations = { _, _ -> },
-        updateWordWithTranslations = { _, _ -> },
+        updateEditWordState = { _ -> },
         onDeleteWordItemClick = {},
     )
 }

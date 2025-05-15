@@ -4,10 +4,12 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import com.dkat.wordbook.EditWordState
 import com.dkat.wordbook.data.PreviewData
 import com.dkat.wordbook.data.entity.Source
 import com.dkat.wordbook.data.entity.SourceWithWords
-import com.dkat.wordbook.data.entity.Translation
 import com.dkat.wordbook.data.entity.WordWithTranslations
 import com.dkat.wordbook.data.entity.Word_B
 
@@ -15,12 +17,13 @@ private const val TAG = "ListOfSources"
 
 @Composable
 fun ListOfSources(
+    navController: NavController,
     sourcesWithWords: List<SourceWithWords>,
     wordsWithTranslations: List<WordWithTranslations>,
     onDeleteWordItemClick: (word: Word_B) -> Unit,
     onDeleteSourceItemClick: (source: Source) -> Unit,
     readSource: (sourceId: Int) -> Source,
-    updateWordWithTranslations: (word: Word_B, translations: List<Translation>) -> Unit,
+    updateEditWordState: (editWordState: EditWordState) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column {
@@ -36,12 +39,13 @@ fun ListOfSources(
         sourcesList.forEach { source ->
             Column {
                 ExpandableSourceItem(
+                    navController = navController,
                     onDeleteSourceClick = onDeleteSourceItemClick,
                     onDeleteWordClick = onDeleteWordItemClick,
                     source = source,
                     wordsWithTranslations = mapOfSources[source],
                     readSourceById = readSource,
-                    updateWordWithTranslations = updateWordWithTranslations,
+                    updateEditWordState = updateEditWordState
                 )
             }
         }
@@ -52,11 +56,12 @@ fun ListOfSources(
 @Composable
 fun ListOfSourcesPreview() {
     ListOfSources(
+        navController = rememberNavController(),
         sourcesWithWords = PreviewData.sourcesWithWords,
         wordsWithTranslations = PreviewData.wordsWithTranslations,
         onDeleteWordItemClick = {},
         onDeleteSourceItemClick = {},
         readSource = { _ -> Source() },
-        updateWordWithTranslations = { _, _ -> },
+        updateEditWordState = { _ -> },
     )
 }

@@ -40,8 +40,7 @@ fun LanguageItem(language: Language,
                  textAlign = TextAlign.Left
             )
         }
-        Column(modifier.fillMaxWidth(), horizontalAlignment = Alignment.End
-        ) {
+        Column(modifier.fillMaxWidth(), horizontalAlignment = Alignment.End) {
             Button(onClick = { onDeleteLanguageItemClick(language) },
                    colors = ButtonDefaults.buttonColors(containerColor = Color.White),
             ) {

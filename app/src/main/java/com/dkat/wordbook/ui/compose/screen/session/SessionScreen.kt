@@ -16,12 +16,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.dkat.wordbook.data.entity.Word
 import com.dkat.wordbook.ui.compose.card.CardWithAnimatedAlpha
+import com.dkat.wordbook.ui.compose.reusable.TitleText
 
 @Composable
 fun SessionScreen(
@@ -74,13 +73,7 @@ fun SessionScreen(
         }
         if (sessionWords.isEmpty())
         {
-            Text(
-                text = "There are no words left.\nPlease, start new session.",
-                modifier = modifier.padding(12.dp),
-                style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.Bold,
-                textAlign = TextAlign.Left
-            )
+            TitleText(text = "There are no words left.\nPlease, start new session.")
         }
     }
 }
