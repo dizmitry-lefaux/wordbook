@@ -38,6 +38,18 @@ sealed class Screen(
         icon = null,
         labelResourceId = R.string.edit_word
     )
+
+    data object EditLanguage: Screen(
+        route = "editLanguage",
+        icon = null,
+        labelResourceId = R.string.edit_language
+    )
+
+    data object EditSource: Screen(
+        route = "editSource",
+        icon = null,
+        labelResourceId = R.string.edit_source
+    )
 }
 
 val bottomBarScreens = listOf(Screen.Home, Screen.Session, Screen.Words, Screen.Books)

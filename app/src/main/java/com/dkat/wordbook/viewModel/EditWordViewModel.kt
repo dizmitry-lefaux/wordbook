@@ -1,4 +1,4 @@
-package com.dkat.wordbook
+package com.dkat.wordbook.viewModel
 
 import androidx.lifecycle.ViewModel
 import com.dkat.wordbook.data.entity.Source

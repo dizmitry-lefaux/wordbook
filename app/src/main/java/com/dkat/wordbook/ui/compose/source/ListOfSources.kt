@@ -6,12 +6,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.dkat.wordbook.EditWordState
 import com.dkat.wordbook.data.PreviewData
 import com.dkat.wordbook.data.entity.Source
 import com.dkat.wordbook.data.entity.SourceWithWords
 import com.dkat.wordbook.data.entity.WordWithTranslations
 import com.dkat.wordbook.data.entity.Word_B
+import com.dkat.wordbook.viewModel.EditWordState
 
 private const val TAG = "ListOfSources"
 
@@ -24,6 +24,7 @@ fun ListOfSources(
     onDeleteSourceItemClick: (source: Source) -> Unit,
     readSource: (sourceId: Int) -> Source,
     updateEditWordState: (editWordState: EditWordState) -> Unit,
+    updateSourceState: (source: Source) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column {
@@ -45,7 +46,8 @@ fun ListOfSources(
                     source = source,
                     wordsWithTranslations = mapOfSources[source],
                     readSourceById = readSource,
-                    updateEditWordState = updateEditWordState
+                    updateEditWordState = updateEditWordState,
+                    updateSourceState = updateSourceState,
                 )
             }
         }
@@ -63,5 +65,6 @@ fun ListOfSourcesPreview() {
         onDeleteSourceItemClick = {},
         readSource = { _ -> Source() },
         updateEditWordState = { _ -> },
+        updateSourceState = { _ -> },
     )
 }

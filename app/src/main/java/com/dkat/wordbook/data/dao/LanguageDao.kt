@@ -11,6 +11,9 @@ interface LanguageDao {
     @Insert
     suspend fun createLanguage(language: Language)
 
+    @Query("UPDATE language SET name = :name WHERE id = :id")
+    suspend fun updateLanguage(id: Int, name: String)
+
     @Query("DELETE FROM language WHERE id = :id")
     suspend fun deleteLanguageById(id: Int)
 }
