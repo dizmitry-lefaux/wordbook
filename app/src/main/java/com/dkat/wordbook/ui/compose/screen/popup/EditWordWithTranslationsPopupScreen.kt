@@ -1,15 +1,13 @@
-package com.dkat.wordbook.ui.compose.screen.dialog
+package com.dkat.wordbook.ui.compose.screen.popup
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -26,22 +24,22 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
+import androidx.compose.ui.window.PopupProperties
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.dkat.wordbook.EditWordState
 import com.dkat.wordbook.data.PreviewData
 import com.dkat.wordbook.data.entity.Translation
 import com.dkat.wordbook.data.entity.Word_B
 import com.dkat.wordbook.ui.compose.reusable.ButtonText
+import com.dkat.wordbook.ui.compose.reusable.CloseablePopupTitle
 import com.dkat.wordbook.ui.compose.reusable.ErrorSupportingText
-import com.dkat.wordbook.ui.compose.reusable.TitleText
 import com.dkat.wordbook.ui.compose.word.EditTranslation
+import com.dkat.wordbook.viewModel.EditWordState
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -83,27 +81,14 @@ fun EditWordWithTranslationsPopupScreen(
         translationInputs[lastInputFieldId] = ""
     }
 
-    Popup {
+    Popup(properties = PopupProperties(focusable = true)) {
         Column(modifier = modifier
             .verticalScroll(rememberScrollState())
             .background(MaterialTheme.colorScheme.secondaryContainer)
         ) {
-            Row(modifier = modifier.fillMaxWidth()) {
-                Column {
-                    // TODO: move to string resources
-                    TitleText("Edit word")
-                }
-                Column(modifier.fillMaxWidth(), horizontalAlignment = Alignment.End) {
-                    IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(
-                            imageVector = Icons.Filled.Clear,
-                            tint = Color.Black,
-                            // TODO: move to string resources
-                            contentDescription = "Close 'Edit word' popup"
-                        )
-                    }
-                }
-            }
+            CloseablePopupTitle(navController = navController,
+                                titleText = "Edit word",
+            )
             Column {
                 Text(modifier = modifier.padding(start = 8.dp, top = 8.dp),
                     // TODO: move to string resources
@@ -188,6 +173,7 @@ fun EditWordWithTranslationsPopupScreen(
                         )
                     }
                 }
+                // TODO: extract popup buttons
                 Row {
                     Button(modifier = modifier.padding(8.dp),
                            onClick = {

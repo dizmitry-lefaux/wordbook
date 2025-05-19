@@ -21,6 +21,12 @@ import com.dkat.wordbook.ui.compose.WordbookNavHost
 import com.dkat.wordbook.ui.compose.bar.BottomBar
 import com.dkat.wordbook.ui.compose.bar.TopAppBar
 import com.dkat.wordbook.ui.theme.AppTheme
+import com.dkat.wordbook.viewModel.BooksScreenViewModel
+import com.dkat.wordbook.viewModel.EditLanguageViewModel
+import com.dkat.wordbook.viewModel.EditSourceViewModel
+import com.dkat.wordbook.viewModel.EditWordViewModel
+import com.dkat.wordbook.viewModel.MainViewModel
+import com.dkat.wordbook.viewModel.MainViewModelFactory
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,6 +49,9 @@ fun WordbookApp() {
         val viewModel: MainViewModel =
             viewModel(factory = MainViewModelFactory(WordRepository(context = context)))
         val editWordViewModel: EditWordViewModel = viewModel()
+        val editLanguageViewModel: EditLanguageViewModel = viewModel()
+        val editSourceViewModel: EditSourceViewModel = viewModel()
+        val booksScreenViewModel: BooksScreenViewModel = viewModel()
 
         Scaffold(modifier = Modifier.fillMaxSize(),
                  topBar = {
@@ -58,6 +67,9 @@ fun WordbookApp() {
             WordbookNavHost(navController = navController,
                             viewModel = viewModel,
                             editWordViewModel = editWordViewModel,
+                            editLanguageViewModel = editLanguageViewModel,
+                            editSourceViewModel = editSourceViewModel,
+                            booksScreenViewModel = booksScreenViewModel,
                             modifier = Modifier.padding(innerPadding)
             )
         }

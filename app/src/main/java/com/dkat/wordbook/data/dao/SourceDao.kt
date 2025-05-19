@@ -27,4 +27,11 @@ interface SourceDao {
     @Transaction
     @Query("SELECT * FROM source")
     fun readSourcesWithWords(): Flow<List<SourceWithWords>>
+
+    @Query("UPDATE source SET " +
+                   "name = :name, " +
+                   "main_orig_lang_id = :mainOrigLangId, " +
+                   "main_translation_lang_id = :mainTranslationLangId " +
+                   "WHERE id = :id")
+    fun updateSource(id: Int, name: String, mainOrigLangId: Int, mainTranslationLangId: Int)
 }

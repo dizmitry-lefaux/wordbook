@@ -1,4 +1,4 @@
-package com.dkat.wordbook
+package com.dkat.wordbook.viewModel
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
@@ -141,6 +141,18 @@ class MainViewModel(
         }.join()
     }
 
+    private suspend fun updateLanguagePrivate(language: Language) {
+        viewModelScope.launch {
+            wordRepository.updateLanguage(language)
+        }
+    }
+
+    private suspend fun updateSourcePrivate(source: Source) {
+        viewModelScope.launch {
+            wordRepository.updateSource(source)
+        }
+    }
+
     private suspend fun createTranslation(translation: Translation): Long {
         var translationId: Long = 0
         viewModelScope.launch { translationId = wordRepository.createTranslation(translation) }.join()
@@ -257,6 +269,21 @@ class MainViewModel(
             }
         }
     }
+
+    fun updateLanguage(language: Language) {
+        viewModelScope.launch {
+            launch { updateLanguagePrivate(language) }.join()
+        }
+        Log.i(TAG, "Language updated: $language")
+    }
+
+    fun updateSource(source: Source) {
+        viewModelScope.launch {
+            launch { updateSourcePrivate(source) }.join()
+        }
+        Log.i(TAG, "Source updated: $source")
+    }
+
 }
 
 class MainViewModelFactory(

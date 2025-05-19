@@ -5,10 +5,8 @@
 * make session size configurable
 * add 'Properties' screen
 * change animated card design
-* add possibility to edit source
-* add possibility to edit language
 * add validations for multiple translations inputs
-* warning for delete actions: language, source
+* warning on delete actions: language, source
 * messages on adding items: language, source, word
 * messages on delete items: language, source, word
 * move strings to resources
@@ -16,7 +14,11 @@
 * remember selected source on words screen
 * make languages sortable or movable
 * make sources sortable or movable
+* move data actions to allotted repositories/view models
+* make 'Edit word' screen translations removals revertable on 'Cancel' click
 
 #### ISSUES:
 * 'Words' screen:
   * workaround to recompose input fields after removal
+* 'Books' scree:
+  * 'Languages' pill title is not selected, while 'Languages' pill content is showed after page recompose

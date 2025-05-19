@@ -7,9 +7,11 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.dkat.wordbook.EditWordState
-import com.dkat.wordbook.EditWordViewModel
-import com.dkat.wordbook.MainViewModel
+import com.dkat.wordbook.viewModel.BooksScreenViewModel
+import com.dkat.wordbook.viewModel.EditLanguageViewModel
+import com.dkat.wordbook.viewModel.EditWordState
+import com.dkat.wordbook.viewModel.EditWordViewModel
+import com.dkat.wordbook.viewModel.MainViewModel
 import com.dkat.wordbook.data.entity.Language
 import com.dkat.wordbook.data.entity.Source
 import com.dkat.wordbook.data.entity.Translation
@@ -17,15 +19,21 @@ import com.dkat.wordbook.data.entity.Word_B
 import com.dkat.wordbook.ui.compose.screen.Screen
 import com.dkat.wordbook.ui.compose.screen.books.BooksScreen
 import com.dkat.wordbook.ui.compose.screen.home.HomeScreen
+import com.dkat.wordbook.ui.compose.screen.popup.EditLanguagePopupScreen
+import com.dkat.wordbook.ui.compose.screen.popup.EditSourcePopupScreen
 import com.dkat.wordbook.ui.compose.screen.session.SessionScreen
 import com.dkat.wordbook.ui.compose.screen.words.WordsScreen
-import com.dkat.wordbook.ui.compose.screen.dialog.EditWordWithTranslationsPopupScreen
+import com.dkat.wordbook.ui.compose.screen.popup.EditWordWithTranslationsPopupScreen
+import com.dkat.wordbook.viewModel.EditSourceViewModel
 
 @Composable
 fun WordbookNavHost(
     navController: NavHostController,
     viewModel: MainViewModel,
     editWordViewModel: EditWordViewModel,
+    editLanguageViewModel: EditLanguageViewModel,
+    editSourceViewModel: EditSourceViewModel,
+    booksScreenViewModel: BooksScreenViewModel,
     modifier: Modifier
 ) {
     val sources by viewModel.sources.collectAsStateWithLifecycle()
@@ -35,6 +43,11 @@ fun WordbookNavHost(
     val sessionWords by viewModel.sessionWords.collectAsStateWithLifecycle()
 
     val editWordState by editWordViewModel.editWordState.collectAsStateWithLifecycle()
+    val editLanguageState by editLanguageViewModel.editLanguageState.collectAsStateWithLifecycle()
+    val editSourceState by editSourceViewModel.editSourceState.collectAsStateWithLifecycle()
+
+    val booksScreenIsBooksOpen by booksScreenViewModel.isBooksOpen.collectAsStateWithLifecycle()
+    val booksScreenIsLanguagesOpen by booksScreenViewModel.isLanguagesOpen.collectAsStateWithLifecycle()
 
     NavHost(
         navController = navController,
@@ -57,6 +70,9 @@ fun WordbookNavHost(
                 },
                 updateEditWordState = { editWordState: EditWordState ->
                     editWordViewModel.updateEditWordState(editWordState)
+                },
+                updateSourceState = { source: Source ->
+                    editSourceViewModel.updateEditSourceState(source)
                 }
             )
         }
@@ -93,6 +109,10 @@ fun WordbookNavHost(
         composable(route = Screen.Books.route) {
             BooksScreen(
                 navController = navController,
+                isBooksOpen = booksScreenIsBooksOpen,
+                isLanguagesOpen = booksScreenIsLanguagesOpen,
+                openBooks = { booksScreenViewModel.openBooks() },
+                openLanguages = { booksScreenViewModel.openLanguages() },
                 sourcesWithWords = sourcesWithWords,
                 wordsWithTranslations = wordsWithTranslations,
                 languages = languages,
@@ -116,6 +136,12 @@ fun WordbookNavHost(
                 },
                 updateEditWordState = { editWordState: EditWordState ->
                     editWordViewModel.updateEditWordState(editWordState)
+                },
+                updateLanguageState = { language: Language ->
+                    editLanguageViewModel.updateEditLanguageState(language)
+                },
+                updateSourceState = { source: Source ->
+                    editSourceViewModel.updateEditSourceState(source)
                 }
             )
         }
@@ -125,6 +151,26 @@ fun WordbookNavHost(
                 editWordState = editWordState,
                 editWordWithTranslations = { word: Word_B, translations: List<Translation> ->
                     viewModel.updateWordWithTranslations(word, translations)
+                },
+            )
+        }
+        composable(route = Screen.EditLanguage.route) {
+            EditLanguagePopupScreen(
+                navController = navController,
+                editLanguageState = editLanguageState,
+                editLanguage = { language: Language ->
+                    viewModel.updateLanguage(language)
+                },
+            )
+        }
+        composable(route = Screen.EditSource.route) {
+            EditSourcePopupScreen(
+                navController = navController,
+                editSourceState = editSourceState,
+                sources = sources,
+                languages = languages,
+                editSource = { source: Source ->
+                    viewModel.updateSource(source)
                 },
             )
         }

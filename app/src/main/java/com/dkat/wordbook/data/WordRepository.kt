@@ -50,6 +50,14 @@ class WordRepository(private val context: Context)
         languageDao.createLanguage(language)
     }
 
+    suspend fun updateLanguage(language: Language) {
+        languageDao.updateLanguage(language.id, language.name)
+    }
+
+    suspend fun updateSource(source: Source) {
+        sourceDao.updateSource(source.id, source.name, source.mainOrigLangId, source.mainTranslationLangId)
+    }
+
     suspend fun deleteWord(word: Word_B) {
         wordDao.deleteWordById(id = word.id)
     }
