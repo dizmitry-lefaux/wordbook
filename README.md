@@ -16,9 +16,8 @@
 * make sources sortable or movable
 * move data actions to allotted repositories/view models
 * make 'Edit word' screen translations removals revertable on 'Cancel' click
+* close 'Edit' popups with smooth recompose (close popup -> compose prev page)
 
 #### ISSUES:
 * 'Words' screen:
   * workaround to recompose input fields after removal
-* 'Books' scree:
-  * 'Languages' pill title is not selected, while 'Languages' pill content is showed after page recompose

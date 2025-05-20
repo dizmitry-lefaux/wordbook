@@ -47,6 +47,7 @@ fun BooksScreen(
             PillSwitch(
                 pills = listOf(
                     PillData(title = "BOOKS",
+                             isSelected = isBooksOpen,
                              onClick = {
                                  if (!isBooksOpen) {
                                      openBooks()
@@ -54,6 +55,7 @@ fun BooksScreen(
                              }
                     ),
                     PillData(title = "LANGUAGES",
+                             isSelected = isLanguagesOpen,
                              onClick = {
                                  if (!isLanguagesOpen) {
                                      openLanguages()

@@ -19,7 +19,7 @@ fun WordsWithTranslationsList(
     wordsWithTranslations: List<WordWithTranslations>?,
     onDeleteWordClick: ((word: Word_B) -> Unit)?,
     readSourceById: (sourceId: Int) -> Source,
-    updateEditWordState: (editWordState: EditWordState) -> Unit,
+    updateEditableWord: (editWordState: EditWordState) -> Unit,
     modifier: Modifier,
 ) {
     if (wordsWithTranslations != null) {
@@ -28,7 +28,7 @@ fun WordsWithTranslationsList(
                                      wordWithTranslations = wordWithTranslations,
                                      onDeleteWordItemClick = onDeleteWordClick,
                                      readSourceById = readSourceById,
-                                     updateEditWordState = updateEditWordState,
+                                     updateEditWordState = updateEditableWord,
                                      modifier = modifier,
             )
             HorizontalDivider(thickness = 2.dp)
@@ -43,7 +43,7 @@ fun WordsWithTranslationsListPreview(
     WordsWithTranslationsList(
         navController = rememberNavController(),
         wordsWithTranslations = PreviewData.wordsWithTranslations,
-        updateEditWordState = { _ -> },
+        updateEditableWord = { _ -> },
         onDeleteWordClick = {},
         readSourceById = { _ -> Source() },
         modifier = Modifier

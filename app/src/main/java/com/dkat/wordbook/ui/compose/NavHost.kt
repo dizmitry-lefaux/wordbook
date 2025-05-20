@@ -116,17 +116,17 @@ fun WordbookNavHost(
                 sourcesWithWords = sourcesWithWords,
                 wordsWithTranslations = wordsWithTranslations,
                 languages = languages,
-                onDeleteSourceItemClick = { source: Source ->
-                    viewModel.deleteSource(source)
-                },
-                onDeleteWordItemClick = { word: Word_B ->
-                    viewModel.deleteWord(word)
-                },
                 createSource = { source: Source ->
                     viewModel.createSource(source)
                 },
                 createLanguage = { language: Language ->
                     viewModel.createLanguage(language)
+                },
+                onDeleteWordItemClick = { word: Word_B ->
+                    viewModel.deleteWord(word)
+                },
+                onDeleteSourceItemClick = { source: Source ->
+                    viewModel.deleteSource(source)
                 },
                 onDeleteLanguageItemClick = { language: Language ->
                     viewModel.deleteLanguage(language)

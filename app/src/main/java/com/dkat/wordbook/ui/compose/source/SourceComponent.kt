@@ -38,73 +38,33 @@ fun ExpandableSourceItem(
             isHideTitleOnExpand = true,
         ) {
             Column {
-                SourceItem(
-                    navController = navController,
-                    modifier = modifier,
-                    source = source,
-                    updateSourceState = updateSourceState,
-                    onDeleteSourceClick = onDeleteSourceClick,
-                    wordsWithTranslations = wordsWithTranslations,
-                    onDeleteWordClick = onDeleteWordClick,
-                    readSource = readSourceById,
-                    updateEditWordState = updateEditWordState,
+                EditableDeletableItem(navController = navController,
+                                      editRoute = Screen.EditSource.route,
+                                      titleValue = source.name,
+                                      editableObject = source,
+                                      updateEditableObject = updateSourceState,
+                                      // TODO: move to string resources
+                                      editDescription = "edit source",
+                                      deletableObject = source,
+                                      deleteObject = onDeleteSourceClick,
+                                      // TODO: move to string resources
+                                      deleteDescription = "delete language",
+                                      additionalContent = {
+                                          HorizontalDivider(thickness = 2.dp)
+                                          WordsWithTranslationsList(
+                                              navController = navController,
+                                              wordsWithTranslations = wordsWithTranslations,
+                                              onDeleteWordClick = onDeleteWordClick,
+                                              readSourceById = readSourceById,
+                                              updateEditableWord = updateEditWordState,
+                                              modifier = modifier,
+                                          )
+                                      },
+                                      modifier = modifier
                 )
-                HorizontalDivider(thickness = 8.dp)
             }
         }
     }
-}
-
-@Composable
-private fun SourceItem(
-    navController: NavController,
-    modifier: Modifier,
-    source: Source,
-    onDeleteSourceClick: ((source: Source) -> Unit)?,
-    updateSourceState: (source: Source) -> Unit,
-    wordsWithTranslations: List<WordWithTranslations>?,
-    onDeleteWordClick: ((word: Word_B) -> Unit)?,
-    readSource: (sourceId: Int) -> Source,
-    updateEditWordState: (editWordState: EditWordState) -> Unit,
-) {
-    EditableDeletableItem(navController = navController,
-                          editRoute = Screen.EditSource.route,
-                          titleValue = source.name,
-                          editObject = source,
-                          updateEditObjectState = updateSourceState,
-                          editDescription = "edit source",
-                          deleteObject = source,
-                          onDeleteObjectClick = onDeleteSourceClick,
-                          deleteDescription = "delete language",
-                          additionalContent = {
-                              HorizontalDivider(thickness = 2.dp)
-                              WordsWithTranslationsList(
-                                  navController = navController,
-                                  wordsWithTranslations = wordsWithTranslations,
-                                  onDeleteWordClick = onDeleteWordClick,
-                                  readSourceById = readSource,
-                                  updateEditWordState = updateEditWordState,
-                                  modifier = modifier,
-                              )
-                          },
-                          modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun SourceItemPreview() {
-    SourceItem(
-        navController = rememberNavController(),
-        modifier = Modifier,
-        source = PreviewData.source1,
-        wordsWithTranslations = PreviewData.wordsWithTranslations,
-        onDeleteSourceClick = {},
-        onDeleteWordClick = {},
-        readSource = { _ -> Source() },
-        updateEditWordState = { _ -> },
-        updateSourceState = { _ -> },
-    )
 }
 
 @Preview(showBackground = true)

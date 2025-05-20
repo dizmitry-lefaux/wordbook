@@ -15,10 +15,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -39,8 +36,6 @@ fun PillSwitch(
             .background(MaterialTheme.colorScheme.secondaryContainer)
         ) {}
 
-        var activePillId by remember { mutableIntStateOf(0) }
-
         Row(modifier = modifier
             .fillMaxWidth()
             .background(MaterialTheme.colorScheme.secondaryContainer)
@@ -49,14 +44,12 @@ fun PillSwitch(
             horizontalArrangement = Arrangement.Center
         ) {
             Row {
-                pills.forEachIndexed { index, pill ->
+                pills.forEach { pill ->
                     PillElement(
-                        id = index,
                         modifier = modifier.weight(1f),
                         onClick = pill.onClick,
                         titleText = pill.title,
-                        onSelect = { activePillId = it },
-                        isSelected = index == activePillId
+                        isSelected = pill.isSelected
                     )
                 }
             }
@@ -66,38 +59,32 @@ fun PillSwitch(
 
 data class PillData(
     val title: String,
-    val onClick: () -> Unit
+    var isSelected: Boolean,
+    val onClick: () -> Unit,
 )
 
 @Composable
 fun PillElement(
     modifier: Modifier = Modifier,
-    id: Int,
     titleText: String,
     onClick: () -> Unit,
-    onSelect: (id: Int) -> Unit,
     isSelected: Boolean
 ) {
-
     val backgroundColor =
         if (isSelected) MaterialTheme.colorScheme.background
         else MaterialTheme.colorScheme.secondaryContainer.copy(0.0f)
     val interactionSource = remember { MutableInteractionSource() }
 
-    Box(
-        modifier = modifier
+    Box(modifier = modifier
             .background(
                 color = backgroundColor,
                 RoundedCornerShape(topStart = 25.dp, topEnd = 25.dp)
-            )
-            .clickable(
+            ).clickable(
                 interactionSource = interactionSource,
                 indication = null
             ) {
                 onClick()
-                onSelect(id)
-            }
-            .clip(RoundedCornerShape(25.dp)),
+            }.clip(RoundedCornerShape(25.dp)),
         contentAlignment = Alignment.Center,
     ) {
         val textColor =
@@ -120,8 +107,9 @@ fun PillElement(
 @Composable
 fun PillSwitchPreview() {
     PillSwitch(
-        pills = listOf(PillData("title1") {},
-                       PillData("title2") {},
-                       PillData("title3") {})
+        pills = listOf(PillData(title = "title1", isSelected = false) {},
+                       PillData(title = "title2", isSelected = true) {},
+                       PillData(title = "title3", isSelected = false) {}
+        )
     )
 }
