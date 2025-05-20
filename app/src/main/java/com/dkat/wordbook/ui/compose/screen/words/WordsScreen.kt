@@ -67,7 +67,7 @@ fun WordsScreen(
             }.toList(),
             onDeleteWordClick = onDeleteWordItemClick,
             readSourceById = readSource,
-            updateEditWordState = updateEditWordState,
+            updateEditableWord = updateEditWordState,
             modifier = modifier,
         )
     }

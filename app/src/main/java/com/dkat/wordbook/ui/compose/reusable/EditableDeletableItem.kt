@@ -27,12 +27,12 @@ fun <EditableObjectType, DeletableObjectType> EditableDeletableItem(
     editRoute: String,
     titleValue: String,
 
-    editObject: EditableObjectType,
-    updateEditObjectState: (editObject: EditableObjectType) -> Unit,
+    editableObject: EditableObjectType,
+    updateEditableObject: (editObject: EditableObjectType) -> Unit,
     editDescription: String,
 
-    deleteObject: DeletableObjectType?,
-    onDeleteObjectClick: ((deleteObject: DeletableObjectType) -> Unit)?,
+    deletableObject: DeletableObjectType?,
+    deleteObject: ((deleteObject: DeletableObjectType) -> Unit)?,
     deleteDescription: String,
 
     additionalContent: (@Composable () -> Unit)?,
@@ -52,7 +52,7 @@ fun <EditableObjectType, DeletableObjectType> EditableDeletableItem(
                     // edit button
                     Button(
                         onClick = {
-                            updateEditObjectState(editObject)
+                            updateEditableObject(editableObject)
                             navController.navigate(editRoute)
                         },
                         colors = ButtonDefaults.buttonColors(containerColor = Color.White),
@@ -62,10 +62,10 @@ fun <EditableObjectType, DeletableObjectType> EditableDeletableItem(
                         )
                     }
 
-                    if (onDeleteObjectClick != null && deleteObject != null) {
+                    if (deleteObject != null && deletableObject != null) {
                         // delete button
                         Button(
-                            onClick = { onDeleteObjectClick(deleteObject) },
+                            onClick = { deleteObject(deletableObject) },
                             colors = ButtonDefaults.buttonColors(containerColor = Color.White),
                         ) {
                             Image(imageVector = Icons.Filled.Clear,
