@@ -8,7 +8,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.dkat.wordbook.viewModel.BooksScreenViewModel
-import com.dkat.wordbook.viewModel.EditLanguageViewModel
+import com.dkat.wordbook.viewModel.EditLanguagePopupScreenViewModel
 import com.dkat.wordbook.viewModel.EditWordState
 import com.dkat.wordbook.viewModel.EditWordViewModel
 import com.dkat.wordbook.viewModel.MainViewModel
@@ -24,22 +24,28 @@ import com.dkat.wordbook.ui.compose.screen.popup.EditSourcePopupScreen
 import com.dkat.wordbook.ui.compose.screen.session.SessionScreen
 import com.dkat.wordbook.ui.compose.screen.words.WordsScreen
 import com.dkat.wordbook.ui.compose.screen.popup.EditWordWithTranslationsPopupScreen
-import com.dkat.wordbook.viewModel.EditSourceViewModel
+import com.dkat.wordbook.viewModel.EditSourcePopupScreenViewModel
+import com.dkat.wordbook.viewModel.LanguageViewModel
+import com.dkat.wordbook.viewModel.SourceViewModel
+import com.dkat.wordbook.viewModel.WordViewModel
 
 @Composable
 fun WordbookNavHost(
     navController: NavHostController,
     viewModel: MainViewModel,
+    languageViewModel: LanguageViewModel,
+    wordViewModel: WordViewModel,
+    sourceViewModel: SourceViewModel,
     editWordViewModel: EditWordViewModel,
-    editLanguageViewModel: EditLanguageViewModel,
-    editSourceViewModel: EditSourceViewModel,
+    editLanguageViewModel: EditLanguagePopupScreenViewModel,
+    editSourceViewModel: EditSourcePopupScreenViewModel,
     booksScreenViewModel: BooksScreenViewModel,
     modifier: Modifier
 ) {
-    val sources by viewModel.sources.collectAsStateWithLifecycle()
-    val sourcesWithWords by viewModel.sourcesWithWords.collectAsStateWithLifecycle()
-    val wordsWithTranslations by viewModel.wordsWithTranslations.collectAsStateWithLifecycle()
-    val languages by viewModel.languages.collectAsStateWithLifecycle()
+    val sources by sourceViewModel.sources.collectAsStateWithLifecycle()
+    val sourcesWithWords by sourceViewModel.sourcesWithWords.collectAsStateWithLifecycle()
+    val wordsWithTranslations by wordViewModel.wordsWithTranslations.collectAsStateWithLifecycle()
+    val languages by languageViewModel.languages.collectAsStateWithLifecycle()
     val sessionWords by viewModel.sessionWords.collectAsStateWithLifecycle()
 
     val editWordState by editWordViewModel.editWordState.collectAsStateWithLifecycle()
@@ -58,15 +64,15 @@ fun WordbookNavHost(
             HomeScreen(
                 navController = navController,
                 onDeleteWordItemClick = { word: Word_B ->
-                    viewModel.deleteWord(word)
+                    wordViewModel.deleteWord(word)
                 },
                 onDeleteSourceItemClick = { source: Source ->
-                    viewModel.deleteSource(source)
+                    sourceViewModel.deleteSource(source)
                 },
                 sourcesWithWords = sourcesWithWords,
                 wordsWithTranslations = wordsWithTranslations,
                 readSource = { id: Int ->
-                    viewModel.readSource(id)
+                    sourceViewModel.readSource(id)
                 },
                 updateEditWordState = { editWordState: EditWordState ->
                     editWordViewModel.updateEditWordState(editWordState)
@@ -91,14 +97,14 @@ fun WordbookNavHost(
             WordsScreen(
                 navController = navController,
                 readSource = { id: Int ->
-                    viewModel.readSource(id)
+                    sourceViewModel.readSource(id)
                 },
                 createWordWithTranslations = { word: Word_B, translations: List<Translation> ->
-                    viewModel.createWordWithTranslations(word, translations)
+                    wordViewModel.createWordWithTranslations(word, translations)
                 },
                 sources = sources,
                 onDeleteWordItemClick = { word: Word_B ->
-                    viewModel.deleteWord(word)
+                    wordViewModel.deleteWord(word)
                 },
                 updateEditWordState = { editWordState: EditWordState ->
                     editWordViewModel.updateEditWordState(editWordState)
@@ -117,22 +123,22 @@ fun WordbookNavHost(
                 wordsWithTranslations = wordsWithTranslations,
                 languages = languages,
                 createSource = { source: Source ->
-                    viewModel.createSource(source)
+                    sourceViewModel.createSource(source)
                 },
                 createLanguage = { language: Language ->
-                    viewModel.createLanguage(language)
+                    languageViewModel.createLanguage(language)
                 },
                 onDeleteWordItemClick = { word: Word_B ->
-                    viewModel.deleteWord(word)
+                    wordViewModel.deleteWord(word)
                 },
                 onDeleteSourceItemClick = { source: Source ->
-                    viewModel.deleteSource(source)
+                    sourceViewModel.deleteSource(source)
                 },
                 onDeleteLanguageItemClick = { language: Language ->
-                    viewModel.deleteLanguage(language)
+                    languageViewModel.deleteLanguage(language)
                 },
                 readSource = { id: Int ->
-                    viewModel.readSource(id)
+                    sourceViewModel.readSource(id)
                 },
                 updateEditWordState = { editWordState: EditWordState ->
                     editWordViewModel.updateEditWordState(editWordState)
@@ -150,7 +156,7 @@ fun WordbookNavHost(
                 navController = navController,
                 editWordState = editWordState,
                 editWordWithTranslations = { word: Word_B, translations: List<Translation> ->
-                    viewModel.updateWordWithTranslations(word, translations)
+                    wordViewModel.updateWordWithTranslations(word, translations)
                 },
             )
         }
@@ -159,7 +165,7 @@ fun WordbookNavHost(
                 navController = navController,
                 editLanguageState = editLanguageState,
                 editLanguage = { language: Language ->
-                    viewModel.updateLanguage(language)
+                    languageViewModel.updateLanguage(language)
                 },
             )
         }
@@ -170,7 +176,7 @@ fun WordbookNavHost(
                 sources = sources,
                 languages = languages,
                 editSource = { source: Source ->
-                    viewModel.updateSource(source)
+                    sourceViewModel.updateSource(source)
                 },
             )
         }
