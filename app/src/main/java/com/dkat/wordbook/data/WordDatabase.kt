@@ -10,6 +10,7 @@ import com.dkat.wordbook.data.dao.LanguageDao
 import com.dkat.wordbook.data.dao.SourceDao
 import com.dkat.wordbook.data.dao.TranslationDao
 import com.dkat.wordbook.data.dao.WordDao
+import com.dkat.wordbook.data.dao.WordsDao
 import com.dkat.wordbook.data.entity.Language
 import com.dkat.wordbook.data.entity.SessionSourceCrossRef
 import com.dkat.wordbook.data.entity.SessionWordCrossRef
@@ -25,6 +26,7 @@ import com.dkat.wordbook.data.entity.Word_B
     exportSchema = false,
 )
 abstract class WordDatabase : RoomDatabase() {
+    abstract fun wordsDao(): WordsDao
     abstract fun wordDao(): WordDao
     abstract fun translationDao(): TranslationDao
     abstract fun sourceDao(): SourceDao

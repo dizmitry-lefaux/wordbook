@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-class EditLanguageViewModel : ViewModel() {
+class EditLanguagePopupScreenViewModel : ViewModel() {
     private val _editLanguageState = MutableStateFlow(Language())
     val editLanguageState: StateFlow<Language> = _editLanguageState.asStateFlow()
 

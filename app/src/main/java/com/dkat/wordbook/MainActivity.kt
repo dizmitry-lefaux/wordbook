@@ -16,17 +16,27 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.dkat.wordbook.data.WordRepository
+import com.dkat.wordbook.data.repo.LanguageRepository
+import com.dkat.wordbook.data.repo.SourceRepository
+import com.dkat.wordbook.data.repo.TranslationRepository
+import com.dkat.wordbook.data.repo.WordRepository
+import com.dkat.wordbook.data.repo.WordsRepository
 import com.dkat.wordbook.ui.compose.WordbookNavHost
 import com.dkat.wordbook.ui.compose.bar.BottomBar
 import com.dkat.wordbook.ui.compose.bar.TopAppBar
 import com.dkat.wordbook.ui.theme.AppTheme
 import com.dkat.wordbook.viewModel.BooksScreenViewModel
-import com.dkat.wordbook.viewModel.EditLanguageViewModel
-import com.dkat.wordbook.viewModel.EditSourceViewModel
+import com.dkat.wordbook.viewModel.EditLanguagePopupScreenViewModel
+import com.dkat.wordbook.viewModel.EditSourcePopupScreenViewModel
 import com.dkat.wordbook.viewModel.EditWordViewModel
+import com.dkat.wordbook.viewModel.LanguageViewModel
+import com.dkat.wordbook.viewModel.LanguageViewModelFactory
 import com.dkat.wordbook.viewModel.MainViewModel
 import com.dkat.wordbook.viewModel.MainViewModelFactory
+import com.dkat.wordbook.viewModel.SourceViewModel
+import com.dkat.wordbook.viewModel.SourceViewModelFactory
+import com.dkat.wordbook.viewModel.WordViewModel
+import com.dkat.wordbook.viewModel.WordViewModelFactory
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,10 +57,18 @@ fun WordbookApp() {
         val context = LocalContext.current
 
         val viewModel: MainViewModel =
-            viewModel(factory = MainViewModelFactory(WordRepository(context = context)))
+            viewModel(factory = MainViewModelFactory(WordsRepository(context = context)))
+        val wordViewModel: WordViewModel = viewModel(factory = WordViewModelFactory(
+            TranslationRepository(context = context),
+            WordRepository(context = context)
+        ))
+        val languageViewModel: LanguageViewModel =
+            viewModel(factory = LanguageViewModelFactory(LanguageRepository(context = context)))
+        val sourceViewModel: SourceViewModel =
+            viewModel(factory = SourceViewModelFactory(SourceRepository(context = context)))
         val editWordViewModel: EditWordViewModel = viewModel()
-        val editLanguageViewModel: EditLanguageViewModel = viewModel()
-        val editSourceViewModel: EditSourceViewModel = viewModel()
+        val editLanguageViewModel: EditLanguagePopupScreenViewModel = viewModel()
+        val editSourceViewModel: EditSourcePopupScreenViewModel = viewModel()
         val booksScreenViewModel: BooksScreenViewModel = viewModel()
 
         Scaffold(modifier = Modifier.fillMaxSize(),
@@ -66,6 +84,9 @@ fun WordbookApp() {
         ) { innerPadding ->
             WordbookNavHost(navController = navController,
                             viewModel = viewModel,
+                            wordViewModel = wordViewModel,
+                            languageViewModel = languageViewModel,
+                            sourceViewModel = sourceViewModel,
                             editWordViewModel = editWordViewModel,
                             editLanguageViewModel = editLanguageViewModel,
                             editSourceViewModel = editSourceViewModel,
