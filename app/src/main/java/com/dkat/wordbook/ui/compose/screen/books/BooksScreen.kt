@@ -8,7 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.dkat.wordbook.viewModel.EditWordState
+import com.dkat.wordbook.viewModel.screen.EditWordState
 import com.dkat.wordbook.data.PreviewData
 import com.dkat.wordbook.data.entity.Language
 import com.dkat.wordbook.data.entity.Source

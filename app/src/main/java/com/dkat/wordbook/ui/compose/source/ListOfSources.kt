@@ -13,7 +13,7 @@ import com.dkat.wordbook.data.entity.Source
 import com.dkat.wordbook.data.entity.SourceWithWords
 import com.dkat.wordbook.data.entity.WordWithTranslations
 import com.dkat.wordbook.data.entity.Word_B
-import com.dkat.wordbook.viewModel.EditWordState
+import com.dkat.wordbook.viewModel.screen.EditWordState
 
 private const val TAG = "ListOfSources"
 
