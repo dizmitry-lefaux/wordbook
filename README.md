@@ -7,6 +7,7 @@
   * make switchable
   * make size configurable
   * change animated card design
+* Buttons: change design (preliminary rectangular with borders)
 * add 'Properties' screen
 * add validations for multiple translations inputs
 * warning on delete actions: language, source
