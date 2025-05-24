@@ -1,19 +1,19 @@
 #### TODO:
 
-* 'Words' screen: make word input collapsable
-* make sessions multiple
-* make sessions switchable
-* make session size configurable
+* bottom bar:
+  * update icons
+* sessions:
+  * make multiple
+  * make switchable
+  * make size configurable
+  * change animated card design
 * add 'Properties' screen
-* change animated card design
 * add validations for multiple translations inputs
 * warning on delete actions: language, source
 * messages on adding items: language, source, word
 * messages on delete items: language, source, word
+* add non-latin languages support
 * move strings to resources
-* update bottom bar icons
-* update bottom bar icons
-* remember selected source on words screen
 * make languages sortable or movable
 * make sources sortable or movable
 * make 'Edit word' screen translations removals revertable on 'Cancel' click
