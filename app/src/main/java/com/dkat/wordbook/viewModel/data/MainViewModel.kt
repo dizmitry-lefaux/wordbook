@@ -1,4 +1,4 @@
-package com.dkat.wordbook.viewModel
+package com.dkat.wordbook.viewModel.data
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

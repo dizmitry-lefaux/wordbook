@@ -17,7 +17,7 @@ import com.dkat.wordbook.ui.compose.reusable.EditableDeletableItem
 import com.dkat.wordbook.ui.compose.reusable.ExpandableSection
 import com.dkat.wordbook.ui.compose.screen.Screen
 import com.dkat.wordbook.ui.compose.word.WordsWithTranslationsList
-import com.dkat.wordbook.viewModel.EditWordState
+import com.dkat.wordbook.viewModel.screen.EditWordState
 
 @Composable
 fun ExpandableSourceItem(

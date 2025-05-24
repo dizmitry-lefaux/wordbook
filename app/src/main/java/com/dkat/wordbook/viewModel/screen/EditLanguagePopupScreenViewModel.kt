@@ -1,4 +1,4 @@
-package com.dkat.wordbook.viewModel
+package com.dkat.wordbook.viewModel.screen
 
 import androidx.lifecycle.ViewModel
 import com.dkat.wordbook.data.entity.Language

@@ -25,18 +25,19 @@ import com.dkat.wordbook.ui.compose.WordbookNavHost
 import com.dkat.wordbook.ui.compose.bar.BottomBar
 import com.dkat.wordbook.ui.compose.bar.TopAppBar
 import com.dkat.wordbook.ui.theme.AppTheme
-import com.dkat.wordbook.viewModel.BooksScreenViewModel
-import com.dkat.wordbook.viewModel.EditLanguagePopupScreenViewModel
-import com.dkat.wordbook.viewModel.EditSourcePopupScreenViewModel
-import com.dkat.wordbook.viewModel.EditWordViewModel
-import com.dkat.wordbook.viewModel.LanguageViewModel
-import com.dkat.wordbook.viewModel.LanguageViewModelFactory
-import com.dkat.wordbook.viewModel.MainViewModel
-import com.dkat.wordbook.viewModel.MainViewModelFactory
-import com.dkat.wordbook.viewModel.SourceViewModel
-import com.dkat.wordbook.viewModel.SourceViewModelFactory
-import com.dkat.wordbook.viewModel.WordViewModel
-import com.dkat.wordbook.viewModel.WordViewModelFactory
+import com.dkat.wordbook.viewModel.data.LanguageViewModel
+import com.dkat.wordbook.viewModel.data.LanguageViewModelFactory
+import com.dkat.wordbook.viewModel.data.MainViewModel
+import com.dkat.wordbook.viewModel.data.MainViewModelFactory
+import com.dkat.wordbook.viewModel.data.SourceViewModel
+import com.dkat.wordbook.viewModel.data.SourceViewModelFactory
+import com.dkat.wordbook.viewModel.data.WordViewModel
+import com.dkat.wordbook.viewModel.data.WordViewModelFactory
+import com.dkat.wordbook.viewModel.screen.BooksScreenViewModel
+import com.dkat.wordbook.viewModel.screen.EditLanguagePopupScreenViewModel
+import com.dkat.wordbook.viewModel.screen.EditSourcePopupScreenViewModel
+import com.dkat.wordbook.viewModel.screen.EditWordViewModel
+import com.dkat.wordbook.viewModel.screen.WordsScreenViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -70,6 +71,7 @@ fun WordbookApp() {
         val editLanguageViewModel: EditLanguagePopupScreenViewModel = viewModel()
         val editSourceViewModel: EditSourcePopupScreenViewModel = viewModel()
         val booksScreenViewModel: BooksScreenViewModel = viewModel()
+        val wordsScreenViewModel: WordsScreenViewModel = viewModel()
 
         Scaffold(modifier = Modifier.fillMaxSize(),
                  topBar = {
@@ -91,6 +93,7 @@ fun WordbookApp() {
                             editLanguageViewModel = editLanguageViewModel,
                             editSourceViewModel = editSourceViewModel,
                             booksScreenViewModel = booksScreenViewModel,
+                            wordsScreenViewModel = wordsScreenViewModel,
                             modifier = Modifier.padding(innerPadding)
             )
         }

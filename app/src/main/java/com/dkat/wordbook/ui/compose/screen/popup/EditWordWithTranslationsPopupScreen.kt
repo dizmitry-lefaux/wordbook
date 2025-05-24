@@ -39,7 +39,7 @@ import com.dkat.wordbook.ui.compose.reusable.ButtonText
 import com.dkat.wordbook.ui.compose.reusable.CloseablePopupTitle
 import com.dkat.wordbook.ui.compose.reusable.ErrorSupportingText
 import com.dkat.wordbook.ui.compose.word.EditTranslation
-import com.dkat.wordbook.viewModel.EditWordState
+import com.dkat.wordbook.viewModel.screen.EditWordState
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
