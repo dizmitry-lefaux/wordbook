@@ -24,6 +24,7 @@ import com.dkat.wordbook.data.entity.Translation
 import com.dkat.wordbook.data.entity.WordWithTranslations
 import com.dkat.wordbook.data.entity.Word_B
 import com.dkat.wordbook.ui.compose.reusable.EntityDropdownMenu
+import com.dkat.wordbook.ui.compose.reusable.ExpandableSection
 import com.dkat.wordbook.ui.compose.word.InputWordWithTranslations
 import com.dkat.wordbook.ui.compose.word.WordsWithTranslationsList
 
@@ -55,10 +56,18 @@ fun WordsScreen(
             resetErrorStateOnClick = { isSelectSourceError = it },
         )
         HorizontalDivider(thickness = 4.dp, color = Color.Black)
-        InputWordWithTranslations(
-            createWordWithTranslations = createWordWithTranslations,
-            source = selectedSource,
-        )
+
+        ExpandableSection(
+            modifier = modifier.fillMaxWidth(),
+            // TODO: move to string resources
+            title = "Add new source",
+            isHideTitleOnExpand = true,
+        ) {
+            InputWordWithTranslations(
+                createWordWithTranslations = createWordWithTranslations,
+                source = selectedSource,
+            )
+        }
         HorizontalDivider(thickness = 4.dp, color = Color.Black)
         WordsWithTranslationsList(
             navController = navController,
