@@ -7,10 +7,10 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 class EditLanguagePopupScreenViewModel : ViewModel() {
-    private val _editLanguageState = MutableStateFlow(Language())
-    val editLanguageState: StateFlow<Language> = _editLanguageState.asStateFlow()
+    private val _editableLanguageState = MutableStateFlow(Language())
+    val editableLanguageState: StateFlow<Language> = _editableLanguageState.asStateFlow()
 
-    fun updateEditLanguageState(language: Language) {
-        _editLanguageState.value = language
+    fun updateEditableLanguageState(language: Language) {
+        _editableLanguageState.value = language
     }
 }

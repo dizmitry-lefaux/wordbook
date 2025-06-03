@@ -7,10 +7,10 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 class EditSourcePopupScreenViewModel : ViewModel() {
-    private val _editSourceState = MutableStateFlow(Source())
-    val editSourceState: StateFlow<Source> = _editSourceState.asStateFlow()
+    private val _editableSourceState = MutableStateFlow(Source())
+    val editableSourceState: StateFlow<Source> = _editableSourceState.asStateFlow()
 
-    fun updateEditSourceState(source: Source) {
-        _editSourceState.value = source
+    fun updateEditableSourceState(source: Source) {
+        _editableSourceState.value = source
     }
 }

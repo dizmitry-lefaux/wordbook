@@ -27,7 +27,7 @@ import com.dkat.wordbook.ui.compose.reusable.EntityDropdownMenu
 import com.dkat.wordbook.ui.compose.reusable.ExpandableSection
 import com.dkat.wordbook.ui.compose.word.InputWordWithTranslations
 import com.dkat.wordbook.ui.compose.word.WordsWithTranslationsList
-import com.dkat.wordbook.viewModel.screen.EditWordState
+import com.dkat.wordbook.viewModel.screen.EditableWordState
 
 @Composable
 fun WordsScreen(
@@ -38,7 +38,7 @@ fun WordsScreen(
     selectedSourceState: Source,
     wordsWithTranslations: List<WordWithTranslations>,
     createWordWithTranslations: (word: Word_B, translations: List<Translation>) -> Unit,
-    updateEditWordState: (editWordState: EditWordState) -> Unit,
+    updateEditableWordState: (editableWordState: EditableWordState) -> Unit,
     onDeleteWordItemClick: (word: Word_B) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -85,7 +85,7 @@ fun WordsScreen(
             }.toList(),
             onDeleteWordClick = onDeleteWordItemClick,
             readSourceById = readSource,
-            updateEditableWord = updateEditWordState,
+            updateEditableWord = updateEditableWordState,
             modifier = modifier,
         )
     }
@@ -102,7 +102,7 @@ fun WordsScreenPreview() {
         selectedSourceState = PreviewData.source1,
         wordsWithTranslations = PreviewData.wordsWithTranslations,
         createWordWithTranslations = { _, _ -> },
-        updateEditWordState = { _ -> },
+        updateEditableWordState = { _ -> },
         onDeleteWordItemClick = {},
     )
 }

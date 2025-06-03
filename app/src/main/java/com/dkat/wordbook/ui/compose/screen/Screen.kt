@@ -50,6 +50,12 @@ sealed class Screen(
         icon = null,
         labelResourceId = R.string.edit_source
     )
+
+    data object EditSession: Screen(
+        route = "editSession",
+        icon = null,
+        labelResourceId = R.string.edit_session
+    )
 }
 
 val bottomBarScreens = listOf(Screen.Home, Screen.Session, Screen.Words, Screen.Books)

@@ -13,7 +13,7 @@ import com.dkat.wordbook.data.entity.Source
 import com.dkat.wordbook.data.entity.SourceWithWords
 import com.dkat.wordbook.data.entity.WordWithTranslations
 import com.dkat.wordbook.data.entity.Word_B
-import com.dkat.wordbook.viewModel.screen.EditWordState
+import com.dkat.wordbook.viewModel.screen.EditableWordState
 
 private const val TAG = "ListOfSources"
 
@@ -25,7 +25,7 @@ fun ListOfSources(
     onDeleteWordItemClick: (word: Word_B) -> Unit,
     onDeleteSourceItemClick: (source: Source) -> Unit,
     readSource: (sourceId: Int) -> Source,
-    updateEditWordState: (editWordState: EditWordState) -> Unit,
+    updateEditableWordState: (editableWordState: EditableWordState) -> Unit,
     updateSourceState: (source: Source) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -48,7 +48,7 @@ fun ListOfSources(
                     source = source,
                     wordsWithTranslations = mapOfSources[source],
                     readSourceById = readSource,
-                    updateEditWordState = updateEditWordState,
+                    updateEditableWordState = updateEditableWordState,
                     updateSourceState = updateSourceState,
                 )
                 HorizontalDivider(thickness = 8.dp)
@@ -67,7 +67,7 @@ fun ListOfSourcesPreview() {
         onDeleteWordItemClick = {},
         onDeleteSourceItemClick = {},
         readSource = { _ -> Source() },
-        updateEditWordState = { _ -> },
+        updateEditableWordState = { _ -> },
         updateSourceState = { _ -> },
     )
 }

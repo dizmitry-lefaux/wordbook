@@ -9,7 +9,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.dkat.wordbook.viewModel.screen.EditWordState
+import com.dkat.wordbook.viewModel.screen.EditableWordState
 import com.dkat.wordbook.data.PreviewData
 import com.dkat.wordbook.data.entity.Source
 import com.dkat.wordbook.data.entity.WordWithTranslations
@@ -21,13 +21,13 @@ import com.dkat.wordbook.ui.compose.screen.Screen
 fun WordWithTranslationsItem(navController: NavController,
                              wordWithTranslations: WordWithTranslations,
                              readSourceById: (sourceId: Int) -> Source,
-                             updateEditWordState: (editWordState: EditWordState) -> Unit,
-                             onDeleteWordItemClick: ((word: Word_B) -> Unit)?,
+                             updateEditableWordState: (editableWordState: EditableWordState) -> Unit,
+                             deleteWord: ((word: Word_B) -> Unit)?,
                              modifier: Modifier
 ) {
     val word = wordWithTranslations.word
     val translations = wordWithTranslations.translations
-    val editWordState = EditWordState(
+    val editableWordState = EditableWordState(
         currentSource = readSourceById(word.sourceId),
         currentWord = word,
         currentTranslations = translations
@@ -36,12 +36,12 @@ fun WordWithTranslationsItem(navController: NavController,
     EditableDeletableItem(navController = navController,
                           editRoute = Screen.EditWord.route,
                           titleValue = word.value,
-                          editableObject = editWordState,
-                          updateEditableObject = updateEditWordState,
+                          editableObject = editableWordState,
+                          updateEditableObject = updateEditableWordState,
                           // TODO: move to string resources
                           editDescription = "edit word",
                           deletableObject = word,
-                          deleteObject = onDeleteWordItemClick,
+                          deleteObject = deleteWord,
                           // TODO: move to string resources
                           deleteDescription = "remove word",
                           modifier = modifier,
@@ -67,9 +67,9 @@ fun WordWithTranslationsItem(navController: NavController,
 fun WordItemPreview1() {
     WordWithTranslationsItem(navController = rememberNavController(),
                              wordWithTranslations = PreviewData.wordWithTranslations1,
-                             updateEditWordState = { _ -> },
+                             updateEditableWordState = { _ -> },
                              readSourceById = { _ -> Source() },
-                             onDeleteWordItemClick = {},
+                             deleteWord = {},
                              modifier = Modifier
     )
 }
@@ -79,9 +79,9 @@ fun WordItemPreview1() {
 fun WordItemPreview2() {
     WordWithTranslationsItem(navController = rememberNavController(),
                              wordWithTranslations = PreviewData.wordWithTranslations1,
-                             updateEditWordState = { _ -> },
+                             updateEditableWordState = { _ -> },
                              readSourceById = { _ -> Source() },
-                             onDeleteWordItemClick = null,
+                             deleteWord = null,
                              modifier = Modifier
     )
 }

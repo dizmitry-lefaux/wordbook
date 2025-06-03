@@ -7,11 +7,13 @@ import androidx.room.RoomDatabase
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.dkat.wordbook.data.dao.LanguageDao
+import com.dkat.wordbook.data.dao.SessionDao
 import com.dkat.wordbook.data.dao.SourceDao
 import com.dkat.wordbook.data.dao.TranslationDao
 import com.dkat.wordbook.data.dao.WordDao
 import com.dkat.wordbook.data.dao.WordsDao
 import com.dkat.wordbook.data.entity.Language
+import com.dkat.wordbook.data.entity.Session
 import com.dkat.wordbook.data.entity.SessionSourceCrossRef
 import com.dkat.wordbook.data.entity.SessionWordCrossRef
 import com.dkat.wordbook.data.entity.Source
@@ -21,8 +23,9 @@ import com.dkat.wordbook.data.entity.Word_B
 
 @Database(
     entities = [Word::class, Language::class, SessionSourceCrossRef::class,
-        SessionWordCrossRef::class, Source::class, Translation::class, Word_B::class],
-    version = 8,
+        SessionWordCrossRef::class, Source::class, Translation::class, Word_B::class,
+        Session::class],
+    version = 9,
     exportSchema = false,
 )
 abstract class WordDatabase : RoomDatabase() {
@@ -31,6 +34,7 @@ abstract class WordDatabase : RoomDatabase() {
     abstract fun translationDao(): TranslationDao
     abstract fun sourceDao(): SourceDao
     abstract fun languageDao(): LanguageDao
+    abstract fun sessionDao(): SessionDao
 
     companion object {
         @Volatile

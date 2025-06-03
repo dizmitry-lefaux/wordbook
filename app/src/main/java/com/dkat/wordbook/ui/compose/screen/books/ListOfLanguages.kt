@@ -15,7 +15,7 @@ import com.dkat.wordbook.data.entity.Language
 fun ListOfLanguages(
     navController: NavController,
     languages: List<Language>,
-    onDeleteLanguageItemClick: (language: Language) -> Unit,
+    deleteLanguage: (language: Language) -> Unit,
     updateLanguageState: (language: Language) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -23,7 +23,7 @@ fun ListOfLanguages(
         languages.forEach { language ->
             LanguageItem(navController = navController,
                          language = language,
-                         onDeleteLanguageItemClick = onDeleteLanguageItemClick,
+                         deleteLanguage = deleteLanguage,
                          updateLanguageState = updateLanguageState,
                          modifier = modifier
             )
@@ -37,7 +37,7 @@ fun ListOfLanguagesPreview() {
     ListOfLanguages(
         navController = rememberNavController(),
         languages = PreviewData.languages,
-        onDeleteLanguageItemClick = {},
+        deleteLanguage = {},
         updateLanguageState = {},
         modifier = Modifier
     )
