@@ -17,7 +17,7 @@ import com.dkat.wordbook.ui.compose.reusable.EditableDeletableItem
 import com.dkat.wordbook.ui.compose.reusable.ExpandableSection
 import com.dkat.wordbook.ui.compose.screen.Screen
 import com.dkat.wordbook.ui.compose.word.WordsWithTranslationsList
-import com.dkat.wordbook.viewModel.screen.EditWordState
+import com.dkat.wordbook.viewModel.screen.EditableWordState
 
 @Composable
 fun ExpandableSourceItem(
@@ -28,7 +28,7 @@ fun ExpandableSourceItem(
     updateSourceState: (source: Source) -> Unit,
     wordsWithTranslations: List<WordWithTranslations>?,
     readSourceById: (sourceId: Int) -> Source,
-    updateEditWordState: (editWordState: EditWordState) -> Unit,
+    updateEditableWordState: (editableWordState: EditableWordState) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column {
@@ -56,7 +56,7 @@ fun ExpandableSourceItem(
                                               wordsWithTranslations = wordsWithTranslations,
                                               onDeleteWordClick = onDeleteWordClick,
                                               readSourceById = readSourceById,
-                                              updateEditableWord = updateEditWordState,
+                                              updateEditableWord = updateEditableWordState,
                                               modifier = modifier,
                                           )
                                       },
@@ -78,7 +78,7 @@ fun ExpandableSourceItemPreview() {
         onDeleteWordClick = {},
         onDeleteSourceClick = {},
         readSourceById = { _ -> Source() },
-        updateEditWordState = { _ -> },
+        updateEditableWordState = { _ -> },
         updateSourceState = { _ -> },
     )
 }

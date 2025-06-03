@@ -17,6 +17,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.dkat.wordbook.data.repo.LanguageRepository
+import com.dkat.wordbook.data.repo.SessionRepository
 import com.dkat.wordbook.data.repo.SourceRepository
 import com.dkat.wordbook.data.repo.TranslationRepository
 import com.dkat.wordbook.data.repo.WordRepository
@@ -27,16 +28,18 @@ import com.dkat.wordbook.ui.compose.bar.TopAppBar
 import com.dkat.wordbook.ui.theme.AppTheme
 import com.dkat.wordbook.viewModel.data.LanguageViewModel
 import com.dkat.wordbook.viewModel.data.LanguageViewModelFactory
-import com.dkat.wordbook.viewModel.data.MainViewModel
-import com.dkat.wordbook.viewModel.data.MainViewModelFactory
+import com.dkat.wordbook.viewModel.data.SessionViewModel
+import com.dkat.wordbook.viewModel.data.SessionViewModelFactory
 import com.dkat.wordbook.viewModel.data.SourceViewModel
 import com.dkat.wordbook.viewModel.data.SourceViewModelFactory
 import com.dkat.wordbook.viewModel.data.WordViewModel
 import com.dkat.wordbook.viewModel.data.WordViewModelFactory
 import com.dkat.wordbook.viewModel.screen.BooksScreenViewModel
 import com.dkat.wordbook.viewModel.screen.EditLanguagePopupScreenViewModel
+import com.dkat.wordbook.viewModel.screen.EditSessionPopupScreenViewModel
 import com.dkat.wordbook.viewModel.screen.EditSourcePopupScreenViewModel
-import com.dkat.wordbook.viewModel.screen.EditWordViewModel
+import com.dkat.wordbook.viewModel.screen.EditWordPopupScreenViewModel
+import com.dkat.wordbook.viewModel.screen.SessionsScreenViewModel
 import com.dkat.wordbook.viewModel.screen.WordsScreenViewModel
 
 class MainActivity : ComponentActivity() {
@@ -57,8 +60,12 @@ fun WordbookApp() {
         val currentDestination = navBackStackEntry?.destination
         val context = LocalContext.current
 
-        val viewModel: MainViewModel =
-            viewModel(factory = MainViewModelFactory(WordsRepository(context = context)))
+        val sessionViewModel: SessionViewModel =
+            viewModel(factory = SessionViewModelFactory(
+                wordsRepository = WordsRepository(context = context),
+                wordRepository = WordRepository(context = context),
+                sessionRepository = SessionRepository(context = context)
+            ))
         val wordViewModel: WordViewModel = viewModel(factory = WordViewModelFactory(
             TranslationRepository(context = context),
             WordRepository(context = context)
@@ -67,11 +74,13 @@ fun WordbookApp() {
             viewModel(factory = LanguageViewModelFactory(LanguageRepository(context = context)))
         val sourceViewModel: SourceViewModel =
             viewModel(factory = SourceViewModelFactory(SourceRepository(context = context)))
-        val editWordViewModel: EditWordViewModel = viewModel()
+        val editWordPopupScreenViewModel: EditWordPopupScreenViewModel = viewModel()
         val editLanguageViewModel: EditLanguagePopupScreenViewModel = viewModel()
         val editSourceViewModel: EditSourcePopupScreenViewModel = viewModel()
         val booksScreenViewModel: BooksScreenViewModel = viewModel()
         val wordsScreenViewModel: WordsScreenViewModel = viewModel()
+        val sessionsScreenViewModel: SessionsScreenViewModel = viewModel()
+        val editSessionViewModel: EditSessionPopupScreenViewModel = viewModel()
 
         Scaffold(modifier = Modifier.fillMaxSize(),
                  topBar = {
@@ -85,15 +94,17 @@ fun WordbookApp() {
                  }
         ) { innerPadding ->
             WordbookNavHost(navController = navController,
-                            viewModel = viewModel,
                             wordViewModel = wordViewModel,
                             languageViewModel = languageViewModel,
                             sourceViewModel = sourceViewModel,
-                            editWordViewModel = editWordViewModel,
+                            sessionViewModel = sessionViewModel,
+                            editWordPopupScreenViewModel = editWordPopupScreenViewModel,
                             editLanguageViewModel = editLanguageViewModel,
                             editSourceViewModel = editSourceViewModel,
                             booksScreenViewModel = booksScreenViewModel,
                             wordsScreenViewModel = wordsScreenViewModel,
+                            editSessionViewModel = editSessionViewModel,
+                            sessionsScreenViewModel = sessionsScreenViewModel,
                             modifier = Modifier.padding(innerPadding)
             )
         }

@@ -13,7 +13,7 @@ import com.dkat.wordbook.ui.compose.screen.Screen
 @Composable
 fun LanguageItem(navController: NavController,
                  language: Language,
-                 onDeleteLanguageItemClick: (language: Language) -> Unit,
+                 deleteLanguage: (language: Language) -> Unit,
                  updateLanguageState: (language: Language) -> Unit,
                  modifier: Modifier
 ) {
@@ -24,7 +24,7 @@ fun LanguageItem(navController: NavController,
                           updateEditableObject = updateLanguageState,
                           editDescription = "edit language",
                           deletableObject = language,
-                          deleteObject = onDeleteLanguageItemClick,
+                          deleteObject = deleteLanguage,
                           deleteDescription = "delete language",
                           additionalContent = null,
                           modifier = modifier
@@ -36,7 +36,7 @@ fun LanguageItem(navController: NavController,
 fun WordItemPreview() {
     LanguageItem(navController = rememberNavController(),
                  language = PreviewData.language1,
-                 onDeleteLanguageItemClick = { _ -> },
+                 deleteLanguage = { _ -> },
                  updateLanguageState = { _ -> },
                  modifier = Modifier
     )

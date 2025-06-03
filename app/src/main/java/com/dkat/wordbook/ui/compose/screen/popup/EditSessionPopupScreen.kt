@@ -33,52 +33,54 @@ import androidx.compose.ui.window.PopupProperties
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.dkat.wordbook.data.PreviewData
-import com.dkat.wordbook.data.entity.Translation
-import com.dkat.wordbook.data.entity.Word_B
+import com.dkat.wordbook.data.entity.Session
+import com.dkat.wordbook.data.entity.Source
 import com.dkat.wordbook.ui.compose.reusable.ButtonText
 import com.dkat.wordbook.ui.compose.reusable.CloseablePopupTitle
 import com.dkat.wordbook.ui.compose.reusable.ErrorSupportingText
-import com.dkat.wordbook.ui.compose.word.EditTranslation
-import com.dkat.wordbook.viewModel.screen.EditableWordState
+import com.dkat.wordbook.ui.compose.screen.session.ChooseSourceComponent
+import com.dkat.wordbook.viewModel.screen.EditableSessionState
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-private const val TAG = "EditWord"
+private const val TAG = "EditSessionPopupScreen"
 
 @Composable
-fun EditWordWithTranslationsPopupScreen(
+fun EditSessionPopupScreen(
     navController: NavController,
-    editableWordState: EditableWordState,
-    editWordWithTranslations: (word: Word_B, translations: List<Translation>) -> Unit,
+    editableSessionState: EditableSessionState,
+    sessions: List<Session>,
+    sources: List<Source>,
+    editSession: (session: Session, sources: List<Source>) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    var origInput by remember { mutableStateOf(editableWordState.currentWord.value) }
-    var word by remember { mutableStateOf(editableWordState.currentWord) }
-    var translation by remember { mutableStateOf(Translation()) }
-    val translations = remember { mutableStateListOf<Translation>() }
+    var sessionNameInput by remember { mutableStateOf(editableSessionState.currentSession.name) }
+    var session by remember { mutableStateOf(editableSessionState.currentSession) }
+    var source by remember { mutableStateOf(Source()) }
+    val sessionSources = remember { mutableStateListOf<Source>() }
     // mutableStateMapOf consumes vararg of pairs
     // toTypedArray() -> convert list of Pairs to array of Pairs
     // * -> convert array to vararg of Pairs
-    val translationInputs = remember {
+    val sourceInputs = remember {
         mutableStateMapOf(*(
-                editableWordState.currentTranslations.mapIndexed { index, translationLocal ->
-                    Pair(index, translationLocal.value)
+                editableSessionState.currentSources.map { sourceLocal ->
+                    Pair(sourceLocal.id, sourceLocal.name)
                 }.toTypedArray())
         )
     }
 
-    var lastInputFieldId by remember { mutableIntStateOf(editableWordState.currentTranslations.size) }
+    var lastInputFieldId by remember { mutableIntStateOf(editableSessionState.currentSources.size) }
 
-    var isOriginalInputError by remember { mutableStateOf(false) }
-    var originalInputErrorText by remember { mutableStateOf("") }
+    var isSessionInputError by remember { mutableStateOf(false) }
+    var sessionInputErrorText by remember { mutableStateOf("") }
 
     // isExpanded: workaround to recompose input fields after removal
     var isExpanded by remember { mutableStateOf(true) }
     val coroutineScope = rememberCoroutineScope()
 
     // needed to have one translation input even if there were attempts to remove it
-    if (translationInputs.isEmpty()) {
-        translationInputs[lastInputFieldId] = ""
+    if (sourceInputs.isEmpty()) {
+        sourceInputs[lastInputFieldId] = ""
     }
 
     Popup(properties = PopupProperties(focusable = true)) {
@@ -87,32 +89,32 @@ fun EditWordWithTranslationsPopupScreen(
             .background(MaterialTheme.colorScheme.secondaryContainer)
         ) {
             CloseablePopupTitle(navController = navController,
-                                titleText = "Edit word",
+                                titleText = "Edit session",
             )
             Column {
                 Text(modifier = modifier.padding(start = 8.dp, top = 8.dp),
                     // TODO: move to string resources
-                     text = "original word:"
+                     text = "name:"
                 )
                 TextField(
-                    value = origInput,
+                    value = sessionNameInput,
                     onValueChange = {
-                        origInput = it
-                        isOriginalInputError = false
+                        sessionNameInput = it
+                        isSessionInputError = false
                         if (it.isEmpty()) {
                             // TODO: move to string resources
-                            origInput = "input original word"
+                            sessionNameInput = "input session name"
                         }
                     },
                     placeholder = {
                         // TODO: move to string resources
-                        Text("input original")
+                        Text("input session name")
                     },
                     modifier = modifier.padding(8.dp),
-                    isError = isOriginalInputError,
+                    isError = isSessionInputError,
                     supportingText = {
-                        if (isOriginalInputError) {
-                            ErrorSupportingText(errorText = originalInputErrorText)
+                        if (isSessionInputError) {
+                            ErrorSupportingText(errorText = sessionInputErrorText)
                         }
                     },
                 )
@@ -122,46 +124,45 @@ fun EditWordWithTranslationsPopupScreen(
                 HorizontalDivider(thickness = 2.dp)
                 // TODO: move to string resources
                 Text(modifier = modifier.padding(start = 8.dp, top = 8.dp),
-                     text = "translations:"
+                     text = "sources:"
                 )
                 if (isExpanded) {
-                    translationInputs.entries.forEach { entry ->
+                    sourceInputs.entries.forEach { entry ->
                         Row {
-                            EditTranslation(
-                                id = entry.key,
-                                value = entry.value,
+                            ChooseSourceComponent(
                                 getIdOnRemoveClick = {
                                     coroutineScope.launch {
                                         isExpanded = false
-                                        translationInputs.remove(entry.key)
+                                        sourceInputs.remove(entry.key)
                                         delay(100L)
                                         isExpanded = true
                                     }
                                 },
                                 getValueOnChange = {
-                                    translationInputs.replace(entry.key, it)
-                                }
+                                    sourceInputs.replace(entry.key, it)
+                                },
+                                sources = sources,
                             )
                         }
                     }
                     IconButton(onClick = {
                         lastInputFieldId += 1
-                        translationInputs[lastInputFieldId] = ""
+                        sourceInputs[lastInputFieldId] = ""
                     }) {
                         Icon(imageVector = Icons.Filled.Add,
                              tint = Color.Black,
                             // TODO: move to string resources
-                             contentDescription = "Add translation field"
+                             contentDescription = "Add source field"
                         )
                     }
                 }
                 if (!isExpanded) {
-                    translationInputs.entries.forEach { entry ->
+                    sourceInputs.entries.forEach { entry ->
                         Row {
-                            EditTranslation(id = entry.key,
-                                            value = entry.value,
-                                            getIdOnRemoveClick = {},
-                                            getValueOnChange = {}
+                            ChooseSourceComponent(sources = sources,
+                                                  getIdOnRemoveClick = { },
+                                                  getValueOnChange = { },
+                                                  modifier = modifier
                             )
                         }
                     }
@@ -169,7 +170,7 @@ fun EditWordWithTranslationsPopupScreen(
                         Icon(imageVector = Icons.Filled.Add,
                              tint = Color.Black,
                             // TODO: move to string resources
-                             contentDescription = "Add translation field"
+                             contentDescription = "Add source field"
                         )
                     }
                 }
@@ -177,29 +178,24 @@ fun EditWordWithTranslationsPopupScreen(
                 Row {
                     Button(modifier = modifier.padding(8.dp),
                            onClick = {
-                               if (origInput.isEmpty()) {
-                                   isOriginalInputError = true
+                               if (sessionNameInput.isEmpty()) {
+                                   isSessionInputError = true
                                    // TODO: move to string resources
-                                   originalInputErrorText = "original is empty"
+                                   sessionInputErrorText = "session name is empty"
                                }
-                               translationInputs.forEach { translationInputEntity ->
-                                   val localTranslationInput = translationInputEntity.value
-                                   word = Word_B(
-                                       id = editableWordState.currentWord.id,
-                                       sourceId = editableWordState.currentSource.id,
-                                       languageId = editableWordState.currentSource.mainOrigLangId,
-                                       value = origInput
+                               sourceInputs.forEach { sourceInputEntity ->
+                                   session = Session(
+                                       id = editableSessionState.currentSession.id,
+                                       name = sessionNameInput
                                    )
-                                   translation = Translation(
-                                       wordId = editableWordState.currentWord.id,
-                                       value = localTranslationInput,
-                                       languageId = editableWordState.currentSource.mainTranslationLangId
+                                   source = Source(
+                                       id = sourceInputEntity.key
                                    )
-                                   translations.add(translation)
+                                   sessionSources.add(source)
                                }
-                               if (!isOriginalInputError) {
-                                   editWordWithTranslations(word, translations.toList())
-                                   origInput = ""
+                               if (!isSessionInputError) {
+                                   editSession(session, sessionSources.toList())
+                                   sessionNameInput = ""
                                    navController.popBackStack()
                                } else {
                                    // TODO
@@ -224,14 +220,15 @@ fun EditWordWithTranslationsPopupScreen(
 
 @Preview(showBackground = true)
 @Composable
-fun EditWordWithTranslationsDialogScreenPreview() {
-    EditWordWithTranslationsPopupScreen(
+fun EditSessionScreenPreview() {
+    EditSessionPopupScreen(
         navController = rememberNavController(),
-        editableWordState = EditableWordState(
-            currentSource = PreviewData.source1,
-            currentWord = PreviewData.word1,
-            currentTranslations = listOf(PreviewData.translation1, PreviewData.translation2)
+        editableSessionState = EditableSessionState(
+            currentSession = PreviewData.session1,
+            currentSources = PreviewData.sources,
         ),
-        editWordWithTranslations = { _, _ -> },
+        editSession = { _, _ -> },
+        sessions = PreviewData.sessions,
+        sources = PreviewData.sources,
     )
 }

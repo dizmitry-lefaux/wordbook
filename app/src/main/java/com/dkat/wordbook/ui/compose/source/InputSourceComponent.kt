@@ -13,6 +13,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.dkat.wordbook.data.PreviewData
 import com.dkat.wordbook.data.entity.Language
 import com.dkat.wordbook.data.entity.Source
 import com.dkat.wordbook.ui.compose.reusable.ButtonText
@@ -126,11 +127,8 @@ fun InputSource(
 @Composable
 fun InputSourcePreview() {
     InputSource(
-        sources = emptyList(),
-        languages = listOf(
-            Language(id = 7369, name = "English"),
-            Language(id = 7369, name = "Russian"),
-        ),
+        sources = PreviewData.sources,
+        languages = PreviewData.languages,
         createSource = {},
     )
 }

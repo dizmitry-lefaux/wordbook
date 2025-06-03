@@ -7,7 +7,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
- import com.dkat.wordbook.viewModel.screen.EditWordState
+ import com.dkat.wordbook.viewModel.screen.EditableWordState
 import com.dkat.wordbook.data.PreviewData
 import com.dkat.wordbook.data.entity.Source
 import com.dkat.wordbook.data.entity.WordWithTranslations
@@ -19,16 +19,16 @@ fun WordsWithTranslationsList(
     wordsWithTranslations: List<WordWithTranslations>?,
     onDeleteWordClick: ((word: Word_B) -> Unit)?,
     readSourceById: (sourceId: Int) -> Source,
-    updateEditableWord: (editWordState: EditWordState) -> Unit,
+    updateEditableWord: (editableWordState: EditableWordState) -> Unit,
     modifier: Modifier,
 ) {
     if (wordsWithTranslations != null) {
         for (wordWithTranslations in wordsWithTranslations) {
             WordWithTranslationsItem(navController = navController,
                                      wordWithTranslations = wordWithTranslations,
-                                     onDeleteWordItemClick = onDeleteWordClick,
+                                     deleteWord = onDeleteWordClick,
                                      readSourceById = readSourceById,
-                                     updateEditWordState = updateEditableWord,
+                                     updateEditableWordState = updateEditableWord,
                                      modifier = modifier,
             )
             HorizontalDivider(thickness = 2.dp)

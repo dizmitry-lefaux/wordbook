@@ -31,11 +31,11 @@ import com.dkat.wordbook.ui.compose.reusable.ErrorSupportingText
 @Composable
 fun EditLanguagePopupScreen(
     navController: NavController,
-    editLanguageState: Language,
+    editableLanguageState: Language,
     editLanguage: (language: Language) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    var languageInput by remember { mutableStateOf(editLanguageState.name) }
+    var languageInput by remember { mutableStateOf(editableLanguageState.name) }
     var isLanguageInputError by remember { mutableStateOf(false) }
     var languageInputErrorText by remember { mutableStateOf("") }
     var language by remember { mutableStateOf(Language()) }
@@ -84,7 +84,7 @@ fun EditLanguagePopupScreen(
                                    // TODO: move to string resources
                                    languageInputErrorText = "language name is empty"
                                }
-                               language = Language(id = editLanguageState.id, name = languageInput)
+                               language = Language(id = editableLanguageState.id, name = languageInput)
                                if (!isLanguageInputError) {
                                    editLanguage(language)
                                    navController.popBackStack()
@@ -114,7 +114,7 @@ fun EditLanguagePopupScreen(
 fun PreviewEditLanguagePopupScreen() {
     EditLanguagePopupScreen(
         navController = rememberNavController(),
-        editLanguageState = PreviewData.language1,
+        editableLanguageState = PreviewData.language1,
         editLanguage = { _ -> },
         modifier = Modifier,
     )

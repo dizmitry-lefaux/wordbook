@@ -8,6 +8,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.dkat.wordbook.data.entity.Language
+import com.dkat.wordbook.data.entity.Session
 import com.dkat.wordbook.data.entity.Source
 import com.dkat.wordbook.data.entity.Translation
 import com.dkat.wordbook.data.entity.Word_B
@@ -15,49 +16,60 @@ import com.dkat.wordbook.ui.compose.screen.Screen
 import com.dkat.wordbook.ui.compose.screen.books.BooksScreen
 import com.dkat.wordbook.ui.compose.screen.home.HomeScreen
 import com.dkat.wordbook.ui.compose.screen.popup.EditLanguagePopupScreen
+import com.dkat.wordbook.ui.compose.screen.popup.EditSessionPopupScreen
 import com.dkat.wordbook.ui.compose.screen.popup.EditSourcePopupScreen
 import com.dkat.wordbook.ui.compose.screen.popup.EditWordWithTranslationsPopupScreen
-import com.dkat.wordbook.ui.compose.screen.session.SessionScreen
+import com.dkat.wordbook.ui.compose.screen.session.SessionsScreen
 import com.dkat.wordbook.ui.compose.screen.words.WordsScreen
 import com.dkat.wordbook.viewModel.data.LanguageViewModel
-import com.dkat.wordbook.viewModel.data.MainViewModel
+import com.dkat.wordbook.viewModel.data.SessionViewModel
 import com.dkat.wordbook.viewModel.data.SourceViewModel
 import com.dkat.wordbook.viewModel.data.WordViewModel
 import com.dkat.wordbook.viewModel.screen.BooksScreenViewModel
 import com.dkat.wordbook.viewModel.screen.EditLanguagePopupScreenViewModel
+import com.dkat.wordbook.viewModel.screen.EditSessionPopupScreenViewModel
+import com.dkat.wordbook.viewModel.screen.EditableSessionState
 import com.dkat.wordbook.viewModel.screen.EditSourcePopupScreenViewModel
-import com.dkat.wordbook.viewModel.screen.EditWordState
-import com.dkat.wordbook.viewModel.screen.EditWordViewModel
+import com.dkat.wordbook.viewModel.screen.EditableWordState
+import com.dkat.wordbook.viewModel.screen.EditWordPopupScreenViewModel
+import com.dkat.wordbook.viewModel.screen.SessionsScreenViewModel
 import com.dkat.wordbook.viewModel.screen.WordsScreenViewModel
 
 @Composable
 fun WordbookNavHost(
     navController: NavHostController,
-    viewModel: MainViewModel,
     languageViewModel: LanguageViewModel,
     wordViewModel: WordViewModel,
     sourceViewModel: SourceViewModel,
-    editWordViewModel: EditWordViewModel,
+    sessionViewModel: SessionViewModel,
+    editWordPopupScreenViewModel: EditWordPopupScreenViewModel,
     editLanguageViewModel: EditLanguagePopupScreenViewModel,
     editSourceViewModel: EditSourcePopupScreenViewModel,
+    editSessionViewModel: EditSessionPopupScreenViewModel,
     booksScreenViewModel: BooksScreenViewModel,
     wordsScreenViewModel: WordsScreenViewModel,
+    sessionsScreenViewModel: SessionsScreenViewModel,
     modifier: Modifier
 ) {
     val sources by sourceViewModel.sources.collectAsStateWithLifecycle()
     val sourcesWithWords by sourceViewModel.sourcesWithWords.collectAsStateWithLifecycle()
     val wordsWithTranslations by wordViewModel.wordsWithTranslations.collectAsStateWithLifecycle()
     val languages by languageViewModel.languages.collectAsStateWithLifecycle()
-    val sessionWords by viewModel.sessionWords.collectAsStateWithLifecycle()
+    val sessions by sessionViewModel.sessions.collectAsStateWithLifecycle()
 
-    val editWordState by editWordViewModel.editWordState.collectAsStateWithLifecycle()
-    val editLanguageState by editLanguageViewModel.editLanguageState.collectAsStateWithLifecycle()
-    val editSourceState by editSourceViewModel.editSourceState.collectAsStateWithLifecycle()
+    val editableWordState by editWordPopupScreenViewModel.editableWordState.collectAsStateWithLifecycle()
+    val editableLanguageState by editLanguageViewModel.editableLanguageState.collectAsStateWithLifecycle()
+    val editableSourceState by editSourceViewModel.editableSourceState.collectAsStateWithLifecycle()
+    val editableSessionState by editSessionViewModel.editableSessionState.collectAsStateWithLifecycle()
 
     val booksScreenIsBooksOpen by booksScreenViewModel.isBooksOpen.collectAsStateWithLifecycle()
     val booksScreenIsLanguagesOpen by booksScreenViewModel.isLanguagesOpen.collectAsStateWithLifecycle()
 
     val wordsScreenSelectedSource by wordsScreenViewModel.selectedSource.collectAsStateWithLifecycle()
+
+    val sessionsScreenSelectedSession by sessionsScreenViewModel.selectedSession.collectAsStateWithLifecycle()
+    val sessionsScreenIsSessionOpen by sessionsScreenViewModel.isSessionOpen.collectAsStateWithLifecycle()
+    val sessionsScreenIsManageSessionOpen by sessionsScreenViewModel.isManageSessionOpen.collectAsStateWithLifecycle()
 
     NavHost(
         navController = navController,
@@ -78,22 +90,45 @@ fun WordbookNavHost(
                 readSource = { id: Int ->
                     sourceViewModel.readSource(id)
                 },
-                updateEditWordState = { editWordState: EditWordState ->
-                    editWordViewModel.updateEditWordState(editWordState)
+                updateEditableWordState = { editableWordState: EditableWordState ->
+                    editWordPopupScreenViewModel.updateEditableWordState(editableWordState)
                 },
                 updateSourceState = { source: Source ->
-                    editSourceViewModel.updateEditSourceState(source)
+                    editSourceViewModel.updateEditableSourceState(source)
                 }
             )
         }
         composable(route = Screen.Session.route) {
-            SessionScreen(
-                sessionWords = sessionWords,
-                onUpdateSessionClick = {
-                    viewModel.updateSession()
+            SessionsScreen(
+                isSessionOpen = sessionsScreenIsSessionOpen,
+                isManageSessionOpen = sessionsScreenIsManageSessionOpen,
+                openSession = { sessionsScreenViewModel.openSession() },
+                openManageSession = { sessionsScreenViewModel.openManageSession() },
+
+                sources = sources,
+                readSourceById = { sourceId: Int ->
+                    sourceViewModel.readSource(sourceId)
                 },
-                onRestartSessionClick = {
-                    viewModel.restartSession()
+                sessions = sessions,
+                selectedSessionState = sessionsScreenSelectedSession,
+                createSession = { source: Source, session: Session ->
+                    sessionViewModel.createSession(source = source, session = session)
+                },
+                readSession = { id: Int ->
+                    sessionViewModel.readSession(id)
+                },
+                updateSelectedSession = { session: Session ->
+                    sessionsScreenViewModel.updateSelectedSession(session)
+                },
+                navController = navController,
+                deleteSession = {session: Session ->
+                    sessionViewModel.deleteSession(session = session)
+                },
+                updateEditableSessionState = { editableSessionState: EditableSessionState ->
+                    editSessionViewModel.updateEditableSessionState(editableSessionState)
+                },
+                readSourcesBySessionId = { sessionId: Int ->
+                    sessionViewModel.readSourcesBySessionId(sessionId)
                 }
             )
         }
@@ -114,8 +149,8 @@ fun WordbookNavHost(
                 onDeleteWordItemClick = { word: Word_B ->
                     wordViewModel.deleteWord(word)
                 },
-                updateEditWordState = { editWordState: EditWordState ->
-                    editWordViewModel.updateEditWordState(editWordState)
+                updateEditableWordState = { editableWordState: EditableWordState ->
+                    editWordPopupScreenViewModel.updateEditableWordState(editableWordState)
                 },
                 wordsWithTranslations = wordsWithTranslations,
             )
@@ -136,33 +171,33 @@ fun WordbookNavHost(
                 createLanguage = { language: Language ->
                     languageViewModel.createLanguage(language)
                 },
-                onDeleteWordItemClick = { word: Word_B ->
+                deleteWord = { word: Word_B ->
                     wordViewModel.deleteWord(word)
                 },
-                onDeleteSourceItemClick = { source: Source ->
+                deleteSource = { source: Source ->
                     sourceViewModel.deleteSource(source)
                 },
-                onDeleteLanguageItemClick = { language: Language ->
+                deleteLanguage = { language: Language ->
                     languageViewModel.deleteLanguage(language)
                 },
                 readSource = { id: Int ->
                     sourceViewModel.readSource(id)
                 },
-                updateEditWordState = { editWordState: EditWordState ->
-                    editWordViewModel.updateEditWordState(editWordState)
+                updateEditableWordState = { editableWordState: EditableWordState ->
+                    editWordPopupScreenViewModel.updateEditableWordState(editableWordState)
                 },
                 updateLanguageState = { language: Language ->
-                    editLanguageViewModel.updateEditLanguageState(language)
+                    editLanguageViewModel.updateEditableLanguageState(language)
                 },
                 updateSourceState = { source: Source ->
-                    editSourceViewModel.updateEditSourceState(source)
+                    editSourceViewModel.updateEditableSourceState(source)
                 }
             )
         }
         composable(route = Screen.EditWord.route) {
             EditWordWithTranslationsPopupScreen(
                 navController = navController,
-                editWordState = editWordState,
+                editableWordState = editableWordState,
                 editWordWithTranslations = { word: Word_B, translations: List<Translation> ->
                     wordViewModel.updateWordWithTranslations(word, translations)
                 },
@@ -171,7 +206,7 @@ fun WordbookNavHost(
         composable(route = Screen.EditLanguage.route) {
             EditLanguagePopupScreen(
                 navController = navController,
-                editLanguageState = editLanguageState,
+                editableLanguageState = editableLanguageState,
                 editLanguage = { language: Language ->
                     languageViewModel.updateLanguage(language)
                 },
@@ -180,12 +215,23 @@ fun WordbookNavHost(
         composable(route = Screen.EditSource.route) {
             EditSourcePopupScreen(
                 navController = navController,
-                editSourceState = editSourceState,
+                editableSourceState = editableSourceState,
                 sources = sources,
                 languages = languages,
                 editSource = { source: Source ->
                     sourceViewModel.updateSource(source)
                 },
+            )
+        }
+        composable(route = Screen.EditSession.route) {
+            EditSessionPopupScreen(
+                navController = navController,
+                editableSessionState = editableSessionState,
+                sessions = sessions,
+                sources = sources,
+                editSession = { session: Session, sources: List<Source> ->
+                    sessionViewModel.updateSessionWithSources(session, sources)
+                }
             )
         }
     }

@@ -1,6 +1,7 @@
 package com.dkat.wordbook.data
 
 import com.dkat.wordbook.data.entity.Language
+import com.dkat.wordbook.data.entity.Session
 import com.dkat.wordbook.data.entity.Source
 import com.dkat.wordbook.data.entity.SourceWithWords
 import com.dkat.wordbook.data.entity.Translation
@@ -44,5 +45,8 @@ class PreviewData {
         val sourceWithWords1 = SourceWithWords(source = source1, words = listOf(word1, word2, word3))
         val sourceWithWords2 = SourceWithWords(source = source2, words = listOf(word4, word5))
         val sourcesWithWords = listOf(sourceWithWords1, sourceWithWords2)
+        val session1 = Session(id = 6119, name = "Jessie Miller", isActive = false)
+        val session2 = Session(id = 9630, name = "Forest Webster", isActive = false)
+        val sessions = listOf(session1, session2)
     }
 }

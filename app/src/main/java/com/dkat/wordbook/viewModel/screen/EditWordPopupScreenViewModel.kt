@@ -8,16 +8,16 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-class EditWordViewModel : ViewModel() {
-    private val _editWordState = MutableStateFlow(EditWordState())
-    val editWordState: StateFlow<EditWordState> = _editWordState.asStateFlow()
+class EditWordPopupScreenViewModel : ViewModel() {
+    private val _editableWordState = MutableStateFlow(EditableWordState())
+    val editableWordState: StateFlow<EditableWordState> = _editableWordState.asStateFlow()
 
-    fun updateEditWordState(editWordState: EditWordState) {
-        _editWordState.value = editWordState
+    fun updateEditableWordState(editableWordState: EditableWordState) {
+        _editableWordState.value = editableWordState
     }
 }
 
-data class EditWordState(
+data class EditableWordState(
     val currentSource: Source = Source(),
     val currentWord: Word_B = Word_B(),
     val currentTranslations: List<Translation> = emptyList()

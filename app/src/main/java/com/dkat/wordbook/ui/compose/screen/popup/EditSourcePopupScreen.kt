@@ -34,22 +34,22 @@ import com.dkat.wordbook.ui.compose.reusable.ErrorText
 
 @Composable
 fun EditSourcePopupScreen(navController: NavController,
-                          editSourceState: Source,
+                          editableSourceState: Source,
                           sources: List<Source>,
                           languages: List<Language>,
                           editSource: (source: Source) -> Unit,
                           modifier: Modifier = Modifier
 ) {
-    val defaultSourceName = editSourceState.name
-    var nameInput by remember { mutableStateOf(editSourceState.name) }
+    val defaultSourceName = editableSourceState.name
+    var nameInput by remember { mutableStateOf(editableSourceState.name) }
     val origLangInput by remember {
-        mutableStateOf(languages.findLast { it.id == editSourceState.mainOrigLangId }?.name)
+        mutableStateOf(languages.findLast { it.id == editableSourceState.mainOrigLangId }?.name)
     }
     val translationLangInput by remember {
-        mutableStateOf(languages.findLast { it.id == editSourceState.mainTranslationLangId }?.name)
+        mutableStateOf(languages.findLast { it.id == editableSourceState.mainTranslationLangId }?.name)
     }
-    var origLangId by remember { mutableIntStateOf(editSourceState.mainOrigLangId) }
-    var translationLangId by remember { mutableIntStateOf(editSourceState.mainTranslationLangId) }
+    var origLangId by remember { mutableIntStateOf(editableSourceState.mainOrigLangId) }
+    var translationLangId by remember { mutableIntStateOf(editableSourceState.mainTranslationLangId) }
     var source by remember { mutableStateOf(Source()) }
 
     var isOrigLangError by remember { mutableStateOf(false) }
@@ -123,7 +123,7 @@ fun EditSourcePopupScreen(navController: NavController,
                             sourceErrorText = "source name should not be empty"
                         }
                         if (!isSourceError && !isOrigLangError && !isTranslationLangError) {
-                            source = Source(id = editSourceState.id,
+                            source = Source(id = editableSourceState.id,
                                             name = nameInput,
                                             mainOrigLangId = origLangId,
                                             mainTranslationLangId = translationLangId
@@ -152,7 +152,7 @@ fun EditSourcePopupScreen(navController: NavController,
 @Composable
 fun PreviewEditSourcePopupScreen() {
     EditSourcePopupScreen(navController = rememberNavController(),
-                          editSourceState = PreviewData.source1,
+                          editableSourceState = PreviewData.source1,
                           sources = PreviewData.sources,
                           languages = PreviewData.languages,
                           editSource = {},

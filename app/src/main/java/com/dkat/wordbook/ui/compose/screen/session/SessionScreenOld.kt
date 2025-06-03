@@ -23,7 +23,7 @@ import com.dkat.wordbook.ui.compose.card.CardWithAnimatedAlpha
 import com.dkat.wordbook.ui.compose.reusable.TitleText
 
 @Composable
-fun SessionScreen(
+fun SessionScreenOld(
     sessionWords: List<Word>,
     onRestartSessionClick: () -> Unit,
     onUpdateSessionClick: () -> Unit,
@@ -80,7 +80,7 @@ fun SessionScreen(
 
 @Preview(showBackground = true)
 @Composable
-fun SessionScreenWithValuesPreview(
+fun SessionScreenWithValuesOldPreview(
     words: List<Word> = listOf(
         Word(
             id = 8643,
@@ -99,9 +99,8 @@ fun SessionScreenWithValuesPreview(
             isInSession = true
         )
     )
-)
-{
-    SessionScreen(
+) {
+    SessionScreenOld(
         sessionWords = words,
         onUpdateSessionClick = { },
         onRestartSessionClick = { },
@@ -111,11 +110,10 @@ fun SessionScreenWithValuesPreview(
 
 @Preview(showBackground = true)
 @Composable
-fun SessionScreenEmptyPreview(
+fun SessionScreenEmptyOldPreview(
     words: List<Word> = emptyList()
-)
-{
-    SessionScreen(
+) {
+    SessionScreenOld(
         sessionWords = words,
         onUpdateSessionClick = { },
         onRestartSessionClick = { },

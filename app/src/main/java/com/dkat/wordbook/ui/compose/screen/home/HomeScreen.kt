@@ -11,7 +11,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.dkat.wordbook.viewModel.screen.EditWordState
+import com.dkat.wordbook.viewModel.screen.EditableWordState
 import com.dkat.wordbook.data.PreviewData
 import com.dkat.wordbook.data.entity.Source
 import com.dkat.wordbook.data.entity.SourceWithWords
@@ -29,7 +29,7 @@ fun HomeScreen(navController: NavController,
                onDeleteWordItemClick: (word: Word_B) -> Unit,
                onDeleteSourceItemClick: (source: Source) -> Unit,
                readSource: (sourceId: Int) -> Source,
-               updateEditWordState: (editWordState: EditWordState) -> Unit,
+               updateEditableWordState: (editableWordState: EditableWordState) -> Unit,
                updateSourceState: (source: Source) -> Unit
 ) {
     Column(modifier = modifier
@@ -46,7 +46,7 @@ fun HomeScreen(navController: NavController,
                           onDeleteWordItemClick = onDeleteWordItemClick,
                           onDeleteSourceItemClick = onDeleteSourceItemClick,
                           readSource = readSource,
-                          updateEditWordState = updateEditWordState,
+                          updateEditableWordState = updateEditableWordState,
                           updateSourceState = updateSourceState,
                           modifier = modifier
             )
@@ -66,7 +66,7 @@ fun HomeScreenPreview() {
             onDeleteSourceItemClick = {},
             readSource = { _ -> Source() },
             updateSourceState = { _ -> },
-            updateEditWordState = { _ -> }
+            updateEditableWordState = { _ -> }
         )
     }
 }

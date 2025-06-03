@@ -3,10 +3,10 @@
 * bottom bar:
   * update icons
 * sessions:
-  * make multiple
-  * make switchable
   * make size configurable
   * change animated card design
+  * add 'Session' screen functionality
+  * move 'Session' composable functions to separate files
 * Buttons: change design (preliminary rectangular with borders)
 * add 'Properties' screen
 * add validations for multiple translations inputs
@@ -26,8 +26,10 @@
 * https://github.com/Prashant-Chandel/Jetpack-compose-MVVM-Clean_Architect-Example-with-koin/blob/Developer/README.md
 
 #### ISSUES:
+* Pills:
+  * work on pills/content background
 * 'Words' screen:
   * workaround to recompose input fields after removal
 * 'Words' screen:
-  * save selected source
+  * prevent save word without selected source (e.g. prevent open dropdown or show error)
   * clear translation value on submit
