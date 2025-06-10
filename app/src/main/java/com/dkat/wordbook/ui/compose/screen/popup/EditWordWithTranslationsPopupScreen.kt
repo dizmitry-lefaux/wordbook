@@ -34,7 +34,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.dkat.wordbook.data.PreviewData
 import com.dkat.wordbook.data.entity.Translation
-import com.dkat.wordbook.data.entity.Word_B
+import com.dkat.wordbook.data.entity.Word
 import com.dkat.wordbook.ui.compose.reusable.ButtonText
 import com.dkat.wordbook.ui.compose.reusable.CloseablePopupTitle
 import com.dkat.wordbook.ui.compose.reusable.ErrorSupportingText
@@ -43,13 +43,13 @@ import com.dkat.wordbook.viewModel.screen.EditableWordState
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-private const val TAG = "EditWord"
+private const val TAG = "EditWordWithTranslationsPopupScreen"
 
 @Composable
 fun EditWordWithTranslationsPopupScreen(
     navController: NavController,
     editableWordState: EditableWordState,
-    editWordWithTranslations: (word: Word_B, translations: List<Translation>) -> Unit,
+    editWordWithTranslations: (word: Word, translations: List<Translation>) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     var origInput by remember { mutableStateOf(editableWordState.currentWord.value) }
@@ -184,7 +184,7 @@ fun EditWordWithTranslationsPopupScreen(
                                }
                                translationInputs.forEach { translationInputEntity ->
                                    val localTranslationInput = translationInputEntity.value
-                                   word = Word_B(
+                                   word = Word(
                                        id = editableWordState.currentWord.id,
                                        sourceId = editableWordState.currentSource.id,
                                        languageId = editableWordState.currentSource.mainOrigLangId,

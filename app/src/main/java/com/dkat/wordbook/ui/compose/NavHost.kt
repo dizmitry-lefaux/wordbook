@@ -11,7 +11,7 @@ import com.dkat.wordbook.data.entity.Language
 import com.dkat.wordbook.data.entity.Session
 import com.dkat.wordbook.data.entity.Source
 import com.dkat.wordbook.data.entity.Translation
-import com.dkat.wordbook.data.entity.Word_B
+import com.dkat.wordbook.data.entity.Word
 import com.dkat.wordbook.ui.compose.screen.Screen
 import com.dkat.wordbook.ui.compose.screen.books.BooksScreen
 import com.dkat.wordbook.ui.compose.screen.home.HomeScreen
@@ -67,7 +67,8 @@ fun WordbookNavHost(
 
     val wordsScreenSelectedSource by wordsScreenViewModel.selectedSource.collectAsStateWithLifecycle()
 
-    val sessionsScreenSelectedSession by sessionsScreenViewModel.selectedSession.collectAsStateWithLifecycle()
+    val selectedSession by sessionViewModel.selectedSession.collectAsStateWithLifecycle()
+    val sessionsScreenSessionWords by sessionViewModel.selectedSessionActiveWords.collectAsStateWithLifecycle()
     val sessionsScreenIsSessionOpen by sessionsScreenViewModel.isSessionOpen.collectAsStateWithLifecycle()
     val sessionsScreenIsManageSessionOpen by sessionsScreenViewModel.isManageSessionOpen.collectAsStateWithLifecycle()
 
@@ -79,7 +80,7 @@ fun WordbookNavHost(
         composable(route = Screen.Home.route) {
             HomeScreen(
                 navController = navController,
-                onDeleteWordItemClick = { word: Word_B ->
+                onDeleteWordItemClick = { word: Word ->
                     wordViewModel.deleteWord(word)
                 },
                 onDeleteSourceItemClick = { source: Source ->
@@ -110,7 +111,7 @@ fun WordbookNavHost(
                     sourceViewModel.readSource(sourceId)
                 },
                 sessions = sessions,
-                selectedSessionState = sessionsScreenSelectedSession,
+                selectedSessionState = selectedSession,
                 createSession = { source: Source, session: Session ->
                     sessionViewModel.createSession(source = source, session = session)
                 },
@@ -118,7 +119,7 @@ fun WordbookNavHost(
                     sessionViewModel.readSession(id)
                 },
                 updateSelectedSession = { session: Session ->
-                    sessionsScreenViewModel.updateSelectedSession(session)
+                    sessionViewModel.updateSelectedSession(session)
                 },
                 navController = navController,
                 deleteSession = {session: Session ->
@@ -129,7 +130,10 @@ fun WordbookNavHost(
                 },
                 readSourcesBySessionId = { sessionId: Int ->
                     sessionViewModel.readSourcesBySessionId(sessionId)
-                }
+                },
+                sessionWordsWithTranslations = sessionsScreenSessionWords,
+                restartSession = { sessionViewModel.restartSession() },
+                updateSession = { sessionViewModel.updateSession() }
             )
         }
         composable(route = Screen.Words.route) {
@@ -143,10 +147,10 @@ fun WordbookNavHost(
                     wordsScreenViewModel.updateSelectedSource(source)
                 },
                 selectedSourceState = wordsScreenSelectedSource,
-                createWordWithTranslations = { word: Word_B, translations: List<Translation> ->
+                createWordWithTranslations = { word: Word, translations: List<Translation> ->
                     wordViewModel.createWordWithTranslations(word, translations)
                 },
-                onDeleteWordItemClick = { word: Word_B ->
+                onDeleteWordItemClick = { word: Word ->
                     wordViewModel.deleteWord(word)
                 },
                 updateEditableWordState = { editableWordState: EditableWordState ->
@@ -171,7 +175,7 @@ fun WordbookNavHost(
                 createLanguage = { language: Language ->
                     languageViewModel.createLanguage(language)
                 },
-                deleteWord = { word: Word_B ->
+                deleteWord = { word: Word ->
                     wordViewModel.deleteWord(word)
                 },
                 deleteSource = { source: Source ->
@@ -198,7 +202,7 @@ fun WordbookNavHost(
             EditWordWithTranslationsPopupScreen(
                 navController = navController,
                 editableWordState = editableWordState,
-                editWordWithTranslations = { word: Word_B, translations: List<Translation> ->
+                editWordWithTranslations = { word: Word, translations: List<Translation> ->
                     wordViewModel.updateWordWithTranslations(word, translations)
                 },
             )

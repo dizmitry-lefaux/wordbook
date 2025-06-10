@@ -13,7 +13,7 @@ import com.dkat.wordbook.viewModel.screen.EditableWordState
 import com.dkat.wordbook.data.PreviewData
 import com.dkat.wordbook.data.entity.Source
 import com.dkat.wordbook.data.entity.WordWithTranslations
-import com.dkat.wordbook.data.entity.Word_B
+import com.dkat.wordbook.data.entity.Word
 import com.dkat.wordbook.ui.compose.reusable.EditableDeletableItem
 import com.dkat.wordbook.ui.compose.screen.Screen
 
@@ -22,7 +22,7 @@ fun WordWithTranslationsItem(navController: NavController,
                              wordWithTranslations: WordWithTranslations,
                              readSourceById: (sourceId: Int) -> Source,
                              updateEditableWordState: (editableWordState: EditableWordState) -> Unit,
-                             deleteWord: ((word: Word_B) -> Unit)?,
+                             deleteWord: ((word: Word) -> Unit)?,
                              modifier: Modifier
 ) {
     val word = wordWithTranslations.word

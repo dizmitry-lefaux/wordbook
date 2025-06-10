@@ -26,7 +26,7 @@ import androidx.compose.ui.unit.dp
 import com.dkat.wordbook.data.PreviewData
 import com.dkat.wordbook.data.entity.Source
 import com.dkat.wordbook.data.entity.Translation
-import com.dkat.wordbook.data.entity.Word_B
+import com.dkat.wordbook.data.entity.Word
 import com.dkat.wordbook.ui.compose.reusable.ButtonText
 import com.dkat.wordbook.ui.compose.reusable.ErrorSupportingText
 import kotlinx.coroutines.delay
@@ -37,11 +37,11 @@ private const val TAG = "InputWord"
 @Composable
 fun InputWordWithTranslations(
     source: Source?,
-    createWordWithTranslations: (word: Word_B, translations: List<Translation>) -> Unit,
+    createWordWithTranslations: (word: Word, translations: List<Translation>) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     var origInput by remember { mutableStateOf("") }
-    var word by remember { mutableStateOf(Word_B()) }
+    var word by remember { mutableStateOf(Word()) }
     var translation by remember { mutableStateOf(Translation()) }
     val translations = mutableListOf<Translation>()
     val translationInputs = remember { mutableStateMapOf<Int, String>() }
@@ -147,7 +147,7 @@ fun InputWordWithTranslations(
                                }
                                translationInputs.forEach { translationInputEntity ->
                                    val localTranslationInput = translationInputEntity.value
-                                   word = Word_B(
+                                   word = Word(
                                        sourceId = source.id,
                                        languageId = source.mainOrigLangId,
                                        value = origInput

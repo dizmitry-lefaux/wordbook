@@ -16,7 +16,7 @@ import com.dkat.wordbook.data.PreviewData
 import com.dkat.wordbook.data.entity.Source
 import com.dkat.wordbook.data.entity.SourceWithWords
 import com.dkat.wordbook.data.entity.WordWithTranslations
-import com.dkat.wordbook.data.entity.Word_B
+import com.dkat.wordbook.data.entity.Word
 import com.dkat.wordbook.ui.compose.reusable.TitleText
 import com.dkat.wordbook.ui.compose.source.ListOfSources
 import com.dkat.wordbook.ui.theme.AppTheme
@@ -26,7 +26,7 @@ fun HomeScreen(navController: NavController,
                sourcesWithWords: List<SourceWithWords>,
                wordsWithTranslations: List<WordWithTranslations>,
                modifier: Modifier = Modifier,
-               onDeleteWordItemClick: (word: Word_B) -> Unit,
+               onDeleteWordItemClick: (word: Word) -> Unit,
                onDeleteSourceItemClick: (source: Source) -> Unit,
                readSource: (sourceId: Int) -> Source,
                updateEditableWordState: (editableWordState: EditableWordState) -> Unit,

@@ -15,10 +15,10 @@ interface SourceDao {
     suspend fun createSource(source: Source): Long
 
     // blocking request
-    @Query("SELECT * FROM source WHERE id = :id")
+    @Query("SELECT * FROM source WHERE _source_id = :id")
     fun readSourceById(id: Int): Source
 
-    @Query("DELETE FROM source WHERE id = :id")
+    @Query("DELETE FROM source WHERE _source_id = :id")
     suspend fun deleteSourceById(id: Int)
 
     @Query("SELECT * FROM source")
@@ -32,6 +32,6 @@ interface SourceDao {
                    "name = :name, " +
                    "main_orig_lang_id = :mainOrigLangId, " +
                    "main_translation_lang_id = :mainTranslationLangId " +
-                   "WHERE id = :id")
+                   "WHERE _source_id = :id")
     fun updateSource(id: Int, name: String, mainOrigLangId: Int, mainTranslationLangId: Int)
 }

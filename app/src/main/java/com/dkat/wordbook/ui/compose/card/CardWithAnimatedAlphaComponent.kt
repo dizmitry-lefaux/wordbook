@@ -4,7 +4,6 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -21,14 +20,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.dkat.wordbook.data.PreviewData
+import com.dkat.wordbook.data.entity.Translation
 import com.dkat.wordbook.data.entity.Word
 
 @Composable
 fun CardWithAnimatedAlpha(
     word: Word,
+    translations: List<Translation>,
     modifier: Modifier = Modifier
-)
-{
+) {
     var visible by remember {
         mutableStateOf(false)
     }
@@ -36,7 +37,7 @@ fun CardWithAnimatedAlpha(
         targetValue = if (visible) 1.0f else 0f,
         label = "alpha"
     )
-    Column (
+    Column(
         modifier
             .padding(12.dp)
             .fillMaxWidth()
@@ -48,15 +49,15 @@ fun CardWithAnimatedAlpha(
             }
     ) {
         Text(
-            text = "Rus value: ${word.rusValue}".trimMargin(),
+            text = "Original: ${word.value}".trimMargin(),
         )
-        Box() {
-            Row {
+        Text(
+            text = "Translations: ",
+        )
+        translations.forEach { translation ->
+            Row(modifier = Modifier.padding(start = 24.dp)) {
                 Text(
-                    text = "Eng value: ",
-                )
-                Text(
-                    text = word.engValue,
+                    text = translation.value,
                     modifier = Modifier
                         .background(color = Color.LightGray)
                         .graphicsLayer {
@@ -71,14 +72,9 @@ fun CardWithAnimatedAlpha(
 
 @Preview(showBackground = true)
 @Composable
-fun CardWithAnimatedAlphaPreview()
-{
+fun CardWithAnimatedAlphaPreview() {
     CardWithAnimatedAlpha(
-        Word(
-            id = 3507,
-            rusValue = "penatibus",
-            engValue = "facilisi",
-            sourceName = "Harley Spencer"
-        )
+        word = PreviewData.word1,
+        translations = PreviewData.translations,
     )
 }

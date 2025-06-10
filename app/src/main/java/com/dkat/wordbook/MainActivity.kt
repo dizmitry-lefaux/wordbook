@@ -21,7 +21,6 @@ import com.dkat.wordbook.data.repo.SessionRepository
 import com.dkat.wordbook.data.repo.SourceRepository
 import com.dkat.wordbook.data.repo.TranslationRepository
 import com.dkat.wordbook.data.repo.WordRepository
-import com.dkat.wordbook.data.repo.WordsRepository
 import com.dkat.wordbook.ui.compose.WordbookNavHost
 import com.dkat.wordbook.ui.compose.bar.BottomBar
 import com.dkat.wordbook.ui.compose.bar.TopAppBar
@@ -62,7 +61,6 @@ fun WordbookApp() {
 
         val sessionViewModel: SessionViewModel =
             viewModel(factory = SessionViewModelFactory(
-                wordsRepository = WordsRepository(context = context),
                 wordRepository = WordRepository(context = context),
                 sessionRepository = SessionRepository(context = context)
             ))

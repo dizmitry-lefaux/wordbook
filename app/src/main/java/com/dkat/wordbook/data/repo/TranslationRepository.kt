@@ -3,7 +3,7 @@ package com.dkat.wordbook.data.repo
 import android.content.Context
 import com.dkat.wordbook.data.WordDatabase
 import com.dkat.wordbook.data.entity.Translation
-import com.dkat.wordbook.data.entity.Word_B
+import com.dkat.wordbook.data.entity.Word
 
 class TranslationRepository(private val context: Context) {
     private val translationDao = WordDatabase.getDatabase(context).translationDao()
@@ -12,7 +12,7 @@ class TranslationRepository(private val context: Context) {
         return translationDao.createTranslation(translation)
     }
 
-    suspend fun deleteTranslationsByWordId(word: Word_B) {
+    suspend fun deleteTranslationsByWordId(word: Word) {
         return translationDao.deleteTranslationsByWordId(wordId = word.id)
     }
 }

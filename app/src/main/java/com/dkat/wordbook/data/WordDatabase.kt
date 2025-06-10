@@ -11,7 +11,6 @@ import com.dkat.wordbook.data.dao.SessionDao
 import com.dkat.wordbook.data.dao.SourceDao
 import com.dkat.wordbook.data.dao.TranslationDao
 import com.dkat.wordbook.data.dao.WordDao
-import com.dkat.wordbook.data.dao.WordsDao
 import com.dkat.wordbook.data.entity.Language
 import com.dkat.wordbook.data.entity.Session
 import com.dkat.wordbook.data.entity.SessionSourceCrossRef
@@ -19,17 +18,14 @@ import com.dkat.wordbook.data.entity.SessionWordCrossRef
 import com.dkat.wordbook.data.entity.Source
 import com.dkat.wordbook.data.entity.Translation
 import com.dkat.wordbook.data.entity.Word
-import com.dkat.wordbook.data.entity.Word_B
 
 @Database(
-    entities = [Word::class, Language::class, SessionSourceCrossRef::class,
-        SessionWordCrossRef::class, Source::class, Translation::class, Word_B::class,
-        Session::class],
-    version = 9,
+    entities = [Language::class, SessionSourceCrossRef::class, SessionWordCrossRef::class,
+        Source::class, Translation::class, Word::class, Session::class],
+    version = 19,
     exportSchema = false,
 )
 abstract class WordDatabase : RoomDatabase() {
-    abstract fun wordsDao(): WordsDao
     abstract fun wordDao(): WordDao
     abstract fun translationDao(): TranslationDao
     abstract fun sourceDao(): SourceDao
@@ -54,6 +50,15 @@ abstract class WordDatabase : RoomDatabase() {
                         .addMigrations(MIGRATION_4_5)
                         .addMigrations(MIGRATION_5_6)
                         .addMigrations(MIGRATION_6_7)
+                        .addMigrations(MIGRATION_10_11)
+                        .addMigrations(MIGRATION_11_12)
+                        .addMigrations(MIGRATION_12_13)
+                        .addMigrations(MIGRATION_13_14)
+                        .addMigrations(MIGRATION_14_15)
+                        .addMigrations(MIGRATION_15_16)
+                        .addMigrations(MIGRATION_16_17)
+                        .addMigrations(MIGRATION_17_18)
+                        .addMigrations(MIGRATION_18_19)
                         // allowing to get direct requests blocking UI
                         .allowMainThreadQueries()
                         .fallbackToDestructiveMigration()
@@ -145,5 +150,59 @@ private val MIGRATION_5_6 = object : Migration(5, 6) {
 private val MIGRATION_6_7 = object : Migration(6, 7) {
     override fun migrate(db: SupportSQLiteDatabase) {
         db.execSQL("ALTER TABLE source ADD main_translation_lang_id INTEGER NOT NULL DEFAULT(0)")
+    }
+}
+
+private val MIGRATION_10_11 = object : Migration(3, 4) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL("ALTER TABLE session RENAME COLUMN id TO session_id")
+    }
+}
+
+private val MIGRATION_11_12 = object : Migration(3, 4) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL("ALTER TABLE word RENAME COLUMN id TO _word_id")
+    }
+}
+
+private val MIGRATION_12_13 = object : Migration(3, 4) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL("ALTER TABLE session RENAME COLUMN session_id TO _session_id")
+    }
+}
+
+private val MIGRATION_13_14 = object : Migration(3, 4) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL("ALTER TABLE language RENAME COLUMN id TO _language_id")
+    }
+}
+
+private val MIGRATION_14_15 = object : Migration(3, 4) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL("ALTER TABLE source RENAME COLUMN id TO _source_id")
+    }
+}
+
+private val MIGRATION_15_16 = object : Migration(3, 4) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL("ALTER TABLE translation RENAME COLUMN id TO _translation_id")
+    }
+}
+
+private val MIGRATION_16_17 = object : Migration(3, 4) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL("ALTER TABLE translation RENAME COLUMN value TO translation_value")
+    }
+}
+
+private val MIGRATION_17_18 = object : Migration(3, 4) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL("ALTER TABLE word RENAME COLUMN value TO word_value")
+    }
+}
+
+private val MIGRATION_18_19 = object : Migration(3, 4) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL("DROP TABLE words")
     }
 }
