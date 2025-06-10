@@ -1,12 +1,16 @@
 #### TODO:
 
+* SessionViewModel methods refactoring
+* update CardWithAnimatedSizeComponent to use new Word entity
 * bottom bar:
   * update icons
 * sessions:
   * make size configurable
   * change animated card design
-  * add 'Session' screen functionality
-  * move 'Session' composable functions to separate files
+  * convert 'Create session' actions to atomic transaction
+  * implement weight dependent probability mechanism for already picked words
+* books:
+  * display source languages
 * Buttons: change design (preliminary rectangular with borders)
 * add 'Properties' screen
 * add validations for multiple translations inputs
@@ -24,8 +28,14 @@
   * koin (https://github.com/marelso/di_with_koin)
 * https://www.reddit.com/r/androiddev/comments/1ecklee/using_multiple_view_models_for_different/
 * https://github.com/Prashant-Chandel/Jetpack-compose-MVVM-Clean_Architect-Example-with-koin/blob/Developer/README.md
+* load animations
+* add data import from files
+* add data import from claud vaults
+* add multiple profiles
 
 #### ISSUES:
+* DB entities:
+  * CHECK: make column names unique to avoid Room DB issue with identical column names on JOIN
 * Pills:
   * work on pills/content background
 * 'Words' screen:
@@ -33,3 +43,6 @@
 * 'Words' screen:
   * prevent save word without selected source (e.g. prevent open dropdown or show error)
   * clear translation value on submit
+* 'Sessions' screen:
+  * Manage pill: need to display editable session source on edit screen
+  * Session pill: update session with source words when add words to session source

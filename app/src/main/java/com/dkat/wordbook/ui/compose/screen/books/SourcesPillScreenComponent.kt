@@ -15,7 +15,7 @@ import com.dkat.wordbook.data.entity.Language
 import com.dkat.wordbook.data.entity.Source
 import com.dkat.wordbook.data.entity.SourceWithWords
 import com.dkat.wordbook.data.entity.WordWithTranslations
-import com.dkat.wordbook.data.entity.Word_B
+import com.dkat.wordbook.data.entity.Word
 import com.dkat.wordbook.ui.compose.reusable.ExpandableSection
 import com.dkat.wordbook.ui.compose.source.InputSource
 import com.dkat.wordbook.ui.compose.source.ListOfSources
@@ -27,7 +27,7 @@ fun SourcesPillScreenComponent(modifier: Modifier,
                                languages: List<Language>,
                                sourcesWithWords: List<SourceWithWords>,
                                navController: NavController,
-                               deleteWord: (word: Word_B) -> Unit,
+                               deleteWord: (word: Word) -> Unit,
                                deleteSource: (source: Source) -> Unit,
                                wordsWithTranslations: List<WordWithTranslations>,
                                readSource: (sourceId: Int) -> Source,

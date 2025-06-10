@@ -6,7 +6,6 @@ import androidx.room.Entity
 import androidx.room.Junction
 import androidx.room.Relation
 
-// TODO: not clear how to use SessionWithSources and SourceWithSessions structures without JOIN queries
 @Entity(
     tableName = "session_source",
     primaryKeys = ["session_id", "source_id"],
@@ -19,8 +18,8 @@ data class SessionSourceCrossRef(
 data class SessionWithSources(
     @Embedded val session: Session,
     @Relation(
-        parentColumn = "id",
-        entityColumn = "id",
+        parentColumn = "_session_id",
+        entityColumn = "_source_id",
         associateBy = Junction(SessionSourceCrossRef::class)
     )
     val sources: List<Source>
@@ -29,8 +28,8 @@ data class SessionWithSources(
 data class SourceWithSessions(
     @Embedded val source: Source,
     @Relation(
-        parentColumn = "id",
-        entityColumn = "id",
+        parentColumn = "_source_id",
+        entityColumn = "_session_id",
         associateBy = Junction(SessionSourceCrossRef::class)
     )
     val sessions: List<Session>

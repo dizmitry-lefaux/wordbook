@@ -12,7 +12,7 @@ import com.dkat.wordbook.data.PreviewData
 import com.dkat.wordbook.data.entity.Source
 import com.dkat.wordbook.data.entity.SourceWithWords
 import com.dkat.wordbook.data.entity.WordWithTranslations
-import com.dkat.wordbook.data.entity.Word_B
+import com.dkat.wordbook.data.entity.Word
 import com.dkat.wordbook.viewModel.screen.EditableWordState
 
 private const val TAG = "ListOfSources"
@@ -22,7 +22,7 @@ fun ListOfSources(
     navController: NavController,
     sourcesWithWords: List<SourceWithWords>,
     wordsWithTranslations: List<WordWithTranslations>,
-    onDeleteWordItemClick: (word: Word_B) -> Unit,
+    onDeleteWordItemClick: (word: Word) -> Unit,
     onDeleteSourceItemClick: (source: Source) -> Unit,
     readSource: (sourceId: Int) -> Source,
     updateEditableWordState: (editableWordState: EditableWordState) -> Unit,

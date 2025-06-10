@@ -8,7 +8,7 @@ data class TranslationLanguageWithSources(
 
     @Relation(
         entity = Source::class,
-        parentColumn = "id",
+        parentColumn = "_language_id",
         entityColumn = "main_translation_lang_id"
     )
     val sources: List<Source>

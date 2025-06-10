@@ -3,7 +3,7 @@ package com.dkat.wordbook.viewModel.screen
 import androidx.lifecycle.ViewModel
 import com.dkat.wordbook.data.entity.Source
 import com.dkat.wordbook.data.entity.Translation
-import com.dkat.wordbook.data.entity.Word_B
+import com.dkat.wordbook.data.entity.Word
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -19,6 +19,6 @@ class EditWordPopupScreenViewModel : ViewModel() {
 
 data class EditableWordState(
     val currentSource: Source = Source(),
-    val currentWord: Word_B = Word_B(),
+    val currentWord: Word = Word(),
     val currentTranslations: List<Translation> = emptyList()
 )

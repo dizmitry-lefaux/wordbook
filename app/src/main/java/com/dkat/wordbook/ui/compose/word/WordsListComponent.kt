@@ -11,13 +11,13 @@ import androidx.navigation.compose.rememberNavController
 import com.dkat.wordbook.data.PreviewData
 import com.dkat.wordbook.data.entity.Source
 import com.dkat.wordbook.data.entity.WordWithTranslations
-import com.dkat.wordbook.data.entity.Word_B
+import com.dkat.wordbook.data.entity.Word
 
 @Composable
 fun WordsWithTranslationsList(
     navController: NavController,
     wordsWithTranslations: List<WordWithTranslations>?,
-    onDeleteWordClick: ((word: Word_B) -> Unit)?,
+    onDeleteWordClick: ((word: Word) -> Unit)?,
     readSourceById: (sourceId: Int) -> Source,
     updateEditableWord: (editableWordState: EditableWordState) -> Unit,
     modifier: Modifier,

@@ -22,7 +22,7 @@ import com.dkat.wordbook.data.PreviewData
 import com.dkat.wordbook.data.entity.Source
 import com.dkat.wordbook.data.entity.Translation
 import com.dkat.wordbook.data.entity.WordWithTranslations
-import com.dkat.wordbook.data.entity.Word_B
+import com.dkat.wordbook.data.entity.Word
 import com.dkat.wordbook.ui.compose.reusable.EntityDropdownMenu
 import com.dkat.wordbook.ui.compose.reusable.ExpandableSection
 import com.dkat.wordbook.ui.compose.word.InputWordWithTranslations
@@ -37,9 +37,9 @@ fun WordsScreen(
     updateSelectedSource: (source: Source) -> Unit,
     selectedSourceState: Source,
     wordsWithTranslations: List<WordWithTranslations>,
-    createWordWithTranslations: (word: Word_B, translations: List<Translation>) -> Unit,
+    createWordWithTranslations: (word: Word, translations: List<Translation>) -> Unit,
     updateEditableWordState: (editableWordState: EditableWordState) -> Unit,
-    onDeleteWordItemClick: (word: Word_B) -> Unit,
+    onDeleteWordItemClick: (word: Word) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     var selectedSource by remember { mutableStateOf<Source?>(selectedSourceState) }

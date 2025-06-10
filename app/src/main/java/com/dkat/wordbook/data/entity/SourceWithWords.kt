@@ -7,9 +7,9 @@ data class SourceWithWords(
     @Embedded val source: Source,
 
     @Relation(
-        entity = Word_B::class,
-        parentColumn = "id",
+        entity = Word::class,
+        parentColumn = "_source_id",
         entityColumn = "source_id"
     )
-    val words: List<Word_B>
+    val words: List<Word>
 )

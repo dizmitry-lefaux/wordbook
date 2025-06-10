@@ -4,11 +4,11 @@ import androidx.room.Embedded
 import androidx.room.Relation
 
 data class WordWithTranslations(
-    @Embedded val word: Word_B,
+    @Embedded val word: Word,
 
     @Relation(
         entity = Translation::class,
-        parentColumn = "id",
+        parentColumn = "_word_id",
         entityColumn = "word_id"
     )
     val translations: List<Translation>

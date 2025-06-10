@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.dkat.wordbook.data.entity.Translation
 import com.dkat.wordbook.data.entity.WordWithTranslations
-import com.dkat.wordbook.data.entity.Word_B
+import com.dkat.wordbook.data.entity.Word
 import com.dkat.wordbook.data.repo.TranslationRepository
 import com.dkat.wordbook.data.repo.WordRepository
 import kotlinx.coroutines.flow.SharingStarted
@@ -27,13 +27,13 @@ class WordViewModel(
         initialValue = emptyList()
     )
 
-    private suspend fun createWord(word: Word_B): Long {
+    private suspend fun createWord(word: Word): Long {
         var wordId: Long = 0
         viewModelScope.launch { wordId = wordRepository.createWord(word) }.join()
         return wordId
     }
 
-    private suspend fun updateWord(word: Word_B) {
+    private suspend fun updateWord(word: Word) {
         viewModelScope.launch {
             wordRepository.updateWord(word)
         }.join()
@@ -45,19 +45,19 @@ class WordViewModel(
         return translationId
     }
 
-    fun deleteWord(word: Word_B) {
+    fun deleteWord(word: Word) {
         viewModelScope.launch {
             wordRepository.deleteWord(word)
         }
     }
 
-    private fun deleteTranslationsByWordId(word: Word_B) {
+    private fun deleteTranslationsByWordId(word: Word) {
         viewModelScope.launch {
             translationRepository.deleteTranslationsByWordId(word)
         }
     }
 
-    fun createWordWithTranslations(word: Word_B, translations: List<Translation>) {
+    fun createWordWithTranslations(word: Word, translations: List<Translation>) {
         Log.i(TAG, "Creating word: $word")
         Log.i(TAG, "Creating translations: ${translations.joinToString { translation -> translation.toString() }}")
         viewModelScope.launch {
@@ -80,7 +80,7 @@ class WordViewModel(
         }
     }
 
-    fun updateWordWithTranslations(word: Word_B, translations: List<Translation>) {
+    fun updateWordWithTranslations(word: Word, translations: List<Translation>) {
         Log.i(TAG, "Updating word: $word")
         Log.i(TAG, "Updating translations: ${translations.joinToString { translation -> translation.toString() }}")
         viewModelScope.launch {

@@ -13,7 +13,7 @@ import com.dkat.wordbook.data.entity.Language
 import com.dkat.wordbook.data.entity.Source
 import com.dkat.wordbook.data.entity.SourceWithWords
 import com.dkat.wordbook.data.entity.WordWithTranslations
-import com.dkat.wordbook.data.entity.Word_B
+import com.dkat.wordbook.data.entity.Word
 import com.dkat.wordbook.ui.compose.reusable.PillData
 import com.dkat.wordbook.ui.compose.reusable.PillSwitch
 import com.dkat.wordbook.viewModel.screen.EditableWordState
@@ -39,7 +39,7 @@ fun BooksScreen(
     deleteSource: (source: Source) -> Unit,
     updateSourceState: (source: Source) -> Unit,
 
-    deleteWord: (word: Word_B) -> Unit,
+    deleteWord: (word: Word) -> Unit,
     updateEditableWordState: (editableWordState: EditableWordState) -> Unit,
     modifier: Modifier = Modifier
 ) {

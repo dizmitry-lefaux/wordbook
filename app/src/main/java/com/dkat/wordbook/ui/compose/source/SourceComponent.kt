@@ -12,7 +12,7 @@ import androidx.navigation.compose.rememberNavController
 import com.dkat.wordbook.data.PreviewData
 import com.dkat.wordbook.data.entity.Source
 import com.dkat.wordbook.data.entity.WordWithTranslations
-import com.dkat.wordbook.data.entity.Word_B
+import com.dkat.wordbook.data.entity.Word
 import com.dkat.wordbook.ui.compose.reusable.EditableDeletableItem
 import com.dkat.wordbook.ui.compose.reusable.ExpandableSection
 import com.dkat.wordbook.ui.compose.screen.Screen
@@ -23,7 +23,7 @@ import com.dkat.wordbook.viewModel.screen.EditableWordState
 fun ExpandableSourceItem(
     navController: NavController,
     onDeleteSourceClick: (source: Source) -> Unit,
-    onDeleteWordClick: (word: Word_B) -> Unit,
+    onDeleteWordClick: (word: Word) -> Unit,
     source: Source,
     updateSourceState: (source: Source) -> Unit,
     wordsWithTranslations: List<WordWithTranslations>?,
