@@ -42,11 +42,10 @@ fun WordsScreen(
     onDeleteWordItemClick: (word: Word) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    var selectedSource by remember { mutableStateOf<Source?>(selectedSourceState) }
+    var selectedSource by remember { mutableStateOf(selectedSourceState) }
     var selectedSourceId by remember { mutableStateOf<Int?>(selectedSourceState.id) }
     var selectedSourceLabel by remember { mutableStateOf(
-        if (selectedSource?.name?.isEmpty() == true) "Select source"
-        else selectedSource!!.name
+        selectedSource.name.ifEmpty { "Select source" }
     ) }
     var isSelectSourceError by remember { mutableStateOf(false) }
 
@@ -60,7 +59,7 @@ fun WordsScreen(
                 selectedSourceId = it.id
                 selectedSourceLabel = it.name
                 selectedSource = readSource(selectedSourceId!!)
-                updateSelectedSource(selectedSource!!)
+                updateSelectedSource(selectedSource)
             },
             resetErrorStateOnClick = { isSelectSourceError = it },
         )
