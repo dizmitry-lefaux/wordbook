@@ -9,8 +9,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun ErrorText(errorText: String) {
-    Text(modifier = Modifier.fillMaxWidth().offset(16.dp),
+fun ErrorText(errorText: String,
+              modifier: Modifier = Modifier) {
+    Text(modifier = modifier.fillMaxWidth().offset(16.dp),
          text = errorText,
          color = MaterialTheme.colorScheme.error,
          style = MaterialTheme.typography.labelSmall

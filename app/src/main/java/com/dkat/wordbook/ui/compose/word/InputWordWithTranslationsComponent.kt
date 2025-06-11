@@ -29,14 +29,15 @@ import com.dkat.wordbook.data.entity.Translation
 import com.dkat.wordbook.data.entity.Word
 import com.dkat.wordbook.ui.compose.reusable.ButtonText
 import com.dkat.wordbook.ui.compose.reusable.ErrorSupportingText
+import com.dkat.wordbook.ui.compose.reusable.ErrorText
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-private const val TAG = "InputWord"
+private const val TAG = "InputWordWithTranslations"
 
 @Composable
 fun InputWordWithTranslations(
-    source: Source?,
+    source: Source,
     createWordWithTranslations: (word: Word, translations: List<Translation>) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -50,6 +51,10 @@ fun InputWordWithTranslations(
     var isOriginalInputError by remember { mutableStateOf(false) }
     var originalInputErrorText by remember { mutableStateOf("") }
 
+    var isSourceSelected by remember { mutableStateOf(false) }
+    isSourceSelected = source.id != 0
+    var isShowSourceSelectedError by remember { mutableStateOf(false) }
+
     // isExpanded: workaround to recompose input fields after removal
     var isExpanded by remember { mutableStateOf(true) }
     val coroutineScope = rememberCoroutineScope()
@@ -59,119 +64,126 @@ fun InputWordWithTranslations(
         translationInputs[lastInputFieldId] = ""
     }
 
-    if (source != null) {
+    Column {
         Column {
-            Column {
-                Text(modifier = modifier.padding(start = 8.dp, top = 8.dp),
-                     text = "original:"
-                )
-                TextField(
-                    value = origInput,
-                    onValueChange = {
-                        origInput = it
-                        isOriginalInputError = false
-                    },
-                    placeholder = {
-                        // TODO: move to string resources
-                        Text("input original")
-                    },
-                    modifier = modifier.padding(8.dp),
-                    isError = isOriginalInputError,
-                    supportingText = {
-                        if (isOriginalInputError) {
-                            ErrorSupportingText(errorText = originalInputErrorText)
-                        }
-                    },
-                )
+            Text(modifier = modifier.padding(start = 8.dp, top = 8.dp),
+                 text = "original:"
+            )
+            TextField(
+                value = origInput,
+                onValueChange = {
+                    origInput = it
+                    isOriginalInputError = false
+                },
+                placeholder = {
+                    // TODO: move to string resources
+                    Text("input original")
+                },
+                modifier = modifier.padding(8.dp),
+                isError = isOriginalInputError,
+                supportingText = {
+                    if (isOriginalInputError) {
+                        ErrorSupportingText(errorText = originalInputErrorText)
+                    }
+                },
+            )
+        }
+
+        Column {
+            HorizontalDivider(thickness = 2.dp)
+            // TODO: move to string resources
+            Text(modifier = modifier.padding(start = 8.dp, top = 8.dp),
+                 text = "translations:"
+            )
+
+            if (isExpanded) {
+                translationInputs.entries.forEach { entry ->
+                    Row {
+                        InputTranslation(
+                            id = entry.key,
+                            value = entry.value,
+                            getIdOnRemoveClick = {
+                                coroutineScope.launch {
+                                    isExpanded = false
+                                    translationInputs.remove(entry.key)
+                                    delay(100L)
+                                    isExpanded = true
+                                }
+                            },
+                            getValueOnChange = {
+                                translationInputs.replace(entry.key, it)
+                            }
+                        )
+                    }
+                }
+            }
+            if (!isExpanded) {
+                translationInputs.entries.forEach { entry ->
+                    Row {
+                        InputTranslation(id = entry.key,
+                                         value = entry.value,
+                                         getIdOnRemoveClick = {},
+                                         getValueOnChange = {}
+                        )
+                    }
+                }
             }
 
             Column {
-                HorizontalDivider(thickness = 2.dp)
-                // TODO: move to string resources
-                Text(modifier = modifier.padding(start = 8.dp, top = 8.dp),
-                     text = "translations:"
-                )
-
-                if (isExpanded) {
-                    translationInputs.entries.forEach { entry ->
-                        Row {
-                            InputTranslation(
-                                id = entry.key,
-                                value = entry.value,
-                                getIdOnRemoveClick = {
-                                    coroutineScope.launch {
-                                        isExpanded = false
-                                        translationInputs.remove(entry.key)
-                                        delay(100L)
-                                        isExpanded = true
-                                    }
-                                },
-                                getValueOnChange = {
-                                    translationInputs.replace(entry.key, it)
-                                }
-                            )
-                        }
-                    }
+                IconButton(onClick = {
+                    lastInputFieldId += 1
+                    translationInputs[lastInputFieldId] = ""
                 }
-                if (!isExpanded) {
-                    translationInputs.entries.forEach { entry ->
-                        Row {
-                            InputTranslation(id = entry.key,
-                                             value = entry.value,
-                                             getIdOnRemoveClick = {},
-                                             getValueOnChange = {}
-                            )
-                        }
-                    }
-                }
-
-                Column {
-                    IconButton(onClick = {
-                                   lastInputFieldId += 1
-                                   translationInputs[lastInputFieldId] = ""
-                               }
-                    ) {
-                        Icon(imageVector = Icons.Filled.Add,
-                             tint = Color.Black,
-                            // TODO: move to string resources
-                             contentDescription = "Add translation field"
-                        )
-                    }
-                    // TODO: possibly move out of conditional 'if(isExpanded)'
-                    Button(modifier = modifier.padding(8.dp),
-                           onClick = {
-                               if (origInput.isEmpty()) {
-                                   isOriginalInputError = true
-                                   // TODO: move to string resources
-                                   originalInputErrorText = "original is empty"
-                               }
-                               translationInputs.forEach { translationInputEntity ->
-                                   val localTranslationInput = translationInputEntity.value
-                                   word = Word(
-                                       sourceId = source.id,
-                                       languageId = source.mainOrigLangId,
-                                       value = origInput
-                                   )
-                                   translation = Translation(
-                                       value = localTranslationInput,
-                                       languageId = source.mainTranslationLangId
-                                   )
-                                   translations.add(translation)
-                               }
-                               if (!isOriginalInputError) {
-                                   createWordWithTranslations(word, translations.toList())
-                                   origInput = ""
-                                   translationInputs.clear()
-                                   translations.clear()
-                                   isOriginalInputError = false
-                               } else {
-                                   // TODO
-                               }
-                           }
-                    ) {
+                ) {
+                    Icon(imageVector = Icons.Filled.Add,
+                         tint = Color.Black,
                         // TODO: move to string resources
-                        ButtonText(buttonText = "Submit")
-                    }
+                         contentDescription = "Add translation field"
+                    )
+                }
+                // TODO: possibly move out of conditional 'if(isExpanded)'
+                Button(modifier = modifier.padding(8.dp),
+                       onClick = {
+                           if (!isSourceSelected) {
+                               isShowSourceSelectedError = true
+                           }
+                           if (origInput.isEmpty()) {
+                               isOriginalInputError = true
+                               // TODO: move to string resources
+                               originalInputErrorText = "original is empty"
+                           }
+                           translationInputs.forEach { translationInputEntity ->
+                               val localTranslationInput = translationInputEntity.value
+                               word = Word(
+                                   sourceId = source.id,
+                                   languageId = source.mainOrigLangId,
+                                   value = origInput
+                               )
+                               translation = Translation(
+                                   value = localTranslationInput,
+                                   languageId = source.mainTranslationLangId
+                               )
+                               translations.add(translation)
+                           }
+                           if (!isOriginalInputError && isSourceSelected) {
+                               createWordWithTranslations(word, translations.toList())
+                               origInput = ""
+                               translationInputs.clear()
+                               translations.clear()
+                               isOriginalInputError = false
+                               isShowSourceSelectedError = false
+                           } else {
+                               // TODO
+                           }
+                       }
+                ) {
+                    // TODO: move to string resources
+                    ButtonText(buttonText = "Submit")
+                }
+                if (!isSourceSelected && isShowSourceSelectedError) {
+                    ErrorText(errorText = "source not selected",
+                              modifier = Modifier.padding(bottom = 8.dp)
+                    )
                 }
             }
         }

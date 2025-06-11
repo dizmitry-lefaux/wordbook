@@ -41,7 +41,6 @@
 * 'Words' screen:
   * workaround to recompose input fields after removal
 * 'Words' screen:
-  * prevent save word without selected source (e.g. prevent open dropdown or show error)
   * clear translation value on submit
 * 'Sessions' screen:
   * Manage pill: need to display editable session source on edit screen
