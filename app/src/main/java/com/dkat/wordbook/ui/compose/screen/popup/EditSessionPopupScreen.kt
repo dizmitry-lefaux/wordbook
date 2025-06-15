@@ -64,9 +64,9 @@ fun EditSessionPopupScreen(
     val sourceInputs = remember {
         mutableStateMapOf(*(
                 editableSessionState.currentSources.map { sourceLocal ->
-                    Pair(sourceLocal.id, sourceLocal.name)
-                }.toTypedArray())
-        )
+                    Pair(sourceLocal.id, sourceLocal)
+                }.toTypedArray()
+        ))
     }
 
     var lastInputFieldId by remember { mutableIntStateOf(editableSessionState.currentSources.size) }
@@ -78,9 +78,13 @@ fun EditSessionPopupScreen(
     var isExpanded by remember { mutableStateOf(true) }
     val coroutineScope = rememberCoroutineScope()
 
-    // needed to have one translation input even if there were attempts to remove it
+    // needed to have one source select even if there were attempts to remove it
     if (sourceInputs.isEmpty()) {
-        sourceInputs[lastInputFieldId] = ""
+        sourceInputs[lastInputFieldId] = Source(id = 0,
+                                                name = "select source",
+                                                mainOrigLangId = 0,
+                                                mainTranslationLangId = 0
+        )
     }
 
     Popup(properties = PopupProperties(focusable = true)) {
@@ -89,6 +93,7 @@ fun EditSessionPopupScreen(
             .background(MaterialTheme.colorScheme.secondaryContainer)
         ) {
             CloseablePopupTitle(navController = navController,
+                                // TODO: move to string resources
                                 titleText = "Edit session",
             )
             Column {
@@ -98,12 +103,20 @@ fun EditSessionPopupScreen(
                 )
                 TextField(
                     value = sessionNameInput,
-                    onValueChange = {
-                        sessionNameInput = it
+                    onValueChange = {currentSessionName ->
+                        sessionNameInput = currentSessionName
                         isSessionInputError = false
-                        if (it.isEmpty()) {
+                        sessionInputErrorText = ""
+                        if (currentSessionName.isEmpty()) {
                             // TODO: move to string resources
                             sessionNameInput = "input session name"
+                        }
+                        if (sessions.map { session -> session.name }
+                                .toList().contains(currentSessionName)
+                            && currentSessionName != session.name
+                        ) {
+                            isSessionInputError = true
+                            sessionInputErrorText = "session '$currentSessionName' already exists"
                         }
                     },
                     placeholder = {
@@ -122,32 +135,37 @@ fun EditSessionPopupScreen(
 
             Column {
                 HorizontalDivider(thickness = 2.dp)
-                // TODO: move to string resources
                 Text(modifier = modifier.padding(start = 8.dp, top = 8.dp),
+                     // TODO: move to string resources
                      text = "sources:"
                 )
                 if (isExpanded) {
-                    sourceInputs.entries.forEach { entry ->
+                    sourceInputs.entries.forEach{ entry ->
                         Row {
                             ChooseSourceComponent(
+                                sources = sources,
+                                currentSource = entry.value,
                                 getIdOnRemoveClick = {
                                     coroutineScope.launch {
                                         isExpanded = false
-                                        sourceInputs.remove(entry.key)
+                                        sourceInputs.remove(entry.value.id)
                                         delay(100L)
                                         isExpanded = true
                                     }
                                 },
                                 getValueOnChange = {
-                                    sourceInputs.replace(entry.key, it)
+                                    sourceInputs.replace(entry.value.id, it)
                                 },
-                                sources = sources,
                             )
                         }
                     }
                     IconButton(onClick = {
                         lastInputFieldId += 1
-                        sourceInputs[lastInputFieldId] = ""
+                        sourceInputs[lastInputFieldId] = Source(id = 0,
+                                                                name = "select source",
+                                                                mainOrigLangId = 0,
+                                                                mainTranslationLangId = 0
+                        )
                     }) {
                         Icon(imageVector = Icons.Filled.Add,
                              tint = Color.Black,
@@ -160,9 +178,9 @@ fun EditSessionPopupScreen(
                     sourceInputs.entries.forEach { entry ->
                         Row {
                             ChooseSourceComponent(sources = sources,
+                                                  currentSource = Source(),
                                                   getIdOnRemoveClick = { },
                                                   getValueOnChange = { },
-                                                  modifier = modifier
                             )
                         }
                     }
@@ -197,6 +215,8 @@ fun EditSessionPopupScreen(
                                    editSession(session, sessionSources.toList())
                                    sessionNameInput = ""
                                    navController.popBackStack()
+                                   isSessionInputError = false
+                                   sessionInputErrorText = ""
                                } else {
                                    // TODO
                                }

@@ -14,7 +14,7 @@ data class SessionWordCrossRef(
     @ColumnInfo(name = "word_id")        val wordId: Int = 0,
     @ColumnInfo(name = "session_id")     val sessionId: Int = 0,
     @ColumnInfo(name = "session_weight") val sessionWeight: Float = 1f,
-    @ColumnInfo(name = "is_active")      val isActive: Boolean = false
+    @ColumnInfo(name = "is_word_active") val isActive: Boolean = false
 )
 
 data class SessionWithWords(

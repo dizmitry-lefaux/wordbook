@@ -15,7 +15,7 @@ interface LanguageDao {
     @Query("SELECT * from language")
     fun readLanguages(): Flow<List<Language>>
 
-    @Query("UPDATE language SET name = :name WHERE _language_id = :id")
+    @Query("UPDATE language SET language_name = :name WHERE _language_id = :id")
     suspend fun updateLanguage(id: Int, name: String)
 
     @Query("DELETE FROM language WHERE _language_id = :id")
