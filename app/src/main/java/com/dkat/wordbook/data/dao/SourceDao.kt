@@ -29,7 +29,7 @@ interface SourceDao {
     fun readSourcesWithWords(): Flow<List<SourceWithWords>>
 
     @Query("UPDATE source SET " +
-                   "name = :name, " +
+                   "source_name = :name, " +
                    "main_orig_lang_id = :mainOrigLangId, " +
                    "main_translation_lang_id = :mainTranslationLangId " +
                    "WHERE _source_id = :id")

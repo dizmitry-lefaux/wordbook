@@ -55,7 +55,7 @@ fun InputWordWithTranslations(
     isSourceSelected = source.id != 0
     var isShowSourceSelectedError by remember { mutableStateOf(false) }
 
-    // isExpanded: workaround to recompose input fields after removal
+    // isExpanded: workaround to recompose input fields on removal and submit
     var isExpanded by remember { mutableStateOf(true) }
     val coroutineScope = rememberCoroutineScope()
 
@@ -172,6 +172,11 @@ fun InputWordWithTranslations(
                                translations.clear()
                                isOriginalInputError = false
                                isShowSourceSelectedError = false
+                               coroutineScope.launch {
+                                   isExpanded = false
+                                   delay(100L)
+                                   isExpanded = true
+                               }
                            } else {
                                // TODO
                            }

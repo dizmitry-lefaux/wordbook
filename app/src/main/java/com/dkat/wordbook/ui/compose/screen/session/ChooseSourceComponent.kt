@@ -1,6 +1,8 @@
 package com.dkat.wordbook.ui.compose.screen.session
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.Icon
@@ -10,6 +12,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
@@ -20,34 +23,49 @@ import com.dkat.wordbook.ui.compose.reusable.ErrorText
 
 @Composable
 fun ChooseSourceComponent(
+    currentSource: Source,
     sources: List<Source>,
     getIdOnRemoveClick: (id: Int) -> Unit,
-    getValueOnChange: (value: String) -> Unit,
+    getValueOnChange: (source: Source) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     var sourceId by remember { mutableStateOf<Int?>(null) }
     var isSourceError by remember { mutableStateOf(false) }
     var sourceErrorText by remember { mutableStateOf("") }
 
-    Row {
-        EntityDropdownMenu(list = sources,
-                           defaultValue = "select source",
-                           onSelect = { sourceId = it.id },
-                           resetErrorStateOnClick = { isSourceError = it })
+    Row(modifier = modifier.fillMaxWidth()) {
+        Column {
+            EntityDropdownMenu(list = sources,
+                               defaultValue = currentSource.name,
+                               onSelect = {
+                                   sourceId = it.id
+                                   val source = Source(id = it.id,
+                                                       name = it.name,
+                                                       mainOrigLangId = 0,
+                                                       mainTranslationLangId = 0
+                                   )
+                                   getValueOnChange(source)
+                               },
+                               resetErrorStateOnClick = { isSourceError = it },
+                               isRemovable = true
+            )
+        }
         if (isSourceError) {
             ErrorText(errorText = sourceErrorText)
         }
-        IconButton(
-            onClick = {
-                getIdOnRemoveClick(sourceId!!)
+        Column(modifier = modifier.fillMaxWidth(), horizontalAlignment = Alignment.End) {
+            IconButton(
+                onClick = {
+                    getIdOnRemoveClick(sourceId!!)
+                }
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.Clear,
+                    tint = Color.Black,
+                    // TODO: move to string resources
+                    contentDescription = "Remove source field"
+                )
             }
-        ) {
-            Icon(
-                imageVector = Icons.Filled.Clear,
-                tint = Color.Black,
-                // TODO: move to string resources
-                contentDescription = "Remove source field"
-            )
         }
     }
 }
@@ -58,5 +76,6 @@ fun EditSourcePreview() {
     ChooseSourceComponent(sources = PreviewData.sources,
                           getIdOnRemoveClick = { },
                           getValueOnChange = { },
+                          currentSource = PreviewData.source1
     )
 }

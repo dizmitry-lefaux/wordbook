@@ -24,5 +24,5 @@ data class Word(
     @ColumnInfo(name = "_word_id")   val id: Int = 0,
     @ColumnInfo(name = "source_id")  val sourceId: Int = 0,
     @ColumnInfo(name = "lang_id")    val languageId: Int = 0,
-    @ColumnInfo(name = "word_value")      val value: String = "",
+    @ColumnInfo(name = "word_value") val value: String = "",
 )

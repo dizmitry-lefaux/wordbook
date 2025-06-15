@@ -22,7 +22,7 @@ import com.dkat.wordbook.data.entity.Word
 @Database(
     entities = [Language::class, SessionSourceCrossRef::class, SessionWordCrossRef::class,
         Source::class, Translation::class, Word::class, Session::class],
-    version = 19,
+    version = 25,
     exportSchema = false,
 )
 abstract class WordDatabase : RoomDatabase() {
@@ -59,6 +59,11 @@ abstract class WordDatabase : RoomDatabase() {
                         .addMigrations(MIGRATION_16_17)
                         .addMigrations(MIGRATION_17_18)
                         .addMigrations(MIGRATION_18_19)
+                        .addMigrations(MIGRATION_19_20)
+                        .addMigrations(MIGRATION_20_21)
+                        .addMigrations(MIGRATION_21_22)
+                        .addMigrations(MIGRATION_23_24)
+                        .addMigrations(MIGRATION_24_25)
                         // allowing to get direct requests blocking UI
                         .allowMainThreadQueries()
                         .fallbackToDestructiveMigration()
@@ -88,7 +93,7 @@ private val MIGRATION_3_4 = object : Migration(3, 4) {
     }
 }
 
-private val MIGRATION_4_5 = object : Migration(3, 4) {
+private val MIGRATION_4_5 = object : Migration(4, 5) {
     override fun migrate(db: SupportSQLiteDatabase) {
         db.execSQL(
             """
@@ -153,56 +158,86 @@ private val MIGRATION_6_7 = object : Migration(6, 7) {
     }
 }
 
-private val MIGRATION_10_11 = object : Migration(3, 4) {
+private val MIGRATION_10_11 = object : Migration(10, 11) {
     override fun migrate(db: SupportSQLiteDatabase) {
         db.execSQL("ALTER TABLE session RENAME COLUMN id TO session_id")
     }
 }
 
-private val MIGRATION_11_12 = object : Migration(3, 4) {
+private val MIGRATION_11_12 = object : Migration(11, 12) {
     override fun migrate(db: SupportSQLiteDatabase) {
         db.execSQL("ALTER TABLE word RENAME COLUMN id TO _word_id")
     }
 }
 
-private val MIGRATION_12_13 = object : Migration(3, 4) {
+private val MIGRATION_12_13 = object : Migration(12, 13) {
     override fun migrate(db: SupportSQLiteDatabase) {
         db.execSQL("ALTER TABLE session RENAME COLUMN session_id TO _session_id")
     }
 }
 
-private val MIGRATION_13_14 = object : Migration(3, 4) {
+private val MIGRATION_13_14 = object : Migration(13, 14) {
     override fun migrate(db: SupportSQLiteDatabase) {
         db.execSQL("ALTER TABLE language RENAME COLUMN id TO _language_id")
     }
 }
 
-private val MIGRATION_14_15 = object : Migration(3, 4) {
+private val MIGRATION_14_15 = object : Migration(14, 15) {
     override fun migrate(db: SupportSQLiteDatabase) {
         db.execSQL("ALTER TABLE source RENAME COLUMN id TO _source_id")
     }
 }
 
-private val MIGRATION_15_16 = object : Migration(3, 4) {
+private val MIGRATION_15_16 = object : Migration(15, 16) {
     override fun migrate(db: SupportSQLiteDatabase) {
         db.execSQL("ALTER TABLE translation RENAME COLUMN id TO _translation_id")
     }
 }
 
-private val MIGRATION_16_17 = object : Migration(3, 4) {
+private val MIGRATION_16_17 = object : Migration(16, 17) {
     override fun migrate(db: SupportSQLiteDatabase) {
         db.execSQL("ALTER TABLE translation RENAME COLUMN value TO translation_value")
     }
 }
 
-private val MIGRATION_17_18 = object : Migration(3, 4) {
+private val MIGRATION_17_18 = object : Migration(17, 18) {
     override fun migrate(db: SupportSQLiteDatabase) {
         db.execSQL("ALTER TABLE word RENAME COLUMN value TO word_value")
     }
 }
 
-private val MIGRATION_18_19 = object : Migration(3, 4) {
+private val MIGRATION_18_19 = object : Migration(18, 19) {
     override fun migrate(db: SupportSQLiteDatabase) {
         db.execSQL("DROP TABLE words")
+    }
+}
+
+private val MIGRATION_19_20 = object : Migration(19, 20) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL("ALTER TABLE language RENAME COLUMN name TO language_name")
+    }
+}
+
+private val MIGRATION_20_21 = object : Migration(20, 21) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL("ALTER TABLE session RENAME COLUMN name TO session_name")
+    }
+}
+
+private val MIGRATION_21_22 = object : Migration(21, 22) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL("ALTER TABLE session RENAME COLUMN is_active TO is_session_active")
+    }
+}
+
+private val MIGRATION_23_24 = object : Migration(23, 24) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL("ALTER TABLE session_word RENAME COLUMN is_active TO is_word_active")
+    }
+}
+
+private val MIGRATION_24_25 = object : Migration(24, 25) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL("ALTER TABLE source RENAME COLUMN name TO source_name")
     }
 }

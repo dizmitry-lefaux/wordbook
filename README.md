@@ -34,14 +34,10 @@
 * add multiple profiles
 
 #### ISSUES:
-* DB entities:
-  * CHECK: make column names unique to avoid Room DB issue with identical column names on JOIN
 * Pills:
   * work on pills/content background
 * 'Words' screen:
   * workaround to recompose input fields after removal
-* 'Words' screen:
-  * clear translation value on submit
 * 'Sessions' screen:
-  * Manage pill: need to display editable session source on edit screen
+  * Manage pill: implement multiple sources for session
   * Session pill: update session with source words when add words to session source

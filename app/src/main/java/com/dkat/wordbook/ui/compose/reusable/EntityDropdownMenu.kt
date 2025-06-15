@@ -31,14 +31,15 @@ fun EntityDropdownMenu(
     list: List<NamedEntity>,
     defaultValue: String,
     onSelect: (NamedEntity) -> Unit,
-    resetErrorStateOnClick: (Boolean) -> Unit
+    resetErrorStateOnClick: (Boolean) -> Unit,
+    isRemovable: Boolean = false
 ) {
     var currentValue by remember { mutableStateOf(defaultValue) }
     var currentId by remember { mutableIntStateOf(Int.MIN_VALUE) }
     var isExpanded by remember { mutableStateOf(false) }
 
     Column(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = if (isRemovable) Modifier else Modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.Center
     ) {
         Box {
@@ -88,5 +89,20 @@ fun EntityDropdownMenuPreview() {
         defaultValue = "source original language",
         onSelect = {},
         resetErrorStateOnClick = {}
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun EntityDropdownMenuRemovablePreview() {
+    EntityDropdownMenu(
+        list = listOf(
+            Language(id = 2510, name = "Pierre Jones"),
+            Language(id = 3926, name = "Harlan Burks")
+        ),
+        defaultValue = "source original language",
+        onSelect = {},
+        resetErrorStateOnClick = {},
+        isRemovable = true
     )
 }

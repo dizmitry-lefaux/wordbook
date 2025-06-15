@@ -52,7 +52,7 @@ interface SessionDao {
     @Query("SELECT * FROM session")
     fun readSessions(): Flow<List<Session>>
 
-    @Query("SELECT * FROM session WHERE is_active = 1")
+    @Query("SELECT * FROM session WHERE is_session_active = 1")
     fun readActiveSession(): Flow<Session>
 
     @Transaction
@@ -67,25 +67,25 @@ interface SessionDao {
     @Query("SELECT * FROM session_word"+
                    " INNER JOIN word ON session_word.word_id = word._word_id" +
                    " INNER JOIN session ON session_word.session_id = session._session_id" +
-                   " WHERE session.is_active = 1" +
-                   " AND session_word.is_active = 1")
+                   " WHERE session.is_session_active = 1" +
+                   " AND session_word.is_word_active = 1")
     fun readActiveSessionWords(): Flow<List<WordWithTranslations>>
 
     @Query("SELECT * FROM session_word"+
                    " INNER JOIN word ON session_word.word_id = word._word_id" +
                    " INNER JOIN session ON session_word.session_id = session._session_id" +
-                   " WHERE session.is_active = 1" +
-                   " AND session_word.is_active = 0" +
+                   " WHERE session.is_session_active = 1" +
+                   " AND session_word.is_word_active = 0" +
                    " AND session_word.session_weight != 0")
     fun readCandidateSessionWords(): Flow<List<WordWithTranslations>>
 
     @Query("SELECT * FROM word"+
                    " INNER JOIN session_word ON session_word.word_id = word._word_id" +
                    " INNER JOIN session ON session_word.session_id = session._session_id" +
-                   " WHERE session.is_active = 1")
+                   " WHERE session.is_session_active = 1")
     fun readSessionWords(): Flow<List<WordWithTranslations>>
 
-    @Query("UPDATE session SET name = :name WHERE _session_id = :id")
+    @Query("UPDATE session SET session_name = :name WHERE _session_id = :id")
     fun updateSession(id: Int, name: String)
 
     @Transaction
@@ -94,16 +94,16 @@ interface SessionDao {
         privateMakeSessionActive(activeSessionId = sessionId)
     }
 
-    @Query("UPDATE session_word SET is_active = 0, session_weight = 1 WHERE session_id = :sessionId")
+    @Query("UPDATE session_word SET is_word_active = 0, session_weight = 1 WHERE session_id = :sessionId")
     fun resetActiveSession(sessionId: Int)
 
-    @Query("UPDATE session SET is_active = 1 WHERE _session_id = :activeSessionId")
+    @Query("UPDATE session SET is_session_active = 1 WHERE _session_id = :activeSessionId")
     fun privateMakeSessionActive(activeSessionId: Int)
 
-    @Query("UPDATE session SET is_active = 0 WHERE _session_id != :activeSessionId")
+    @Query("UPDATE session SET is_session_active = 0 WHERE _session_id != :activeSessionId")
     fun privateMakeSessionsInactive(activeSessionId: Int)
 
-    @Query("UPDATE session_word SET is_active = :isInSession " +
+    @Query("UPDATE session_word SET is_word_active = :isInSession " +
                    "WHERE session_id = :sessionId AND word_id IN (:wordIds)")
     fun setIsInSessionForWordsInSession(wordIds: List<Int>, sessionId: Int, isInSession: Boolean)
 
