@@ -4,8 +4,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -29,6 +27,8 @@ import com.dkat.wordbook.ui.compose.word.InputWordWithTranslations
 import com.dkat.wordbook.ui.compose.word.WordsWithTranslationsList
 import com.dkat.wordbook.viewModel.screen.EditableWordState
 
+private const val TAG = "WordsScreen"
+
 @Composable
 fun WordsScreen(
     navController: NavController,
@@ -44,13 +44,19 @@ fun WordsScreen(
 ) {
     var selectedSource by remember { mutableStateOf(selectedSourceState) }
     var selectedSourceId by remember { mutableStateOf<Int?>(selectedSourceState.id) }
-    var selectedSourceLabel by remember { mutableStateOf(
-        selectedSource.name.ifEmpty { "Select source" }
-    ) }
+    var selectedSourceLabel by remember {
+        mutableStateOf(
+            selectedSource.name.ifEmpty { "Select source" }
+        )
+    }
     var isSelectSourceError by remember { mutableStateOf(false) }
+    // workaround for reorderable columns: mutableStateOf works not properly with lists
+    // need to re-compose words list on source select
+    var wordsListState by remember { mutableStateOf(true) }
 
-    Column(modifier = modifier.fillMaxSize().verticalScroll(rememberScrollState()),
-           verticalArrangement = Arrangement.spacedBy(16.dp)
+    Column(
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+        modifier = modifier.fillMaxSize()
     ) {
         EntityDropdownMenu(
             list = sources,
@@ -60,6 +66,7 @@ fun WordsScreen(
                 selectedSourceLabel = it.name
                 selectedSource = readSource(selectedSourceId!!)
                 updateSelectedSource(selectedSource)
+                wordsListState = !wordsListState
             },
             resetErrorStateOnClick = { isSelectSourceError = it },
         )
@@ -77,16 +84,28 @@ fun WordsScreen(
             )
         }
         HorizontalDivider(thickness = 4.dp, color = Color.Black)
-        WordsWithTranslationsList(
-            navController = navController,
-            wordsWithTranslations = wordsWithTranslations.filter { wordWithTranslations ->
-                wordWithTranslations.word.sourceId == selectedSourceId
-            }.toList(),
-            onDeleteWordClick = onDeleteWordItemClick,
-            readSourceById = readSource,
-            updateEditableWord = updateEditableWordState,
-            modifier = modifier,
-        )
+        var filteredWords = wordsWithTranslations.filter { wordWithTranslations ->
+            wordWithTranslations.word.sourceId == selectedSourceId
+        }.toList()
+        if (wordsListState) {
+            WordsWithTranslationsList(
+                navController = navController,
+                wordsWithTranslations = filteredWords,
+                onDeleteWordClick = onDeleteWordItemClick,
+                readSourceById = readSource,
+                updateEditableWord = updateEditableWordState,
+                modifier = modifier,
+            )
+        } else {
+            WordsWithTranslationsList(
+                navController = navController,
+                wordsWithTranslations = filteredWords,
+                onDeleteWordClick = onDeleteWordItemClick,
+                readSourceById = readSource,
+                updateEditableWord = updateEditableWordState,
+                modifier = modifier,
+            )
+        }
     }
 }
 

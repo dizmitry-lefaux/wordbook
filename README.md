@@ -1,7 +1,6 @@
 #### TODO:
 
 * SessionViewModel methods refactoring
-* update CardWithAnimatedSizeComponent to use new Word entity
 * bottom bar:
   * update icons
 * sessions:
@@ -15,12 +14,15 @@
 * add 'Properties' screen
 * add validations for multiple translations inputs
 * warning on delete actions: language, source
-* messages on adding items: language, source, word
-* messages on delete items: language, source, word
+* messages on adding items: language, source, word, session
+* messages on delete items: language, source, word, session
 * add non-latin languages support
 * move strings to resources
-* make languages sortable or movable
-* make sources sortable or movable
+* make languages sortable and movable
+* make sources sortable
+* make remember sources order
+* make remember words order
+* make remember languages order
 * make 'Edit word' screen translations removals revertable on 'Cancel' click
 * close 'Edit' popups with smooth recompose (close popup -> compose prev page)
 * think about DI:
@@ -37,7 +39,6 @@
 * Pills:
   * work on pills/content background
 * 'Words' screen:
-  * workaround to recompose input fields after removal
+  * rework workaround with re-composing words list on source select
 * 'Sessions' screen:
-  * Manage pill: implement multiple sources for session
   * Session pill: update session with source words when add words to session source

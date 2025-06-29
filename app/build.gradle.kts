@@ -63,6 +63,7 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.converter.moshi)
     implementation(libs.androidx.preferences.datastore)
+    implementation(libs.reorderable)
 
     implementation(libs.androidx.room.ktx)
     ksp(libs.androidx.room.compiler)

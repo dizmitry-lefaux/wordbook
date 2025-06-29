@@ -4,14 +4,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -19,13 +15,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
@@ -37,11 +30,10 @@ import com.dkat.wordbook.data.entity.Session
 import com.dkat.wordbook.data.entity.Source
 import com.dkat.wordbook.ui.compose.reusable.ButtonText
 import com.dkat.wordbook.ui.compose.reusable.CloseablePopupTitle
+import com.dkat.wordbook.ui.compose.reusable.EntityDropdownMenu
 import com.dkat.wordbook.ui.compose.reusable.ErrorSupportingText
 import com.dkat.wordbook.ui.compose.screen.session.ChooseSourceComponent
 import com.dkat.wordbook.viewModel.screen.EditableSessionState
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 private const val TAG = "EditSessionPopupScreen"
 
@@ -56,185 +48,181 @@ fun EditSessionPopupScreen(
 ) {
     var sessionNameInput by remember { mutableStateOf(editableSessionState.currentSession.name) }
     var session by remember { mutableStateOf(editableSessionState.currentSession) }
-    var source by remember { mutableStateOf(Source()) }
-    val sessionSources = remember { mutableStateListOf<Source>() }
-    // mutableStateMapOf consumes vararg of pairs
-    // toTypedArray() -> convert list of Pairs to array of Pairs
-    // * -> convert array to vararg of Pairs
-    val sourceInputs = remember {
-        mutableStateMapOf(*(
-                editableSessionState.currentSources.map { sourceLocal ->
-                    Pair(sourceLocal.id, sourceLocal)
-                }.toTypedArray()
-        ))
-    }
-
-    var lastInputFieldId by remember { mutableIntStateOf(editableSessionState.currentSources.size) }
-
-    var isSessionInputError by remember { mutableStateOf(false) }
-    var sessionInputErrorText by remember { mutableStateOf("") }
-
-    // isExpanded: workaround to recompose input fields after removal
-    var isExpanded by remember { mutableStateOf(true) }
-    val coroutineScope = rememberCoroutineScope()
-
-    // needed to have one source select even if there were attempts to remove it
-    if (sourceInputs.isEmpty()) {
-        sourceInputs[lastInputFieldId] = Source(id = 0,
-                                                name = "select source",
-                                                mainOrigLangId = 0,
-                                                mainTranslationLangId = 0
+    // mutableStateListOf consumes vararg of list elements
+    // toTypedArray() -> convert list of elements to array of elements
+    // * -> convert array to vararg of elements
+    var selectedSources = remember {
+        mutableStateListOf(*(
+                editableSessionState.currentSources.mapIndexed { index, sourceLocal ->
+                    IndexedSource(index, sourceLocal)
+                }.toTypedArray())
         )
     }
 
+    var lastAddedSourceIndex by remember { mutableIntStateOf(selectedSources.size) }
+
+    var isSessionError by remember { mutableStateOf(false) }
+    var sessionErrorText by remember { mutableStateOf("") }
+
+    var isSourceError by remember { mutableStateOf(false) }
+    var sourceErrorText by remember { mutableStateOf("") }
+
     Popup(properties = PopupProperties(focusable = true)) {
         Column(modifier = modifier
-            .verticalScroll(rememberScrollState())
             .background(MaterialTheme.colorScheme.secondaryContainer)
         ) {
-            CloseablePopupTitle(navController = navController,
-                                // TODO: move to string resources
-                                titleText = "Edit session",
+            CloseablePopupTitle(
+                navController = navController,
+                // TODO: move to string resources
+                titleText = "Edit session",
             )
-            Column {
-                Text(modifier = modifier.padding(start = 8.dp, top = 8.dp),
-                    // TODO: move to string resources
-                     text = "name:"
-                )
-                TextField(
-                    value = sessionNameInput,
-                    onValueChange = {currentSessionName ->
-                        sessionNameInput = currentSessionName
-                        isSessionInputError = false
-                        sessionInputErrorText = ""
-                        if (currentSessionName.isEmpty()) {
-                            // TODO: move to string resources
-                            sessionNameInput = "input session name"
-                        }
-                        if (sessions.map { session -> session.name }
-                                .toList().contains(currentSessionName)
-                            && currentSessionName != session.name
-                        ) {
-                            isSessionInputError = true
-                            sessionInputErrorText = "session '$currentSessionName' already exists"
-                        }
-                    },
-                    placeholder = {
-                        // TODO: move to string resources
-                        Text("input session name")
-                    },
-                    modifier = modifier.padding(8.dp),
-                    isError = isSessionInputError,
-                    supportingText = {
-                        if (isSessionInputError) {
-                            ErrorSupportingText(errorText = sessionInputErrorText)
-                        }
-                    },
-                )
-            }
+            LazyColumn {
+                item {
+                    Column {
+                        Text(modifier = modifier.padding(start = 8.dp, top = 8.dp),
+                             // TODO: move to string resources
+                             text = "name:"
+                        )
+                        TextField(
+                            value = sessionNameInput,
+                            onValueChange = { currentSessionName ->
+                                sessionNameInput = currentSessionName
+                                isSessionError = false
+                                sessionErrorText = ""
+                                if (currentSessionName.isEmpty()) {
+                                    // TODO: move to string resources
+                                    sessionNameInput = "input session name"
+                                }
+                                if (sessions.map { session -> session.name }
+                                        .toList().contains(currentSessionName)
+                                    && currentSessionName != session.name
+                                ) {
+                                    isSessionError = true
+                                    sessionErrorText =
+                                        "session '$currentSessionName' already exists"
+                                }
+                            },
+                            placeholder = {
+                                // TODO: move to string resources
+                                Text("input session name")
+                            },
+                            modifier = modifier.padding(8.dp),
+                            isError = isSessionError,
+                            supportingText = {
+                                if (isSessionError) {
+                                    ErrorSupportingText(errorText = sessionErrorText)
+                                }
+                            },
+                        )
+                        HorizontalDivider(thickness = 2.dp)
+                        Text(modifier = modifier.padding(start = 8.dp, top = 8.dp),
+                             // TODO: move to string resources
+                             text = "sources:"
+                        )
+                    }
+                }
 
-            Column {
-                HorizontalDivider(thickness = 2.dp)
-                Text(modifier = modifier.padding(start = 8.dp, top = 8.dp),
-                     // TODO: move to string resources
-                     text = "sources:"
-                )
-                if (isExpanded) {
-                    sourceInputs.entries.forEach{ entry ->
-                        Row {
-                            ChooseSourceComponent(
-                                sources = sources,
-                                currentSource = entry.value,
-                                getIdOnRemoveClick = {
-                                    coroutineScope.launch {
-                                        isExpanded = false
-                                        sourceInputs.remove(entry.value.id)
-                                        delay(100L)
-                                        isExpanded = true
-                                    }
-                                },
-                                getValueOnChange = {
-                                    sourceInputs.replace(entry.value.id, it)
-                                },
-                            )
-                        }
-                    }
-                    IconButton(onClick = {
-                        lastInputFieldId += 1
-                        sourceInputs[lastInputFieldId] = Source(id = 0,
-                                                                name = "select source",
-                                                                mainOrigLangId = 0,
-                                                                mainTranslationLangId = 0
-                        )
-                    }) {
-                        Icon(imageVector = Icons.Filled.Add,
-                             tint = Color.Black,
-                            // TODO: move to string resources
-                             contentDescription = "Add source field"
-                        )
-                    }
+                items(items = selectedSources,
+                      key = { selectedSource -> selectedSource.index }
+                ) { selectedSource ->
+                    ChooseSourceComponent(
+                        currentSource = selectedSource.source,
+                        sources = sources,
+                        getIdOnRemoveClick = {
+                            selectedSources.removeIf { src ->
+                                src.source.id == it
+                            }
+                        },
+                        getValueOnChange = { changingSource ->
+                            var newSource = sources.find { src ->
+                                src.id == changingSource.id
+                            }!!
+                            selectedSources.replaceAll { replaceableSource ->
+                                if (selectedSource.index == replaceableSource.index) {
+                                    IndexedSource(replaceableSource.index, newSource)
+                                } else replaceableSource
+                            }
+                        },
+                    )
                 }
-                if (!isExpanded) {
-                    sourceInputs.entries.forEach { entry ->
-                        Row {
-                            ChooseSourceComponent(sources = sources,
-                                                  currentSource = Source(),
-                                                  getIdOnRemoveClick = { },
-                                                  getValueOnChange = { },
-                            )
-                        }
-                    }
-                    IconButton(onClick = {}) {
-                        Icon(imageVector = Icons.Filled.Add,
-                             tint = Color.Black,
-                            // TODO: move to string resources
-                             contentDescription = "Add source field"
-                        )
-                    }
+                item {
+                    EntityDropdownMenu(list = sources,
+                                       defaultValue = "select source",
+                                       onSelect = {
+                                           var selectedSource = sources.findLast { src ->
+                                               src.id == it.id
+                                           }
+                                           lastAddedSourceIndex += 1
+                                           selectedSources.add(IndexedSource(lastAddedSourceIndex,
+                                                                             selectedSource!!
+                                           )
+                                           )
+                                       },
+                                       resetErrorStateOnClick = { isSourceError = it })
                 }
-                // TODO: extract popup buttons
-                Row {
-                    Button(modifier = modifier.padding(8.dp),
-                           onClick = {
-                               if (sessionNameInput.isEmpty()) {
-                                   isSessionInputError = true
-                                   // TODO: move to string resources
-                                   sessionInputErrorText = "session name is empty"
-                               }
-                               sourceInputs.forEach { sourceInputEntity ->
-                                   session = Session(
-                                       id = editableSessionState.currentSession.id,
-                                       name = sessionNameInput
-                                   )
-                                   source = Source(
-                                       id = sourceInputEntity.key
-                                   )
-                                   sessionSources.add(source)
-                               }
-                               if (!isSessionInputError) {
-                                   editSession(session, sessionSources.toList())
-                                   sessionNameInput = ""
-                                   navController.popBackStack()
-                                   isSessionInputError = false
-                                   sessionInputErrorText = ""
-                               } else {
-                                   // TODO
-                               }
-                           }
-                    ) {
-                        // TODO: move to string resources
-                        ButtonText(buttonText = "Submit")
-                    }
-                    Button(
-                        modifier = modifier.padding(8.dp),
-                        onClick = { navController.popBackStack() }
-                    ) {
-                        // TODO: move to string resources
-                        ButtonText(buttonText = "Cancel")
+
+                item {
+                    Row {
+                        Button(modifier = modifier.padding(8.dp), onClick = {
+                            // TODO: extract validations to separate method if possible
+                            if (sessions.map { it.name }.toList().contains(sessionNameInput)
+                                && sessionNameInput != editableSessionState.currentSession.name
+                            ) {
+                                isSessionError = true
+                                // TODO: move to string resources
+                                sessionErrorText = "session name not unique"
+                            }
+                            if (sessionNameInput.isEmpty()) {
+                                isSessionError = true
+                                // TODO: move to string resources
+                                sessionErrorText = "session name should not be empty"
+                            }
+                            if (selectedSources.isEmpty()) {
+                                isSourceError = true
+                                sourceErrorText = "at least one source should be selected"
+                            }
+                            var uniqueSourceIds =
+                                selectedSources.toList().map { source -> source.source.id }
+                                    .distinct()
+                            if (uniqueSourceIds.size != selectedSources.size) {
+                                isSourceError = true
+                                sourceErrorText = "sources should be unique across selected"
+                            }
+                            if (!isSessionError && !isSourceError) {
+                                session = Session(name = sessionNameInput)
+                                editSession(session,
+                                            selectedSources.toList().map { src -> src.source })
+                                sessionNameInput = ""
+                                selectedSources.clear()
+                                isSessionError = false
+                                sessionErrorText = ""
+                                isSourceError = false
+                                sourceErrorText = ""
+                            }
+                        }) {
+                            // TODO: move to string resources
+                            ButtonText(buttonText = "Submit")
+                        }
+                        Button(
+                            modifier = modifier.padding(8.dp),
+                            onClick = { navController.popBackStack() }
+                        ) {
+                            // TODO: move to string resources
+                            ButtonText(buttonText = "Cancel")
+                        }
                     }
                 }
             }
         }
+    }
+}
+
+private class IndexedSource(
+    var index: Int,
+    var source: Source
+) {
+    override fun toString(): String {
+        return "IndexedSource(index=$index, source=$source)"
     }
 }
 

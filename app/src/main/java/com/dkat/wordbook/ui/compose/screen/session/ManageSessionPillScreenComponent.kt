@@ -21,13 +21,12 @@ fun ManageSessionPillScreenComponent(
     navController: NavController,
 
     sources: List<Source>,
-    readSourceById: (sourceId: Int) -> Source,
     deleteSession: (session: Session) -> Unit,
     updateEditableSessionState: (editableSessionState: EditableSessionState) -> Unit,
     readSourcesBySessionId: (sessionId: Int) -> List<Source>,
 
     sessions: List<Session>,
-    createSession: (source: Source, session: Session) -> Unit,
+    createSession: (sources: List<Source>, session: Session) -> Unit,
 
     modifier: Modifier = Modifier
 ) {
@@ -42,7 +41,6 @@ fun ManageSessionPillScreenComponent(
                 sessions = sessions,
                 sources = sources,
                 createSession = createSession,
-                readSourceById = readSourceById
             )
         }
         HorizontalDivider(thickness = 4.dp, color = Color.Black)
@@ -62,11 +60,10 @@ fun ManageSessionPillScreenComponent(
 fun ManageSessionScreenPillPreview() {
     ManageSessionPillScreenComponent(navController = rememberNavController(),
                                      sources = PreviewData.sources,
-                                     readSourceById = { _ -> PreviewData.source1 },
                                      deleteSession = { },
                                      updateEditableSessionState = { },
                                      readSourcesBySessionId = { _ -> PreviewData.sources },
                                      sessions = PreviewData.sessions,
-                                     createSession = { _, _ -> },
+                                     createSession = { _, _ -> }
     )
 }

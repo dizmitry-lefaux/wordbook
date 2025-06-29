@@ -11,8 +11,8 @@ import androidx.navigation.compose.rememberNavController
 import com.dkat.wordbook.data.PreviewData
 import com.dkat.wordbook.data.entity.Source
 import com.dkat.wordbook.data.entity.SourceWithWords
-import com.dkat.wordbook.data.entity.WordWithTranslations
 import com.dkat.wordbook.data.entity.Word
+import com.dkat.wordbook.data.entity.WordWithTranslations
 import com.dkat.wordbook.viewModel.screen.EditableWordState
 
 private const val TAG = "ListOfSources"
@@ -29,16 +29,16 @@ fun ListOfSources(
     updateSourceState: (source: Source) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val mapOfSources: MutableMap<Source, List<WordWithTranslations>> = mutableMapOf()
+    for (sourceWithWords in sourcesWithWords) {
+        val wordsWithTranslationsSubList: List<WordWithTranslations> =
+            wordsWithTranslations.filter { wordWithTranslations ->
+                wordWithTranslations.word.sourceId == sourceWithWords.source.id
+            }.toList()
+        mapOfSources[sourceWithWords.source] = wordsWithTranslationsSubList
+    }
+    val sourcesList = mapOfSources.keys.toList()
     Column {
-        val mapOfSources: MutableMap<Source, List<WordWithTranslations>> = mutableMapOf()
-        for (sourceWithWords in sourcesWithWords) {
-            val wordsWithTranslationsSubList: List<WordWithTranslations> =
-                wordsWithTranslations.filter { wordWithTranslations ->
-                    wordWithTranslations.word.sourceId == sourceWithWords.source.id
-                }.toList()
-            mapOfSources[sourceWithWords.source] = wordsWithTranslationsSubList
-        }
-        val sourcesList = mapOfSources.keys.toList()
         sourcesList.forEach { source ->
             Column {
                 ExpandableSourceItem(
@@ -46,7 +46,7 @@ fun ListOfSources(
                     onDeleteSourceClick = onDeleteSourceItemClick,
                     onDeleteWordClick = onDeleteWordItemClick,
                     source = source,
-                    wordsWithTranslations = mapOfSources[source],
+                    wordsWithTranslations = mapOfSources[source]!!,
                     readSourceById = readSource,
                     updateEditableWordState = updateEditableWordState,
                     updateSourceState = updateSourceState,

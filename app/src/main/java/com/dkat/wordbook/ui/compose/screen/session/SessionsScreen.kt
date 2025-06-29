@@ -1,8 +1,6 @@
 package com.dkat.wordbook.ui.compose.screen.session
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -30,11 +28,10 @@ fun SessionsScreen(
     openManageSession: () -> Unit,
 
     sources: List<Source>,
-    readSourceById: (sourceId: Int) -> Source,
 
     sessions: List<Session>,
     selectedSessionState: Session?,
-    createSession: (source: Source, session: Session) -> Unit,
+    createSession: (sources: List<Source>, session: Session) -> Unit,
     readSession: (id: Int) -> Session,
     deleteSession: (session: Session) -> Unit,
     updateSelectedSession: (session: Session) -> Unit,
@@ -66,7 +63,7 @@ fun SessionsScreen(
                 )
             )
         }
-        Column(modifier = modifier.verticalScroll(rememberScrollState())) {
+        Column {
             if (isSessionOpen) {
                 SessionPillScreenComponent(sessions = sessions,
                                            selectedSessionState = selectedSessionState,
@@ -80,7 +77,6 @@ fun SessionsScreen(
             }
             if (!isSessionOpen) {
                 ManageSessionPillScreenComponent(sources = sources,
-                                                 readSourceById = readSourceById,
                                                  sessions = sessions,
                                                  createSession = createSession,
                                                  navController = navController,
@@ -103,7 +99,6 @@ fun ManageSessionScreenPreview() {
         sessions = PreviewData.sessions,
         selectedSessionState = PreviewData.session1,
         createSession = { _, _ -> },
-        readSourceById = { _ -> Source() },
         readSession = { _ -> Session() },
         updateSelectedSession = { _ -> },
         isSessionOpen = false,
@@ -131,7 +126,6 @@ fun SessionScreenWithValuesPreview() {
         selectedSessionState = PreviewData.session1,
         createSession = { _, _ -> },
         readSession = { _ -> Session() },
-        readSourceById = { _ -> Source() },
         updateSelectedSession = { _ -> },
         isSessionOpen = true,
         isManageSessionOpen = false,
@@ -156,7 +150,6 @@ fun SessionScreenEmptyPreview() {
         sessions = emptyList(),
         selectedSessionState = Session(),
         createSession = { _, _ -> },
-        readSourceById = { _ -> Source() },
         readSession = { _ -> Session() },
         updateSelectedSession = { _ -> },
         isSessionOpen = true,

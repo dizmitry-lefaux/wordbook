@@ -7,8 +7,8 @@ import androidx.lifecycle.viewModelScope
 import com.dkat.wordbook.data.entity.Session
 import com.dkat.wordbook.data.entity.SessionWordCrossRef
 import com.dkat.wordbook.data.entity.Source
-import com.dkat.wordbook.data.entity.WordWithTranslations
 import com.dkat.wordbook.data.entity.Word
+import com.dkat.wordbook.data.entity.WordWithTranslations
 import com.dkat.wordbook.data.repo.SessionRepository
 import com.dkat.wordbook.data.repo.WordRepository
 import kotlinx.coroutines.Dispatchers
@@ -18,6 +18,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import java.util.Collections
 import java.util.Random
 import java.util.stream.Collectors.toList
 
@@ -57,28 +58,30 @@ class SessionViewModel(
             initialValue = _selectedSessionActiveWords.value
         )
 
-    fun createSession(source: Source, session: Session) {
+    fun createSession(sources: List<Source>, session: Session) {
         var sessionId: Long = 0
-        var sourceWords: List<Word> = mutableListOf()
+        var sourceWords = Collections.synchronizedList(mutableListOf<Word>())
         val sessionWords = mutableListOf<SessionWordCrossRef>()
         viewModelScope.launch {
             launch { sessionId = sessionRepository.createSession(session = session) }.join()
             launch {
-                sessionRepository.createSessionSourceCrossRef(sourceId = source.id,
-                                                              sessionId = sessionId.toInt()
-                )
+                sources.forEach { source ->
+                    sessionRepository.createSessionSourceCrossRef(sourceId = source.id,
+                                                                  sessionId = sessionId.toInt())
+                }
             }.join()
             launch {
                 launch {
-                    sourceWords = wordRepository.readWordsBySourceId(sourceId = source.id)
+                    sources.forEach { source ->
+                        sourceWords.addAll(wordRepository.readWordsBySourceId(sourceId = source.id))
+                    }
                 }.join()
                 sourceWords.stream().forEach { sourceWord ->
                     sessionWords.add(
                         SessionWordCrossRef(wordId = sourceWord.id,
                                             sessionId = sessionId.toInt(),
                                             sessionWeight = 1.0f,
-                                            isActive = false
-                        )
+                                            isActive = false)
                     )
                 }
             }.join()
