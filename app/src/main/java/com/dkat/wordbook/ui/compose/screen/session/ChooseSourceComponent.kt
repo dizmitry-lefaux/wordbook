@@ -21,6 +21,8 @@ import com.dkat.wordbook.data.entity.Source
 import com.dkat.wordbook.ui.compose.reusable.EntityDropdownMenu
 import com.dkat.wordbook.ui.compose.reusable.ErrorText
 
+private const val TAG = "ChooseSourceComponent"
+
 @Composable
 fun ChooseSourceComponent(
     currentSource: Source,
@@ -29,7 +31,7 @@ fun ChooseSourceComponent(
     getValueOnChange: (source: Source) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    var sourceId by remember { mutableStateOf<Int?>(null) }
+    var sourceId by remember { mutableStateOf<Int?>(currentSource.id) }
     var isSourceError by remember { mutableStateOf(false) }
     var sourceErrorText by remember { mutableStateOf("") }
 

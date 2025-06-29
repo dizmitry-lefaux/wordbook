@@ -1,7 +1,10 @@
 package com.dkat.wordbook.ui.compose.screen.session
 
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Card
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.dkat.wordbook.data.entity.Session
 import com.dkat.wordbook.data.entity.Source
@@ -21,16 +24,18 @@ fun SessionItem(navController: NavController,
         currentSession = session,
         currentSources = readSourcesBySessionId(session.id)
     )
-    EditableDeletableItem(navController = navController,
-                          editRoute = Screen.EditSession.route,
-                          titleValue = session.name,
-                          editableObject = editableSessionState,
-                          updateEditableObject = updateEditableSessionState,
-                          editDescription = "edit session",
-                          deletableObject = session,
-                          deleteObject = deleteSession,
-                          deleteDescription = "delete session",
-                          additionalContent = null,
-                          modifier = modifier
-    )
+    Card(shape = RoundedCornerShape(10.dp)) {
+        EditableDeletableItem(navController = navController,
+                              editRoute = Screen.EditSession.route,
+                              titleValue = session.name,
+                              editableObject = editableSessionState,
+                              updateEditableObject = updateEditableSessionState,
+                              editDescription = "edit session",
+                              deletableObject = session,
+                              deleteObject = deleteSession,
+                              deleteDescription = "delete session",
+                              additionalContent = null,
+                              modifier = modifier
+        )
+    }
 }

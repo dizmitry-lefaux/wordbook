@@ -4,6 +4,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
@@ -68,7 +70,8 @@ fun SessionPillScreenComponent(
                     Row(Modifier.fillMaxWidth()) {
                         Column(modifier = modifier.weight(0.5f)) {
                             Button(
-                                modifier = modifier.padding(16.dp)
+                                modifier = modifier
+                                    .padding(16.dp)
                                     .fillMaxWidth(),
                                 onClick = { updateSession() }
                             ) {
@@ -80,7 +83,8 @@ fun SessionPillScreenComponent(
                         }
                         Column(modifier = modifier.weight(0.5f)) {
                             Button(
-                                modifier = modifier.padding(16.dp)
+                                modifier = modifier
+                                    .padding(16.dp)
                                     .fillMaxWidth(),
                                 onClick = { restartSession() }
                             ) {
@@ -97,9 +101,12 @@ fun SessionPillScreenComponent(
                 if (sessionWordsWithTranslations.isNotEmpty()) {
                     Column {
                         HorizontalDivider()
-                        sessionWordsWithTranslations.forEach { wordWithTranslations ->
-                            CardWithAnimatedAlpha(word = wordWithTranslations.word,
-                                                  translations = wordWithTranslations.translations)
+                        LazyColumn {
+                            items(sessionWordsWithTranslations) { wordWithTranslations ->
+                                CardWithAnimatedAlpha(word = wordWithTranslations.word,
+                                                      translations = wordWithTranslations.translations
+                                )
+                            }
                         }
                     }
                 }

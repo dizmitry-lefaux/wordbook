@@ -107,13 +107,10 @@ fun WordbookNavHost(
                 openManageSession = { sessionsScreenViewModel.openManageSession() },
 
                 sources = sources,
-                readSourceById = { sourceId: Int ->
-                    sourceViewModel.readSource(sourceId)
-                },
                 sessions = sessions,
                 selectedSessionState = selectedSession,
-                createSession = { source: Source, session: Session ->
-                    sessionViewModel.createSession(source = source, session = session)
+                createSession = { sources: List<Source>, session: Session ->
+                    sessionViewModel.createSession(sources = sources, session = session)
                 },
                 readSession = { id: Int ->
                     sessionViewModel.readSession(id)

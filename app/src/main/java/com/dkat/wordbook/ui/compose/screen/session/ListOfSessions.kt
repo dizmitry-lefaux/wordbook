@@ -1,10 +1,9 @@
 package com.dkat.wordbook.ui.compose.screen.session
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.dkat.wordbook.data.entity.Session
 import com.dkat.wordbook.data.entity.Source
@@ -18,8 +17,8 @@ fun ListOfSessions(navController: NavController,
                    readSourcesBySessionId: (sessionId: Int) -> List<Source>,
                    modifier: Modifier
 ) {
-    Column(modifier = Modifier.padding(8.dp)) {
-        sessions.forEach { session ->
+    LazyColumn {
+        items(sessions) {session ->
             SessionItem(
                 navController = navController,
                 session = session,

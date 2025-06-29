@@ -26,7 +26,7 @@ fun ExpandableSourceItem(
     onDeleteWordClick: (word: Word) -> Unit,
     source: Source,
     updateSourceState: (source: Source) -> Unit,
-    wordsWithTranslations: List<WordWithTranslations>?,
+    wordsWithTranslations: List<WordWithTranslations>,
     readSourceById: (sourceId: Int) -> Source,
     updateEditableWordState: (editableWordState: EditableWordState) -> Unit,
     modifier: Modifier = Modifier,

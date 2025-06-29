@@ -4,8 +4,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Button
@@ -19,10 +19,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -40,8 +38,6 @@ import com.dkat.wordbook.ui.compose.reusable.CloseablePopupTitle
 import com.dkat.wordbook.ui.compose.reusable.ErrorSupportingText
 import com.dkat.wordbook.ui.compose.word.EditTranslation
 import com.dkat.wordbook.viewModel.screen.EditableWordState
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 private const val TAG = "EditWordWithTranslationsPopupScreen"
 
@@ -56,171 +52,166 @@ fun EditWordWithTranslationsPopupScreen(
     var word by remember { mutableStateOf(editableWordState.currentWord) }
     var translation by remember { mutableStateOf(Translation()) }
     val translations = remember { mutableStateListOf<Translation>() }
-    // mutableStateMapOf consumes vararg of pairs
-    // toTypedArray() -> convert list of Pairs to array of Pairs
-    // * -> convert array to vararg of Pairs
-    val translationInputs = remember {
-        mutableStateMapOf(*(
+    var lastTranslationInputFieldId by remember {
+        mutableIntStateOf(editableWordState.currentTranslations.size)
+    }
+    var currentTranslationInputValue by remember { mutableStateOf("") }
+    // mutableStateListOf consumes vararg of list elements
+    // toTypedArray() -> convert list of elements to array of elements
+    // * -> convert array to vararg of elements
+    var translationInputs = remember {
+        mutableStateListOf(*(
                 editableWordState.currentTranslations.mapIndexed { index, translationLocal ->
-                    Pair(index, translationLocal.value)
+                    IndexedTranslationInput(index, translationLocal.value)
                 }.toTypedArray())
         )
     }
 
-    var lastInputFieldId by remember { mutableIntStateOf(editableWordState.currentTranslations.size) }
-
     var isOriginalInputError by remember { mutableStateOf(false) }
     var originalInputErrorText by remember { mutableStateOf("") }
 
-    // isExpanded: workaround to recompose input fields after removal
-    var isExpanded by remember { mutableStateOf(true) }
-    val coroutineScope = rememberCoroutineScope()
-
-    // needed to have one translation input even if there were attempts to remove it
-    if (translationInputs.isEmpty()) {
-        translationInputs[lastInputFieldId] = ""
-    }
-
     Popup(properties = PopupProperties(focusable = true)) {
         Column(modifier = modifier
-            .verticalScroll(rememberScrollState())
             .background(MaterialTheme.colorScheme.secondaryContainer)
         ) {
-            CloseablePopupTitle(navController = navController,
-                                titleText = "Edit word",
-            )
-            Column {
-                Text(modifier = modifier.padding(start = 8.dp, top = 8.dp),
-                    // TODO: move to string resources
-                     text = "original word:"
-                )
-                TextField(
-                    value = origInput,
-                    onValueChange = {
-                        origInput = it
-                        isOriginalInputError = false
-                        if (it.isEmpty()) {
-                            // TODO: move to string resources
-                            origInput = "input original word"
-                        }
-                    },
-                    placeholder = {
-                        // TODO: move to string resources
-                        Text("input original")
-                    },
-                    modifier = modifier.padding(8.dp),
-                    isError = isOriginalInputError,
-                    supportingText = {
-                        if (isOriginalInputError) {
-                            ErrorSupportingText(errorText = originalInputErrorText)
-                        }
-                    },
-                )
-            }
-
-            Column {
-                HorizontalDivider(thickness = 2.dp)
+            CloseablePopupTitle(
+                navController = navController,
                 // TODO: move to string resources
-                Text(modifier = modifier.padding(start = 8.dp, top = 8.dp),
-                     text = "translations:"
-                )
-                if (isExpanded) {
-                    translationInputs.entries.forEach { entry ->
-                        Row {
-                            EditTranslation(
-                                id = entry.key,
-                                value = entry.value,
-                                getIdOnRemoveClick = {
-                                    coroutineScope.launch {
-                                        isExpanded = false
-                                        translationInputs.remove(entry.key)
-                                        delay(100L)
-                                        isExpanded = true
-                                    }
-                                },
-                                getValueOnChange = {
-                                    translationInputs.replace(entry.key, it)
+                titleText = "Edit word",
+            )
+            LazyColumn {
+                item {
+                    Column {
+                        Text(modifier = modifier.padding(start = 8.dp, top = 8.dp),
+                            // TODO: move to string resources
+                             text = "original word:"
+                        )
+                        TextField(
+                            value = origInput,
+                            onValueChange = {
+                                origInput = it
+                                isOriginalInputError = false
+                                if (it.isEmpty()) {
+                                    // TODO: move to string resources
+                                    origInput = "input original word"
                                 }
-                            )
-                        }
+                            },
+                            placeholder = {
+                                // TODO: move to string resources
+                                Text("input original")
+                            },
+                            modifier = modifier.padding(8.dp),
+                            isError = isOriginalInputError,
+                            supportingText = {
+                                if (isOriginalInputError) {
+                                    ErrorSupportingText(errorText = originalInputErrorText)
+                                }
+                            },
+                        )
+                        HorizontalDivider(thickness = 2.dp)
+                        // TODO: move to string resources
+                        Text(modifier = modifier.padding(start = 8.dp, top = 8.dp),
+                             text = "translations:"
+                        )
                     }
+                }
+                items(items = translationInputs,
+                      key = { translationInput -> translationInput.index }
+                ) { translationInput ->
+                    Row {
+                        EditTranslation(
+                            id = translationInput.index,
+                            value = translationInput.value,
+                            getIdOnRemoveClick = {
+                                translationInputs.removeIf { it.index == translationInput.index }
+                            },
+                            getValueOnChange = { currentValue ->
+                                currentTranslationInputValue = currentValue
+                                translationInputs.replaceAll { replaceableInput ->
+                                    if (translationInput.index == replaceableInput.index) {
+                                        IndexedTranslationInput(
+                                            index = translationInput.index, value = currentValue
+                                        )
+                                    } else replaceableInput
+                                }
+                            }
+                        )
+                    }
+                }
+                item {
                     IconButton(onClick = {
-                        lastInputFieldId += 1
-                        translationInputs[lastInputFieldId] = ""
+                        lastTranslationInputFieldId += 1
+                        translationInputs.add(IndexedTranslationInput(lastTranslationInputFieldId, ""))
                     }) {
                         Icon(imageVector = Icons.Filled.Add,
                              tint = Color.Black,
-                            // TODO: move to string resources
+                             // TODO: move to string resources
                              contentDescription = "Add translation field"
                         )
                     }
                 }
-                if (!isExpanded) {
-                    translationInputs.entries.forEach { entry ->
-                        Row {
-                            EditTranslation(id = entry.key,
-                                            value = entry.value,
-                                            getIdOnRemoveClick = {},
-                                            getValueOnChange = {}
-                            )
+                item {
+                    Row {
+                        Button(modifier = modifier.padding(8.dp),
+                               onClick = {
+                                   if (origInput.isEmpty()) {
+                                       isOriginalInputError = true
+                                       // TODO: move to string resources
+                                       originalInputErrorText = "original is empty"
+                                   }
+                                   translationInputs.forEach { translationInputEntity ->
+                                       val localTranslationInput = translationInputEntity.value
+                                       word = Word(
+                                           id = editableWordState.currentWord.id,
+                                           sourceId = editableWordState.currentSource.id,
+                                           languageId = editableWordState.currentSource.mainOrigLangId,
+                                           value = origInput
+                                       )
+                                       translation = Translation(
+                                           wordId = editableWordState.currentWord.id,
+                                           value = localTranslationInput,
+                                           languageId = editableWordState.currentSource.mainTranslationLangId
+                                       )
+                                       translations.add(translation)
+                                   }
+                                   if (!isOriginalInputError) {
+                                       editWordWithTranslations(word, translations.toList())
+                                       origInput = ""
+                                       translationInputs.clear()
+                                       currentTranslationInputValue = ""
+                                       lastTranslationInputFieldId += 1
+                                       translationInputs.add(IndexedTranslationInput(
+                                           index = lastTranslationInputFieldId,
+                                           value = currentTranslationInputValue
+                                       ))
+                                       translations.clear()
+                                       navController.popBackStack()
+                                   } else {
+                                       // TODO
+                                   }
+                               }
+                        ) {
+                            // TODO: move to string resources
+                            ButtonText(buttonText = "Submit")
                         }
-                    }
-                    IconButton(onClick = {}) {
-                        Icon(imageVector = Icons.Filled.Add,
-                             tint = Color.Black,
+                        Button(
+                            modifier = modifier.padding(8.dp),
+                            onClick = { navController.popBackStack() }
+                        ) {
                             // TODO: move to string resources
-                             contentDescription = "Add translation field"
-                        )
-                    }
-                }
-                // TODO: extract popup buttons
-                Row {
-                    Button(modifier = modifier.padding(8.dp),
-                           onClick = {
-                               if (origInput.isEmpty()) {
-                                   isOriginalInputError = true
-                                   // TODO: move to string resources
-                                   originalInputErrorText = "original is empty"
-                               }
-                               translationInputs.forEach { translationInputEntity ->
-                                   val localTranslationInput = translationInputEntity.value
-                                   word = Word(
-                                       id = editableWordState.currentWord.id,
-                                       sourceId = editableWordState.currentSource.id,
-                                       languageId = editableWordState.currentSource.mainOrigLangId,
-                                       value = origInput
-                                   )
-                                   translation = Translation(
-                                       wordId = editableWordState.currentWord.id,
-                                       value = localTranslationInput,
-                                       languageId = editableWordState.currentSource.mainTranslationLangId
-                                   )
-                                   translations.add(translation)
-                               }
-                               if (!isOriginalInputError) {
-                                   editWordWithTranslations(word, translations.toList())
-                                   origInput = ""
-                                   navController.popBackStack()
-                               } else {
-                                   // TODO
-                               }
-                           }
-                    ) {
-                        // TODO: move to string resources
-                        ButtonText(buttonText = "Submit")
-                    }
-                    Button(
-                        modifier = modifier.padding(8.dp),
-                        onClick = { navController.popBackStack() }
-                    ) {
-                        // TODO: move to string resources
-                        ButtonText(buttonText = "Cancel")
+                            ButtonText(buttonText = "Cancel")
+                        }
                     }
                 }
             }
         }
     }
 }
+
+private class IndexedTranslationInput(
+    var index: Int,
+    var value: String
+)
 
 @Preview(showBackground = true)
 @Composable
