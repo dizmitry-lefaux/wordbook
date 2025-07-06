@@ -18,21 +18,21 @@ import com.dkat.wordbook.data.entity.WordWithTranslations
 import com.dkat.wordbook.data.entity.Word
 import com.dkat.wordbook.ui.compose.reusable.ExpandableSection
 import com.dkat.wordbook.ui.compose.source.InputSource
-import com.dkat.wordbook.ui.compose.source.ListOfSources
+import com.dkat.wordbook.ui.compose.source.SourcesList
 import com.dkat.wordbook.viewModel.screen.EditableWordState
 
 @Composable
-fun SourcesPillScreenComponent(modifier: Modifier,
-                               createSource: (source: Source) -> Unit,
-                               languages: List<Language>,
-                               sourcesWithWords: List<SourceWithWords>,
-                               navController: NavController,
-                               deleteWord: (word: Word) -> Unit,
-                               deleteSource: (source: Source) -> Unit,
-                               wordsWithTranslations: List<WordWithTranslations>,
-                               readSource: (sourceId: Int) -> Source,
-                               updateEditableWordState: (editableWordState: EditableWordState) -> Unit,
-                               updateSourceState: (source: Source) -> Unit
+fun SourcesPillScreen(modifier: Modifier,
+                      createSource: (source: Source) -> Unit,
+                      languages: List<Language>,
+                      sourcesWithWords: List<SourceWithWords>,
+                      navController: NavController,
+                      deleteWord: (word: Word) -> Unit,
+                      deleteSource: (source: Source) -> Unit,
+                      wordsWithTranslations: List<WordWithTranslations>,
+                      readSource: (sourceId: Int) -> Source,
+                      updateEditableWordState: (editableWordState: EditableWordState) -> Unit,
+                      updateSourceState: (source: Source) -> Unit
 ) {
     Column {
         ExpandableSection(
@@ -48,7 +48,7 @@ fun SourcesPillScreenComponent(modifier: Modifier,
             )
         }
         HorizontalDivider(thickness = 4.dp, color = Color.Black)
-        ListOfSources(
+        SourcesList(
             navController = navController,
             onDeleteWordItemClick = deleteWord,
             onDeleteSourceItemClick = deleteSource,
@@ -65,16 +65,16 @@ fun SourcesPillScreenComponent(modifier: Modifier,
 @Preview(showBackground = true)
 @Composable
 fun SourcesPillScreenComponentPreview() {
-    SourcesPillScreenComponent(modifier = Modifier,
-                               createSource = { },
-                               languages = PreviewData.languages,
-                               sourcesWithWords = PreviewData.sourcesWithWords,
-                               navController = rememberNavController(),
-                               deleteWord = { },
-                               deleteSource = { },
-                               wordsWithTranslations = PreviewData.wordsWithTranslations,
-                               readSource = { _ -> Source() },
-                               updateEditableWordState = { },
-                               updateSourceState = { }
+    SourcesPillScreen(modifier = Modifier,
+                      createSource = { },
+                      languages = PreviewData.languages,
+                      sourcesWithWords = PreviewData.sourcesWithWords,
+                      navController = rememberNavController(),
+                      deleteWord = { },
+                      deleteSource = { },
+                      wordsWithTranslations = PreviewData.wordsWithTranslations,
+                      readSource = { _ -> Source() },
+                      updateEditableWordState = { },
+                      updateSourceState = { }
     )
 }

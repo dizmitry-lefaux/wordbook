@@ -23,6 +23,7 @@ fun InputLanguage(
     languages: List<Language>,
     createLanguage: (language: Language) -> Unit,
     modifier: Modifier = Modifier,
+    onAddLanguageEvent: () -> Unit
 ) {
     var nameInput by remember { mutableStateOf("") }
     var language by remember { mutableStateOf(Language()) }
@@ -53,6 +54,7 @@ fun InputLanguage(
                 language = Language(name = nameInput)
                 nameInput = ""
                 createLanguage(language)
+                onAddLanguageEvent()
                 isError = false
             } else {
                 // TODO: move to string resources
@@ -69,5 +71,8 @@ fun InputLanguage(
 @Preview(showBackground = true)
 @Composable
 fun InputLanguagePreview() {
-    InputLanguage(languages = PreviewData.languages, createLanguage = {})
+    InputLanguage(languages = PreviewData.languages,
+                  createLanguage = {},
+                  onAddLanguageEvent = {}
+    )
 }

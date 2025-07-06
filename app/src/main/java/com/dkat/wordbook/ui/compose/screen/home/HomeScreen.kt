@@ -16,7 +16,7 @@ import com.dkat.wordbook.data.entity.SourceWithWords
 import com.dkat.wordbook.data.entity.WordWithTranslations
 import com.dkat.wordbook.data.entity.Word
 import com.dkat.wordbook.ui.compose.reusable.TitleText
-import com.dkat.wordbook.ui.compose.source.ListOfSources
+import com.dkat.wordbook.ui.compose.source.SourcesList
 import com.dkat.wordbook.ui.theme.AppTheme
 
 @Composable
@@ -36,15 +36,15 @@ fun HomeScreen(navController: NavController,
         Column {
             // TODO: move to string resources
             TitleText(text = "Words grouped by resources")
-            ListOfSources(navController = navController,
-                          sourcesWithWords = sourcesWithWords,
-                          wordsWithTranslations = wordsWithTranslations,
-                          onDeleteWordItemClick = onDeleteWordItemClick,
-                          onDeleteSourceItemClick = onDeleteSourceItemClick,
-                          readSource = readSource,
-                          updateEditableWordState = updateEditableWordState,
-                          updateSourceState = updateSourceState,
-                          modifier = modifier
+            SourcesList(navController = navController,
+                        sourcesWithWords = sourcesWithWords,
+                        wordsWithTranslations = wordsWithTranslations,
+                        onDeleteWordItemClick = onDeleteWordItemClick,
+                        onDeleteSourceItemClick = onDeleteSourceItemClick,
+                        readSource = readSource,
+                        updateEditableWordState = updateEditableWordState,
+                        updateSourceState = updateSourceState,
+                        modifier = modifier
             )
         }
     }

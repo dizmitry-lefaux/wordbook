@@ -16,7 +16,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.semantics.CustomAccessibilityAction
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.customActions
 import androidx.compose.ui.semantics.semantics
@@ -28,6 +27,7 @@ import com.dkat.wordbook.data.PreviewData
 import com.dkat.wordbook.data.entity.Source
 import com.dkat.wordbook.data.entity.Word
 import com.dkat.wordbook.data.entity.WordWithTranslations
+import com.dkat.wordbook.ui.compose.reusable.getCustomAccessibilityActions
 import com.dkat.wordbook.viewModel.screen.EditableWordState
 import sh.calvin.reorderable.ReorderableItem
 import sh.calvin.reorderable.rememberReorderableLazyListState
@@ -36,7 +36,7 @@ private const val TAG = "WordsWithTranslationsList"
 
 @SuppressLint("UnrememberedMutableState")
 @Composable
-fun WordsWithTranslationsList(
+fun WordsList(
     navController: NavController,
     wordsWithTranslations: List<WordWithTranslations>,
     onDeleteWordClick: ((word: Word) -> Unit)?,
@@ -69,34 +69,8 @@ fun WordsWithTranslationsList(
                         modifier = Modifier
                             .draggableHandle()
                             .semantics {
-                                customActions = listOf(
-                                    CustomAccessibilityAction(
-                                        label = "Move Up",
-                                        action = {
-                                            if (index > 0) {
-                                                list = list.toMutableList().apply {
-                                                    add(index - 1, removeAt(index))
-                                                }
-                                                true
-                                            } else {
-                                                false
-                                            }
-                                        }
-                                    ),
-                                    CustomAccessibilityAction(
-                                        label = "Move Down",
-                                        action = {
-                                            if (index < list.size - 1) {
-                                                list = list.toMutableList().apply {
-                                                    add(index + 1, removeAt(index))
-                                                }
-                                                true
-                                            } else {
-                                                false
-                                            }
-                                        }
-                                    ),
-                                )
+                                customActions = getCustomAccessibilityActions(index = index,
+                                                                              list = list)
                             },
                         interactionSource = interactionSource
                     ) {
@@ -123,7 +97,7 @@ fun WordsWithTranslationsList(
 @Composable
 fun WordsWithTranslationsListPreview(
 ) {
-    WordsWithTranslationsList(
+    WordsList(
         navController = rememberNavController(),
         wordsWithTranslations = PreviewData.wordsWithTranslations,
         updateEditableWord = { _ -> },

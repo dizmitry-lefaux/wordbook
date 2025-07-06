@@ -8,6 +8,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.dkat.wordbook.data.entity.Language
+import com.dkat.wordbook.data.entity.LanguageAndOrder
 import com.dkat.wordbook.data.entity.Session
 import com.dkat.wordbook.data.entity.Source
 import com.dkat.wordbook.data.entity.Translation
@@ -181,6 +182,12 @@ fun WordbookNavHost(
                 deleteLanguage = { language: Language ->
                     languageViewModel.deleteLanguage(language)
                 },
+                readLanguages = {
+                    languageViewModel.readLanguages()
+                },
+                updateLanguagesOrder = { languages: List<LanguageAndOrder> ->
+                    languageViewModel.updateLanguagesOrder(languages)
+                },
                 readSource = { id: Int ->
                     sourceViewModel.readSource(id)
                 },
@@ -218,7 +225,7 @@ fun WordbookNavHost(
                 navController = navController,
                 editableSourceState = editableSourceState,
                 sources = sources,
-                languages = languages,
+                languages = languages.map { language -> language.language },
                 editSource = { source: Source ->
                     sourceViewModel.updateSource(source)
                 },

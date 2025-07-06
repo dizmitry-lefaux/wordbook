@@ -3,6 +3,7 @@ package com.dkat.wordbook.data.repo
 import android.content.Context
 import com.dkat.wordbook.data.WordDatabase
 import com.dkat.wordbook.data.entity.Language
+import com.dkat.wordbook.data.entity.LanguageAndOrder
 import kotlinx.coroutines.flow.Flow
 
 class LanguageRepository(private val context: Context) {
@@ -12,7 +13,11 @@ class LanguageRepository(private val context: Context) {
         languageDao.createLanguage(language)
     }
 
-    fun readLanguages(): Flow<List<Language>> = languageDao.readLanguages()
+    fun readLanguages(): Flow<List<LanguageAndOrder>> = languageDao.readLanguages()
+
+    fun readLanguagesBlocking(): List<LanguageAndOrder> {
+        return languageDao.readLanguagesBlocking()
+    }
 
     suspend fun updateLanguage(language: Language) {
         languageDao.updateLanguage(language.id, language.name)
@@ -20,5 +25,9 @@ class LanguageRepository(private val context: Context) {
 
     suspend fun deleteLanguage(language: Language) {
         languageDao.deleteLanguageById(id = language.id)
+    }
+
+    suspend fun updateLanguagesOrder(languages: List<LanguageAndOrder>) {
+        languageDao.updateLanguagesOrder(languages)
     }
 }

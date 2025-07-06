@@ -18,7 +18,7 @@ import com.dkat.wordbook.viewModel.screen.EditableWordState
 private const val TAG = "ListOfSources"
 
 @Composable
-fun ListOfSources(
+fun SourcesList(
     navController: NavController,
     sourcesWithWords: List<SourceWithWords>,
     wordsWithTranslations: List<WordWithTranslations>,
@@ -60,7 +60,7 @@ fun ListOfSources(
 @Preview(showBackground = true)
 @Composable
 fun ListOfSourcesPreview() {
-    ListOfSources(
+    SourcesList(
         navController = rememberNavController(),
         sourcesWithWords = PreviewData.sourcesWithWords,
         wordsWithTranslations = PreviewData.wordsWithTranslations,

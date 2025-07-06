@@ -24,7 +24,7 @@ import com.dkat.wordbook.data.entity.Word
 import com.dkat.wordbook.ui.compose.reusable.EntityDropdownMenu
 import com.dkat.wordbook.ui.compose.reusable.ExpandableSection
 import com.dkat.wordbook.ui.compose.word.InputWordWithTranslations
-import com.dkat.wordbook.ui.compose.word.WordsWithTranslationsList
+import com.dkat.wordbook.ui.compose.word.WordsList
 import com.dkat.wordbook.viewModel.screen.EditableWordState
 
 private const val TAG = "WordsScreen"
@@ -88,7 +88,7 @@ fun WordsScreen(
             wordWithTranslations.word.sourceId == selectedSourceId
         }.toList()
         if (wordsListState) {
-            WordsWithTranslationsList(
+            WordsList(
                 navController = navController,
                 wordsWithTranslations = filteredWords,
                 onDeleteWordClick = onDeleteWordItemClick,
@@ -97,7 +97,7 @@ fun WordsScreen(
                 modifier = modifier,
             )
         } else {
-            WordsWithTranslationsList(
+            WordsList(
                 navController = navController,
                 wordsWithTranslations = filteredWords,
                 onDeleteWordClick = onDeleteWordItemClick,
