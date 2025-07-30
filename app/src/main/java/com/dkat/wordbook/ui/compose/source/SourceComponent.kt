@@ -16,7 +16,7 @@ import com.dkat.wordbook.data.entity.Word
 import com.dkat.wordbook.ui.compose.reusable.EditableDeletableItem
 import com.dkat.wordbook.ui.compose.reusable.ExpandableSection
 import com.dkat.wordbook.ui.compose.screen.Screen
-import com.dkat.wordbook.ui.compose.word.WordsWithTranslationsList
+import com.dkat.wordbook.ui.compose.word.WordsList
 import com.dkat.wordbook.viewModel.screen.EditableWordState
 
 @Composable
@@ -51,7 +51,7 @@ fun ExpandableSourceItem(
                                       deleteDescription = "delete language",
                                       additionalContent = {
                                           HorizontalDivider(thickness = 2.dp)
-                                          WordsWithTranslationsList(
+                                          WordsList(
                                               navController = navController,
                                               wordsWithTranslations = wordsWithTranslations,
                                               onDeleteWordClick = onDeleteWordClick,

@@ -1,5 +1,6 @@
 package com.dkat.wordbook.ui.compose.reusable
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -21,6 +22,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 
+private const val TAG = "EditableDeletableItem"
+
 @Composable
 fun <EditableObjectType, DeletableObjectType> EditableDeletableItem(
     navController: NavController,
@@ -34,7 +37,7 @@ fun <EditableObjectType, DeletableObjectType> EditableDeletableItem(
     deletableObject: DeletableObjectType?,
     deleteObject: ((deleteObject: DeletableObjectType) -> Unit)?,
     deleteDescription: String,
-
+    onDeleteEvent: (() -> Unit)? = null,
     additionalContent: (@Composable () -> Unit)?,
     modifier: Modifier
 ) {
@@ -65,7 +68,12 @@ fun <EditableObjectType, DeletableObjectType> EditableDeletableItem(
                     if (deleteObject != null && deletableObject != null) {
                         // delete button
                         Button(
-                            onClick = { deleteObject(deletableObject) },
+                            onClick = {
+                                deleteObject(deletableObject)
+                                if (onDeleteEvent != null) {
+                                    onDeleteEvent()
+                                }
+                            },
                             colors = ButtonDefaults.buttonColors(containerColor = Color.White),
                         ) {
                             Image(imageVector = Icons.Filled.Clear,

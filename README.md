@@ -18,11 +18,9 @@
 * messages on delete items: language, source, word, session
 * add non-latin languages support
 * move strings to resources
-* make languages sortable and movable
 * make sources sortable
 * make remember sources order
 * make remember words order
-* make remember languages order
 * make 'Edit word' screen translations removals revertable on 'Cancel' click
 * close 'Edit' popups with smooth recompose (close popup -> compose prev page)
 * think about DI:
@@ -34,6 +32,7 @@
 * add data import from files
 * add data import from claud vaults
 * add multiple profiles
+* create adapter: database entities <-> business objects
 
 #### ISSUES:
 * Pills:

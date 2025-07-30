@@ -1,6 +1,8 @@
 package com.dkat.wordbook.data
 
 import com.dkat.wordbook.data.entity.Language
+import com.dkat.wordbook.data.entity.LanguageAndOrder
+import com.dkat.wordbook.data.entity.LanguageOrder
 import com.dkat.wordbook.data.entity.Session
 import com.dkat.wordbook.data.entity.Source
 import com.dkat.wordbook.data.entity.SourceWithWords
@@ -37,9 +39,18 @@ class PreviewData {
             translations = listOf(translation6, translation7, translation8)
         )
         val wordsWithTranslations = listOf(wordWithTranslations1, wordWithTranslations2, wordWithTranslations3)
-        val language1 = Language(id = 4426, name = "English")
-        val language2 = Language(id = 4427, name = "Russian")
+        val language1 = Language(id = 4427, name = "English")
+        val language2 = Language(id = 4426, name = "Russian")
+        val languageAndOrder1 = LanguageAndOrder(
+            language = language1,
+            languageOrder = LanguageOrder(language1.id, language1.id)
+        )
+        val languageAndOrder2 = LanguageAndOrder(
+            language = language2,
+            languageOrder = LanguageOrder(language2.id, language2.id)
+        )
         val languages = listOf(language1, language2)
+        val languageAndOrderList = listOf(languageAndOrder1, languageAndOrder2)
         val source1 = Source(id = 1845, name = "source1", mainOrigLangId = 5432, mainTranslationLangId = 4679)
         val source2 = Source(id = 9734, name = "source2", mainOrigLangId = 8877, mainTranslationLangId = 2605)
         val sources = listOf(source1, source2)

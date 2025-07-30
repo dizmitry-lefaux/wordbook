@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.dkat.wordbook.data.repo.LanguageRepository
 import com.dkat.wordbook.data.entity.Language
+import com.dkat.wordbook.data.entity.LanguageAndOrder
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
@@ -22,9 +23,9 @@ class LanguageViewModel(
         }
     }
 
-    val languages: StateFlow<List<Language>> = languageRepository.readLanguages().stateIn(
+    val languages: StateFlow<List<LanguageAndOrder>> = languageRepository.readLanguages().stateIn(
         scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5_000),
+        started = SharingStarted.WhileSubscribed(stopTimeoutMillis = 5_000),
         initialValue = emptyList()
     )
 
@@ -34,14 +35,25 @@ class LanguageViewModel(
         }
     }
 
+    fun readLanguages() : List<LanguageAndOrder> {
+        return languageRepository.readLanguagesBlocking();
+    }
+
     fun updateLanguage(language: Language) {
         viewModelScope.launch {
             launch { updateLanguagePrivate(language) }.join()
         }
-        Log.i(TAG, "Language updated: $language")
     }
 
-    private suspend fun updateLanguagePrivate(language: Language) {
+    fun updateLanguagesOrder(languagesWithOrder: List<LanguageAndOrder>) {
+        viewModelScope.launch {
+            launch {
+                languageRepository.updateLanguagesOrder(languagesWithOrder)
+            }.join()
+        }
+    }
+
+    private fun updateLanguagePrivate(language: Language) {
         viewModelScope.launch {
             languageRepository.updateLanguage(language)
         }
