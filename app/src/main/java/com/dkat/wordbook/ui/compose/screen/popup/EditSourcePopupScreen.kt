@@ -69,6 +69,21 @@ fun EditSourcePopupScreen(navController: NavController,
                 titleText = "Edit source",
             )
             Column {
+                TextField(value = nameInput,
+                          onValueChange = {
+                              nameInput = it
+                              isSourceError = false
+                          },
+                    // TODO: Move text to string resources
+                          placeholder = { Text(text = "source name") },
+                          modifier = modifier.padding(8.dp),
+                          isError = isSourceError,
+                          supportingText = {
+                              if (isSourceError) {
+                                  ErrorSupportingText(sourceErrorText)
+                              }
+                          }
+                )
                 // TODO: move default value to string resources
                 EntityDropdownMenu(list = languages,
                                    defaultValue = origLangInput!!,
@@ -85,21 +100,6 @@ fun EditSourcePopupScreen(navController: NavController,
                 if (isTranslationLangError) {
                     ErrorText(errorText = translationLangErrorText)
                 }
-                TextField(value = nameInput,
-                          onValueChange = {
-                              nameInput = it
-                              isSourceError = false
-                          },
-                          // TODO: Move text to string resources
-                          placeholder = { Text(text = "source name") },
-                          modifier = modifier.padding(8.dp),
-                          isError = isSourceError,
-                          supportingText = {
-                              if (isSourceError) {
-                                  ErrorSupportingText(sourceErrorText)
-                              }
-                          }
-                )
                 Row {
                     Button(modifier = modifier.padding(8.dp), onClick = {
                         // TODO: extract validations to separate method if possible

@@ -82,10 +82,6 @@ fun EditWordWithTranslationsPopupScreen(
             LazyColumn {
                 item {
                     Column {
-                        Text(modifier = modifier.padding(start = 8.dp, top = 8.dp),
-                            // TODO: move to string resources
-                             text = "original word:"
-                        )
                         TextField(
                             value = origInput,
                             onValueChange = {

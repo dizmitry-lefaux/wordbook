@@ -18,6 +18,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.dkat.wordbook.data.PreviewData
 import com.dkat.wordbook.data.entity.Source
+import com.dkat.wordbook.data.entity.SourceAndOrder
 import com.dkat.wordbook.data.entity.Translation
 import com.dkat.wordbook.data.entity.WordWithTranslations
 import com.dkat.wordbook.data.entity.Word
@@ -32,7 +33,7 @@ private const val TAG = "WordsScreen"
 @Composable
 fun WordsScreen(
     navController: NavController,
-    sources: List<Source>,
+    sourcesAndOrder: List<SourceAndOrder>,
     readSource: (id: Int) -> Source,
     updateSelectedSource: (source: Source) -> Unit,
     selectedSourceState: Source,
@@ -53,6 +54,9 @@ fun WordsScreen(
     // workaround for reorderable columns: mutableStateOf works not properly with lists
     // need to re-compose words list on source select
     var wordsListState by remember { mutableStateOf(true) }
+    var sources = sourcesAndOrder
+        .sortedWith { it1, it2 -> it1.sourceOrder.order - it2.sourceOrder.order }
+        .map { it -> it.source }
 
     Column(
         verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -114,7 +118,7 @@ fun WordsScreen(
 fun WordsScreenPreview() {
     WordsScreen(
         navController = rememberNavController(),
-        sources = PreviewData.sources,
+        sourcesAndOrder = PreviewData.sourceAndOrderList,
         readSource = { _ -> Source() },
         updateSelectedSource = { _ -> },
         selectedSourceState = PreviewData.source1,

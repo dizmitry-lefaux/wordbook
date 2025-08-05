@@ -28,6 +28,7 @@ fun InputSource(
     sources: List<Source>,
     languages: List<Language>,
     createSource: (source: Source) -> Unit,
+    onCreateSourceEvent: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     var nameInput by remember { mutableStateOf("") }
@@ -109,6 +110,7 @@ fun InputSource(
                                 mainTranslationLangId = translationLangId!!
                 )
                 createSource(source)
+                onCreateSourceEvent()
                 origLangInput = ""
                 translationLangInput = ""
                 nameInput = ""
@@ -130,5 +132,6 @@ fun InputSourcePreview() {
         sources = PreviewData.sources,
         languages = PreviewData.languages,
         createSource = {},
+        onCreateSourceEvent = {}
     )
 }

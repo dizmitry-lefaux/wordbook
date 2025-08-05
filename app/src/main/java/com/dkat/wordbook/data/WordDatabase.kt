@@ -17,13 +17,15 @@ import com.dkat.wordbook.data.entity.Session
 import com.dkat.wordbook.data.entity.SessionSourceCrossRef
 import com.dkat.wordbook.data.entity.SessionWordCrossRef
 import com.dkat.wordbook.data.entity.Source
+import com.dkat.wordbook.data.entity.SourceOrder
 import com.dkat.wordbook.data.entity.Translation
 import com.dkat.wordbook.data.entity.Word
 
 @Database(
     entities = [Language::class, SessionSourceCrossRef::class, SessionWordCrossRef::class,
-        Source::class, Translation::class, Word::class, Session::class, LanguageOrder::class],
-    version = 26,
+        Source::class, Translation::class, Word::class, Session::class, LanguageOrder::class,
+        SourceOrder::class],
+    version = 27,
     exportSchema = false,
 )
 abstract class WordDatabase : RoomDatabase() {

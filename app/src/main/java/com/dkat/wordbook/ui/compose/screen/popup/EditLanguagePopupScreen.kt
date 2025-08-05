@@ -49,10 +49,6 @@ fun EditLanguagePopupScreen(
                                 titleText = "Edit language",
             )
             Column {
-                Text(modifier = modifier.padding(start = 8.dp, top = 8.dp),
-                    // TODO: move to string resources
-                     text = "language name:"
-                )
                 TextField(
                     value = languageInput,
                     onValueChange = {

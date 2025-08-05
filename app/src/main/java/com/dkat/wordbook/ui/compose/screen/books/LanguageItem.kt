@@ -1,6 +1,5 @@
 package com.dkat.wordbook.ui.compose.screen.books
 
-import android.util.Log
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.runtime.Composable
@@ -33,10 +32,7 @@ fun LanguageItem(navController: NavController,
                               editableObject = language,
                               updateEditableObject = updateLanguageState,
                               editDescription = "edit language",
-                              onDeleteEvent = {
-                                  Log.i(TAG, "delete event")
-                                  onDeleteEvent()
-                              },
+                              onDeleteEvent = onDeleteEvent,
                               deletableObject = language,
                               deleteObject = deleteLanguage,
                               deleteDescription = "delete language",

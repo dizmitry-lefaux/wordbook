@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.dkat.wordbook.data.repo.SourceRepository
 import com.dkat.wordbook.data.entity.Source
+import com.dkat.wordbook.data.entity.SourceAndOrder
 import com.dkat.wordbook.data.entity.SourceWithWords
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -43,11 +44,23 @@ class SourceViewModel(
         return sourceRepository.readSource(id)
     }
 
+    fun readSources() : List<SourceAndOrder> {
+        return sourceRepository.readSourcesBlocking();
+    }
+
     fun updateSource(source: Source) {
         viewModelScope.launch {
             launch { updateSourcePrivate(source) }.join()
         }
         Log.i(TAG, "Source updated: $source")
+    }
+
+    fun updateSourcesOrder(sourcesWithOrder: List<SourceAndOrder>) {
+        viewModelScope.launch {
+            launch {
+                sourceRepository.updateSourcesOrder(sourcesWithOrder)
+            }.join()
+        }
     }
 
     private suspend fun updateSourcePrivate(source: Source) {
