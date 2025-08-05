@@ -4,6 +4,11 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
@@ -13,27 +18,27 @@ import androidx.navigation.compose.rememberNavController
 import com.dkat.wordbook.data.PreviewData
 import com.dkat.wordbook.data.entity.Language
 import com.dkat.wordbook.data.entity.Source
-import com.dkat.wordbook.data.entity.SourceWithWords
-import com.dkat.wordbook.data.entity.WordWithTranslations
-import com.dkat.wordbook.data.entity.Word
+import com.dkat.wordbook.data.entity.SourceAndOrder
 import com.dkat.wordbook.ui.compose.reusable.ExpandableSection
 import com.dkat.wordbook.ui.compose.source.InputSource
 import com.dkat.wordbook.ui.compose.source.SourcesList
-import com.dkat.wordbook.viewModel.screen.EditableWordState
+import kotlinx.coroutines.launch
+import java.lang.Thread.sleep
 
 @Composable
 fun SourcesPillScreen(modifier: Modifier,
                       createSource: (source: Source) -> Unit,
                       languages: List<Language>,
-                      sourcesWithWords: List<SourceWithWords>,
                       navController: NavController,
-                      deleteWord: (word: Word) -> Unit,
                       deleteSource: (source: Source) -> Unit,
-                      wordsWithTranslations: List<WordWithTranslations>,
-                      readSource: (sourceId: Int) -> Source,
-                      updateEditableWordState: (editableWordState: EditableWordState) -> Unit,
-                      updateSourceState: (source: Source) -> Unit
+                      readSources: () -> List<SourceAndOrder>,
+                      updateSourceState: (source: Source) -> Unit,
+                      updateSourcesOrder: (sources: List<SourceAndOrder>) -> Unit
 ) {
+    // workaround for recompose on add / move / remove language actions
+    var recomposeTrigger by remember { mutableStateOf(true) }
+    var coroutineScope = rememberCoroutineScope()
+
     Column {
         ExpandableSection(
             modifier = modifier.fillMaxWidth(),
@@ -43,22 +48,64 @@ fun SourcesPillScreen(modifier: Modifier,
         ) {
             InputSource(
                 createSource = createSource,
+                onCreateSourceEvent = {
+                    coroutineScope.launch {
+                        recomposeTrigger = !recomposeTrigger
+                        sleep(100L)
+                    }
+                },
                 languages = languages,
-                sources = sourcesWithWords.map { it.source }.toList()
+                sources = readSources().map { it.source }
             )
         }
         HorizontalDivider(thickness = 4.dp, color = Color.Black)
-        SourcesList(
-            navController = navController,
-            onDeleteWordItemClick = deleteWord,
-            onDeleteSourceItemClick = deleteSource,
-            modifier = modifier,
-            sourcesWithWords = sourcesWithWords,
-            wordsWithTranslations = wordsWithTranslations,
-            readSource = readSource,
-            updateEditableWordState = updateEditableWordState,
-            updateSourceState = updateSourceState
-        )
+
+        if (recomposeTrigger) {
+            SourcesList(
+                navController = navController,
+                onDeleteSourceItemClick = deleteSource,
+                onDeleteEvent = {
+                    coroutineScope.launch {
+                        recomposeTrigger = !recomposeTrigger
+                        sleep(100L)
+                    }
+                },
+                onMoveEvent = {
+                    coroutineScope.launch {
+                        recomposeTrigger = !recomposeTrigger
+                        sleep(100L)
+                    }
+                },
+                modifier = modifier,
+                sources = readSources(),
+                languages = languages,
+                updateSourceState = updateSourceState,
+                updateSourcesOrder = updateSourcesOrder
+            )
+        }
+        if (!recomposeTrigger) {
+            SourcesList(
+                navController = navController,
+                onDeleteSourceItemClick = deleteSource,
+                onDeleteEvent = {
+                    coroutineScope.launch {
+                        recomposeTrigger = !recomposeTrigger
+                        sleep(100L)
+                    }
+                },
+                onMoveEvent = {
+                    coroutineScope.launch {
+                        recomposeTrigger = !recomposeTrigger
+                        sleep(100L)
+                    }
+                },
+                modifier = modifier,
+                sources = readSources(),
+                languages = languages,
+                updateSourceState = updateSourceState,
+                updateSourcesOrder = updateSourcesOrder
+            )
+        }
     }
 }
 
@@ -68,13 +115,10 @@ fun SourcesPillScreenComponentPreview() {
     SourcesPillScreen(modifier = Modifier,
                       createSource = { },
                       languages = PreviewData.languages,
-                      sourcesWithWords = PreviewData.sourcesWithWords,
                       navController = rememberNavController(),
-                      deleteWord = { },
                       deleteSource = { },
-                      wordsWithTranslations = PreviewData.wordsWithTranslations,
-                      readSource = { _ -> Source() },
-                      updateEditableWordState = { },
-                      updateSourceState = { }
+                      readSources = { -> PreviewData.sourceAndOrderList },
+                      updateSourceState = { },
+                      updateSourcesOrder = { _ -> }
     )
 }

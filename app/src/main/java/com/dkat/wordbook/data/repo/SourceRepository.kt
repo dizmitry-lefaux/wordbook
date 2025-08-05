@@ -3,6 +3,7 @@ package com.dkat.wordbook.data.repo
 import android.content.Context
 import com.dkat.wordbook.data.WordDatabase
 import com.dkat.wordbook.data.entity.Source
+import com.dkat.wordbook.data.entity.SourceAndOrder
 import com.dkat.wordbook.data.entity.SourceWithWords
 import kotlinx.coroutines.flow.Flow
 
@@ -25,7 +26,15 @@ class SourceRepository(private val context: Context) {
         return sourceDao.readSourceById(id = id)
     }
 
+    fun readSourcesBlocking(): List<SourceAndOrder> {
+        return sourceDao.readSourcesBlocking()
+    }
+
     fun readSources(): Flow<List<Source>> = sourceDao.readSources()
 
     fun readSourcesWithWords(): Flow<List<SourceWithWords>> = sourceDao.readSourcesWithWords()
+
+    suspend fun updateSourcesOrder(sources: List<SourceAndOrder>) {
+        sourceDao.updateSourcesOrder(sources)
+    }
 }

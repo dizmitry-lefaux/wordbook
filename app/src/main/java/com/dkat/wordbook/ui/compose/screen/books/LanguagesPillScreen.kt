@@ -22,13 +22,12 @@ import com.dkat.wordbook.ui.compose.reusable.ExpandableSection
 import kotlinx.coroutines.launch
 import java.lang.Thread.sleep
 
-private const val TAG = "LazyLanguagePillScreen"
+private const val TAG = "LanguagesPillScreen"
 
 @Composable
 fun LanguagesPillScreen(
     modifier: Modifier,
     createLanguage: (language: Language) -> Unit,
-    languages: List<LanguageAndOrder>,
     navController: NavController,
     deleteLanguage: (language: Language) -> Unit,
     readLanguages: () -> List<LanguageAndOrder>,
@@ -109,10 +108,9 @@ fun LanguagesPillScreen(
 fun LanguagesPillScreenPreview() {
     LanguagesPillScreen(modifier = Modifier,
                         createLanguage = { },
-                        languages = PreviewData.languageAndOrderList,
                         navController = rememberNavController(),
                         deleteLanguage = { },
-                        readLanguages = { -> emptyList() },
+                        readLanguages = { -> PreviewData.languageAndOrderList },
                         updateLanguageState = { },
                         updateLanguagesOrder = { _ -> })
 }

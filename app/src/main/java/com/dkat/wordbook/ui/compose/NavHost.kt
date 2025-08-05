@@ -11,6 +11,7 @@ import com.dkat.wordbook.data.entity.Language
 import com.dkat.wordbook.data.entity.LanguageAndOrder
 import com.dkat.wordbook.data.entity.Session
 import com.dkat.wordbook.data.entity.Source
+import com.dkat.wordbook.data.entity.SourceAndOrder
 import com.dkat.wordbook.data.entity.Translation
 import com.dkat.wordbook.data.entity.Word
 import com.dkat.wordbook.ui.compose.screen.Screen
@@ -79,26 +80,7 @@ fun WordbookNavHost(
         modifier = modifier
     ) {
         composable(route = Screen.Home.route) {
-            HomeScreen(
-                navController = navController,
-                onDeleteWordItemClick = { word: Word ->
-                    wordViewModel.deleteWord(word)
-                },
-                onDeleteSourceItemClick = { source: Source ->
-                    sourceViewModel.deleteSource(source)
-                },
-                sourcesWithWords = sourcesWithWords,
-                wordsWithTranslations = wordsWithTranslations,
-                readSource = { id: Int ->
-                    sourceViewModel.readSource(id)
-                },
-                updateEditableWordState = { editableWordState: EditableWordState ->
-                    editWordPopupScreenViewModel.updateEditableWordState(editableWordState)
-                },
-                updateSourceState = { source: Source ->
-                    editSourceViewModel.updateEditableSourceState(source)
-                }
-            )
+            HomeScreen()
         }
         composable(route = Screen.Session.route) {
             SessionsScreen(
@@ -140,7 +122,7 @@ fun WordbookNavHost(
                 readSource = { id: Int ->
                     sourceViewModel.readSource(id)
                 },
-                sources = sources,
+                sourcesAndOrder = sourceViewModel.readSources(),
                 updateSelectedSource = { source: Source ->
                     wordsScreenViewModel.updateSelectedSource(source)
                 },
@@ -164,17 +146,12 @@ fun WordbookNavHost(
                 isLanguagesOpen = booksScreenIsLanguagesOpen,
                 openBooks = { booksScreenViewModel.openBooks() },
                 openLanguages = { booksScreenViewModel.openLanguages() },
-                sourcesWithWords = sourcesWithWords,
-                wordsWithTranslations = wordsWithTranslations,
                 languages = languages,
                 createSource = { source: Source ->
                     sourceViewModel.createSource(source)
                 },
                 createLanguage = { language: Language ->
                     languageViewModel.createLanguage(language)
-                },
-                deleteWord = { word: Word ->
-                    wordViewModel.deleteWord(word)
                 },
                 deleteSource = { source: Source ->
                     sourceViewModel.deleteSource(source)
@@ -188,17 +165,17 @@ fun WordbookNavHost(
                 updateLanguagesOrder = { languages: List<LanguageAndOrder> ->
                     languageViewModel.updateLanguagesOrder(languages)
                 },
-                readSource = { id: Int ->
-                    sourceViewModel.readSource(id)
-                },
-                updateEditableWordState = { editableWordState: EditableWordState ->
-                    editWordPopupScreenViewModel.updateEditableWordState(editableWordState)
+                readSources = {
+                    sourceViewModel.readSources()
                 },
                 updateLanguageState = { language: Language ->
                     editLanguageViewModel.updateEditableLanguageState(language)
                 },
                 updateSourceState = { source: Source ->
                     editSourceViewModel.updateEditableSourceState(source)
+                },
+                updateSourcesOrder = { sources: List<SourceAndOrder> ->
+                    sourceViewModel.updateSourcesOrder(sources)
                 }
             )
         }

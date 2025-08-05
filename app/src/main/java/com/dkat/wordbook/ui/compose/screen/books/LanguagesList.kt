@@ -30,7 +30,7 @@ import com.dkat.wordbook.util.ListUtils
 import sh.calvin.reorderable.ReorderableItem
 import sh.calvin.reorderable.rememberReorderableLazyListState
 
-private const val TAG = "LazyLanguagesList"
+private const val TAG = "LanguagesList"
 
 @Composable
 fun LanguagesList(
