@@ -28,6 +28,7 @@ import androidx.navigation.compose.rememberNavController
 import com.dkat.wordbook.data.PreviewData
 import com.dkat.wordbook.data.entity.Session
 import com.dkat.wordbook.data.entity.Source
+import com.dkat.wordbook.data.entity.SourceAndOrder
 import com.dkat.wordbook.ui.compose.reusable.ButtonText
 import com.dkat.wordbook.ui.compose.reusable.CloseablePopupTitle
 import com.dkat.wordbook.ui.compose.reusable.EntityDropdownMenu
@@ -42,11 +43,12 @@ fun EditSessionPopupScreen(
     navController: NavController,
     editableSessionState: EditableSessionState,
     sessions: List<Session>,
-    sources: List<Source>,
+    sources: List<SourceAndOrder>,
     editSession: (session: Session, sources: List<Source>) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     var sessionNameInput by remember { mutableStateOf(editableSessionState.currentSession.name) }
+    var sessionId by remember { mutableIntStateOf(editableSessionState.currentSession.id) }
     var session by remember { mutableStateOf(editableSessionState.currentSession) }
     // mutableStateListOf consumes vararg of list elements
     // toTypedArray() -> convert list of elements to array of elements
@@ -80,7 +82,7 @@ fun EditSessionPopupScreen(
                 item {
                     Column {
                         Text(modifier = modifier.padding(start = 8.dp, top = 8.dp),
-                             // TODO: move to string resources
+                            // TODO: move to string resources
                              text = "name:"
                         )
                         TextField(
@@ -116,7 +118,7 @@ fun EditSessionPopupScreen(
                         )
                         HorizontalDivider(thickness = 2.dp)
                         Text(modifier = modifier.padding(start = 8.dp, top = 8.dp),
-                             // TODO: move to string resources
+                            // TODO: move to string resources
                              text = "sources:"
                         )
                     }
@@ -127,16 +129,18 @@ fun EditSessionPopupScreen(
                 ) { selectedSource ->
                     ChooseSourceComponent(
                         currentSource = selectedSource.source,
-                        sources = sources,
+                        sources = sources
+                            .sortedBy { it -> it.sourceOrder.order }
+                            .map { it -> it.source },
                         getIdOnRemoveClick = {
                             selectedSources.removeIf { src ->
                                 src.source.id == it
                             }
                         },
                         getValueOnChange = { changingSource ->
-                            var newSource = sources.find { src ->
-                                src.id == changingSource.id
-                            }!!
+                            var newSource = sources
+                                .map { it.source }
+                                .find { src -> src.id == changingSource.id }!!
                             selectedSources.replaceAll { replaceableSource ->
                                 if (selectedSource.index == replaceableSource.index) {
                                     IndexedSource(replaceableSource.index, newSource)
@@ -146,19 +150,21 @@ fun EditSessionPopupScreen(
                     )
                 }
                 item {
-                    EntityDropdownMenu(list = sources,
-                                       defaultValue = "select source",
-                                       onSelect = {
-                                           var selectedSource = sources.findLast { src ->
-                                               src.id == it.id
-                                           }
-                                           lastAddedSourceIndex += 1
-                                           selectedSources.add(IndexedSource(lastAddedSourceIndex,
-                                                                             selectedSource!!
-                                           )
-                                           )
-                                       },
-                                       resetErrorStateOnClick = { isSourceError = it })
+                    EntityDropdownMenu(
+                        list = sources
+                            .sortedBy { it -> it.sourceOrder.order }
+                            .map { it -> it.source },
+                        defaultValue = "select source",
+                        onSelect = {
+                            var selectedSource = sources
+                                .map { it -> it.source }
+                                .findLast { src -> src.id == it.id }
+                            lastAddedSourceIndex += 1
+                            selectedSources.add(IndexedSource(lastAddedSourceIndex,
+                                                              selectedSource!!
+                            ))
+                        },
+                        resetErrorStateOnClick = { isSourceError = it })
                 }
 
                 item {
@@ -189,7 +195,7 @@ fun EditSessionPopupScreen(
                                 sourceErrorText = "sources should be unique across selected"
                             }
                             if (!isSessionError && !isSourceError) {
-                                session = Session(name = sessionNameInput)
+                                session = Session(id = sessionId, name = sessionNameInput)
                                 editSession(session,
                                             selectedSources.toList().map { src -> src.source })
                                 sessionNameInput = ""
@@ -237,6 +243,6 @@ fun EditSessionScreenPreview() {
         ),
         editSession = { _, _ -> },
         sessions = PreviewData.sessions,
-        sources = PreviewData.sources,
+        sources = PreviewData.sourceAndOrderList,
     )
 }

@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -27,6 +28,8 @@ import com.dkat.wordbook.ui.compose.reusable.ExpandableSection
 import com.dkat.wordbook.ui.compose.word.InputWordWithTranslations
 import com.dkat.wordbook.ui.compose.word.WordsList
 import com.dkat.wordbook.viewModel.screen.EditableWordState
+import kotlinx.coroutines.launch
+import java.lang.Thread.sleep
 
 private const val TAG = "WordsScreen"
 
@@ -37,7 +40,7 @@ fun WordsScreen(
     readSource: (id: Int) -> Source,
     updateSelectedSource: (source: Source) -> Unit,
     selectedSourceState: Source,
-    wordsWithTranslations: List<WordWithTranslations>,
+    readWords: (sourceId: Int) -> List<WordWithTranslations>,
     createWordWithTranslations: (word: Word, translations: List<Translation>) -> Unit,
     updateEditableWordState: (editableWordState: EditableWordState) -> Unit,
     onDeleteWordItemClick: (word: Word) -> Unit,
@@ -51,12 +54,14 @@ fun WordsScreen(
         )
     }
     var isSelectSourceError by remember { mutableStateOf(false) }
-    // workaround for reorderable columns: mutableStateOf works not properly with lists
-    // need to re-compose words list on source select
-    var wordsListState by remember { mutableStateOf(true) }
     var sources = sourcesAndOrder
         .sortedWith { it1, it2 -> it1.sourceOrder.order - it2.sourceOrder.order }
         .map { it -> it.source }
+
+    // workaround for reorderable columns: mutableStateOf works not properly with lists
+    // need to re-compose words list on source select
+    var recomposeTrigger by remember { mutableStateOf(true) }
+    var coroutineScope = rememberCoroutineScope()
 
     Column(
         verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -70,7 +75,7 @@ fun WordsScreen(
                 selectedSourceLabel = it.name
                 selectedSource = readSource(selectedSourceId!!)
                 updateSelectedSource(selectedSource)
-                wordsListState = !wordsListState
+                recomposeTrigger = !recomposeTrigger
             },
             resetErrorStateOnClick = { isSelectSourceError = it },
         )
@@ -84,18 +89,27 @@ fun WordsScreen(
         ) {
             InputWordWithTranslations(
                 createWordWithTranslations = createWordWithTranslations,
+                onAddEvent = {
+                    coroutineScope.launch {
+                        recomposeTrigger = !recomposeTrigger
+                        sleep(100L)
+                    }
+                },
                 source = selectedSource,
             )
         }
         HorizontalDivider(thickness = 4.dp, color = Color.Black)
-        var filteredWords = wordsWithTranslations.filter { wordWithTranslations ->
-            wordWithTranslations.word.sourceId == selectedSourceId
-        }.toList()
-        if (wordsListState) {
+        if (recomposeTrigger) {
             WordsList(
                 navController = navController,
-                wordsWithTranslations = filteredWords,
+                wordsWithTranslations = readWords(selectedSourceId!!),
                 onDeleteWordClick = onDeleteWordItemClick,
+                onDeleteEvent = {
+                    coroutineScope.launch {
+                        recomposeTrigger = !recomposeTrigger
+                        sleep(100L)
+                    }
+                },
                 readSourceById = readSource,
                 updateEditableWord = updateEditableWordState,
                 modifier = modifier,
@@ -103,8 +117,14 @@ fun WordsScreen(
         } else {
             WordsList(
                 navController = navController,
-                wordsWithTranslations = filteredWords,
+                wordsWithTranslations = readWords(selectedSourceId!!),
                 onDeleteWordClick = onDeleteWordItemClick,
+                onDeleteEvent = {
+                    coroutineScope.launch {
+                        recomposeTrigger = !recomposeTrigger
+                        sleep(100L)
+                    }
+                },
                 readSourceById = readSource,
                 updateEditableWord = updateEditableWordState,
                 modifier = modifier,
@@ -122,7 +142,7 @@ fun WordsScreenPreview() {
         readSource = { _ -> Source() },
         updateSelectedSource = { _ -> },
         selectedSourceState = PreviewData.source1,
-        wordsWithTranslations = PreviewData.wordsWithTranslations,
+        readWords = { _ -> PreviewData.wordsWithTranslations},
         createWordWithTranslations = { _, _ -> },
         updateEditableWordState = { _ -> },
         onDeleteWordItemClick = {},

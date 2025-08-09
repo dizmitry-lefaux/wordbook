@@ -23,6 +23,10 @@ class WordRepository(private val context: Context) {
 
     fun readWordsWithTranslations(): Flow<List<WordWithTranslations>> = wordDao.readWordsWithTranslations()
 
+    fun readWordsWithTranslationsBlocking(sourceId: Int): List<WordWithTranslations> {
+        return wordDao.readWordsWithTranslationsBlocking(sourceId = sourceId)
+    }
+
     fun readWordsBySourceId(sourceId: Int): List<Word> {
         return wordDao.readWordsBySourceId(sourceId = sourceId)
     }

@@ -40,6 +40,7 @@ fun WordsList(
     navController: NavController,
     wordsWithTranslations: List<WordWithTranslations>,
     onDeleteWordClick: ((word: Word) -> Unit)?,
+    onDeleteEvent: () -> Unit,
     readSourceById: (sourceId: Int) -> Source,
     updateEditableWord: (editableWordState: EditableWordState) -> Unit,
     modifier: Modifier,
@@ -78,6 +79,7 @@ fun WordsList(
                             navController = navController,
                             wordWithTranslations = item,
                             deleteWord = onDeleteWordClick,
+                            onDeleteEvent = onDeleteEvent,
                             readSourceById = readSourceById,
                             updateEditableWordState = updateEditableWord,
                             modifier = modifier
@@ -102,6 +104,7 @@ fun WordsWithTranslationsListPreview(
         wordsWithTranslations = PreviewData.wordsWithTranslations,
         updateEditableWord = { _ -> },
         onDeleteWordClick = {},
+        onDeleteEvent = {},
         readSourceById = { _ -> Source() },
         modifier = Modifier
     )

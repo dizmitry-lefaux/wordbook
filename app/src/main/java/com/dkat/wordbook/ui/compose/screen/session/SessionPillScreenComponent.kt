@@ -48,6 +48,10 @@ fun SessionPillScreenComponent(
     }
     var isSelectSessionError by remember { mutableStateOf(false) }
 
+    // workaround for 'revealed' translations recomposition
+    // without workaround translations save 'revealed' state after words list renewal
+    var recomposeTrigger by remember { mutableStateOf(false) }
+
     Column {
         Column {
             EntityDropdownMenu(
@@ -73,7 +77,10 @@ fun SessionPillScreenComponent(
                                 modifier = modifier
                                     .padding(16.dp)
                                     .fillMaxWidth(),
-                                onClick = { updateSession() }
+                                onClick = {
+                                    updateSession()
+                                    recomposeTrigger = !recomposeTrigger
+                                }
                             ) {
                                 Text(
                                     text = "Get more",
@@ -101,11 +108,22 @@ fun SessionPillScreenComponent(
                 if (sessionWordsWithTranslations.isNotEmpty()) {
                     Column {
                         HorizontalDivider()
-                        LazyColumn {
-                            items(sessionWordsWithTranslations) { wordWithTranslations ->
-                                CardWithAnimatedAlpha(word = wordWithTranslations.word,
-                                                      translations = wordWithTranslations.translations
-                                )
+                        if (recomposeTrigger) {
+                            LazyColumn {
+                                items(sessionWordsWithTranslations) { wordWithTranslations ->
+                                    CardWithAnimatedAlpha(word = wordWithTranslations.word,
+                                                          translations = wordWithTranslations.translations
+                                    )
+                                }
+                            }
+                        }
+                        if (!recomposeTrigger) {
+                            LazyColumn {
+                                items(sessionWordsWithTranslations) { wordWithTranslations ->
+                                    CardWithAnimatedAlpha(word = wordWithTranslations.word,
+                                                          translations = wordWithTranslations.translations
+                                    )
+                                }
                             }
                         }
                     }
@@ -115,7 +133,7 @@ fun SessionPillScreenComponent(
                 }
             }
         } else {
-            TitleText(text = "Please, select session")
+            TitleText(text = "Please, select or create session")
         }
     }
 }

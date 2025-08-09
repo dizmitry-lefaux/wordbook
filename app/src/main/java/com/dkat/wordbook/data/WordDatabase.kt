@@ -105,8 +105,8 @@ private val MIGRATION_4_5 = object : Migration(4, 5) {
                     source_id INTEGER NOT NULL DEFAULT(0),
                     lang_id INTEGER NOT NULL DEFAULT(0),
                     value TEXT NOT NULL UNIQUE,
-                    FOREIGN KEY(source_id) REFERENCES source(id) ON DELETE CASCADE ON UPDATE CASCADE,
-                    FOREIGN KEY(lang_id) REFERENCES language(id) ON UPDATE CASCADE
+                    FOREIGN KEY(source_id) REFERENCES source(_source_id) ON DELETE CASCADE ON UPDATE CASCADE,
+                    FOREIGN KEY(lang_id) REFERENCES language(_language_id) ON UPDATE CASCADE
                 );
                 CREATE TABLE IF NOT EXISTS source(
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -126,23 +126,23 @@ private val MIGRATION_4_5 = object : Migration(4, 5) {
                     word_id INTEGER NOT NULL DEFAULT(0),
                     value TEXT NOT NULL,
                     lang_id INTEGER NOT NULL DEFAULT(0),
-                    FOREIGN KEY(word_id) REFERENCES word(id) ON DELETE CASCADE ON UPDATE CASCADE,
-                    FOREIGN KEY(lang_id) REFERENCES language(id) ON UPDATE CASCADE
+                    FOREIGN KEY(word_id) REFERENCES word(_word_id) ON DELETE CASCADE ON UPDATE CASCADE,
+                    FOREIGN KEY(lang_id) REFERENCES language(_language_id) ON UPDATE CASCADE
                 )
                 CREATE TABLE IF NOT EXISTS session_source(
                     session_id INTEGER NOT NULL,
                     source_id INTEGER NOT NULL,
                     PRIMARY KEY(session_id, source_id),
-                    FOREIGN KEY(session_id) REFERENCES session(id) ON DELETE CASCADE ON UPDATE CASCADE,
-                    FOREIGN KEY(source_id) REFERENCES source(id) ON DELETE CASCADE ON UPDATE CASCADE
+                    FOREIGN KEY(session_id) REFERENCES session(_session_id) ON DELETE CASCADE ON UPDATE CASCADE,
+                    FOREIGN KEY(source_id) REFERENCES source(_source_id) ON DELETE CASCADE ON UPDATE CASCADE
                 )
                 CREATE TABLE IF NOT EXISTS session_word(
                     word_id INTEGER NOT NULL,
                     session_id INTEGER NOT NULL,
                     session_weight REAL NOT NULL DEFAULT(1),
                     PRIMARY KEY(word_id, session_id),
-                    FOREIGN KEY(word_id) REFERENCES word(id) ON DELETE CASCADE ON UPDATE CASCADE,
-                    FOREIGN KEY(session_id) REFERENCES session(id) ON DELETE CASCADE ON UPDATE CASCADE
+                    FOREIGN KEY(word_id) REFERENCES word(_word_id) ON DELETE CASCADE ON UPDATE CASCADE,
+                    FOREIGN KEY(session_id) REFERENCES session(_session_id) ON DELETE CASCADE ON UPDATE CASCADE
                 );
             """.trimIndent()
         )

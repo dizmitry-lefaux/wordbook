@@ -13,6 +13,7 @@ import androidx.navigation.compose.rememberNavController
 import com.dkat.wordbook.data.PreviewData
 import com.dkat.wordbook.data.entity.Session
 import com.dkat.wordbook.data.entity.Source
+import com.dkat.wordbook.data.entity.SourceAndOrder
 import com.dkat.wordbook.ui.compose.reusable.ExpandableSection
 import com.dkat.wordbook.viewModel.screen.EditableSessionState
 
@@ -20,11 +21,10 @@ import com.dkat.wordbook.viewModel.screen.EditableSessionState
 fun ManageSessionPillScreenComponent(
     navController: NavController,
 
-    sources: List<Source>,
+    sources: List<SourceAndOrder>,
     deleteSession: (session: Session) -> Unit,
     updateEditableSessionState: (editableSessionState: EditableSessionState) -> Unit,
     readSourcesBySessionId: (sessionId: Int) -> List<Source>,
-
     sessions: List<Session>,
     createSession: (sources: List<Source>, session: Session) -> Unit,
 
@@ -39,7 +39,9 @@ fun ManageSessionPillScreenComponent(
         ) {
             InputSession(
                 sessions = sessions,
-                sources = sources,
+                sources = sources
+                    .sortedBy { it.sourceOrder.order }
+                    .map { it -> it.source },
                 createSession = createSession,
             )
         }
@@ -59,7 +61,7 @@ fun ManageSessionPillScreenComponent(
 @Composable
 fun ManageSessionScreenPillPreview() {
     ManageSessionPillScreenComponent(navController = rememberNavController(),
-                                     sources = PreviewData.sources,
+                                     sources = PreviewData.sourceAndOrderList,
                                      deleteSession = { },
                                      updateEditableSessionState = { },
                                      readSourcesBySessionId = { _ -> PreviewData.sources },

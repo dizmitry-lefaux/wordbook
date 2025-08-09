@@ -37,13 +37,14 @@ private const val TAG = "InputWordWithTranslations"
 fun InputWordWithTranslations(
     source: Source,
     createWordWithTranslations: (word: Word, translations: List<Translation>) -> Unit,
+    onAddEvent: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     var origInput by remember { mutableStateOf("") }
     var word by remember { mutableStateOf(Word()) }
     var translation by remember { mutableStateOf(Translation()) }
     val translations = mutableListOf<Translation>()
-    var currentTranslationInput by remember { mutableStateOf("")}
+    var currentTranslationInput by remember { mutableStateOf("") }
     var lastTranslationInputFieldId by remember { mutableIntStateOf(0) }
     var translationInputs = remember {
         mutableStateListOf<IndexedTranslationInput>(
@@ -91,7 +92,7 @@ fun InputWordWithTranslations(
         }
         items(items = translationInputs,
               key = { translationInput -> translationInput.index }
-        ) {translationInput ->
+        ) { translationInput ->
             InputTranslation(
                 id = translationInput.index,
                 value = translationInput.value,
@@ -159,6 +160,7 @@ fun InputWordWithTranslations(
                            translations.clear()
                            isOriginalInputError = false
                            isShowSourceSelectedError = false
+                           onAddEvent()
                        } else {
                            // TODO
                        }
@@ -185,6 +187,7 @@ private class IndexedTranslationInput(
 @Composable
 fun InputWordWithTranslationsPreview() {
     InputWordWithTranslations(source = PreviewData.source1,
-                                  createWordWithTranslations = { _, _ -> }
+                              createWordWithTranslations = { _, _ -> },
+                              onAddEvent = {}
     )
 }
