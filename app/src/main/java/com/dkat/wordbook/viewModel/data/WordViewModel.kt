@@ -33,6 +33,10 @@ class WordViewModel(
         return wordId
     }
 
+    fun readWords(sourceId: Int) : List<WordWithTranslations> {
+        return wordRepository.readWordsWithTranslationsBlocking(sourceId = sourceId);
+    }
+
     private suspend fun updateWord(word: Word) {
         viewModelScope.launch {
             wordRepository.updateWord(word)

@@ -54,8 +54,6 @@ fun WordbookNavHost(
     modifier: Modifier
 ) {
     val sources by sourceViewModel.sources.collectAsStateWithLifecycle()
-    val sourcesWithWords by sourceViewModel.sourcesWithWords.collectAsStateWithLifecycle()
-    val wordsWithTranslations by wordViewModel.wordsWithTranslations.collectAsStateWithLifecycle()
     val languages by languageViewModel.languages.collectAsStateWithLifecycle()
     val sessions by sessionViewModel.sessions.collectAsStateWithLifecycle()
 
@@ -89,7 +87,7 @@ fun WordbookNavHost(
                 openSession = { sessionsScreenViewModel.openSession() },
                 openManageSession = { sessionsScreenViewModel.openManageSession() },
 
-                sources = sources,
+                sources = sourceViewModel.readSources(),
                 sessions = sessions,
                 selectedSessionState = selectedSession,
                 createSession = { sources: List<Source>, session: Session ->
@@ -122,6 +120,9 @@ fun WordbookNavHost(
                 readSource = { id: Int ->
                     sourceViewModel.readSource(id)
                 },
+                readWords = { sourceId: Int ->
+                    wordViewModel.readWords(sourceId)
+                },
                 sourcesAndOrder = sourceViewModel.readSources(),
                 updateSelectedSource = { source: Source ->
                     wordsScreenViewModel.updateSelectedSource(source)
@@ -136,7 +137,6 @@ fun WordbookNavHost(
                 updateEditableWordState = { editableWordState: EditableWordState ->
                     editWordPopupScreenViewModel.updateEditableWordState(editableWordState)
                 },
-                wordsWithTranslations = wordsWithTranslations,
             )
         }
         composable(route = Screen.Books.route) {
@@ -213,7 +213,7 @@ fun WordbookNavHost(
                 navController = navController,
                 editableSessionState = editableSessionState,
                 sessions = sessions,
-                sources = sources,
+                sources = sourceViewModel.readSources(),
                 editSession = { session: Session, sources: List<Source> ->
                     sessionViewModel.updateSessionWithSources(session, sources)
                 }

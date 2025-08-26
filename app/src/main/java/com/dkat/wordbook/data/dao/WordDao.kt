@@ -24,6 +24,10 @@ interface WordDao {
     @Query("SELECT * FROM word")
     fun readWordsWithTranslations(): Flow<List<WordWithTranslations>>
 
+    @Transaction
+    @Query("SELECT * FROM word WHERE word.source_id = :sourceId")
+    fun readWordsWithTranslationsBlocking(sourceId: Int): List<WordWithTranslations>
+
     @Query("SELECT * FROM word WHERE word.source_id = :sourceId")
     fun readWordsBySourceId(sourceId: Int): List<Word>
 }

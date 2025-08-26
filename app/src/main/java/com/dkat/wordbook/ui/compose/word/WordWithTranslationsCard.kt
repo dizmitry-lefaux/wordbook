@@ -25,6 +25,7 @@ fun WordWithTranslationsCard(navController: NavController,
                              readSourceById: (sourceId: Int) -> Source,
                              updateEditableWordState: (editableWordState: EditableWordState) -> Unit,
                              deleteWord: ((word: Word) -> Unit)?,
+                             onDeleteEvent: () -> Unit,
                              modifier: Modifier
 ) {
     val word = wordWithTranslations.word
@@ -49,6 +50,7 @@ fun WordWithTranslationsCard(navController: NavController,
                               deleteObject = deleteWord,
                               // TODO: move to string resources
                               deleteDescription = "remove word",
+                              onDeleteEvent = onDeleteEvent,
                               modifier = modifier,
                               additionalContent = {
                                   Column {
@@ -76,6 +78,7 @@ fun WordItemPreview1() {
                              updateEditableWordState = { _ -> },
                              readSourceById = { _ -> Source() },
                              deleteWord = {},
+                             onDeleteEvent = {},
                              modifier = Modifier
     )
 }
@@ -88,6 +91,7 @@ fun WordItemPreview2() {
                              updateEditableWordState = { _ -> },
                              readSourceById = { _ -> Source() },
                              deleteWord = null,
+                             onDeleteEvent = {},
                              modifier = Modifier
     )
 }

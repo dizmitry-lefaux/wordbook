@@ -9,6 +9,7 @@ import androidx.navigation.compose.rememberNavController
 import com.dkat.wordbook.data.PreviewData
 import com.dkat.wordbook.data.entity.Session
 import com.dkat.wordbook.data.entity.Source
+import com.dkat.wordbook.data.entity.SourceAndOrder
 import com.dkat.wordbook.data.entity.WordWithTranslations
 import com.dkat.wordbook.ui.compose.reusable.PillData
 import com.dkat.wordbook.ui.compose.reusable.PillSwitch
@@ -27,7 +28,7 @@ fun SessionsScreen(
     openSession: () -> Unit,
     openManageSession: () -> Unit,
 
-    sources: List<Source>,
+    sources: List<SourceAndOrder>,
 
     sessions: List<Session>,
     selectedSessionState: Session?,
@@ -94,7 +95,7 @@ fun SessionsScreen(
 @Composable
 fun ManageSessionScreenPreview() {
     SessionsScreen(
-        sources = PreviewData.sources,
+        sources = PreviewData.sourceAndOrderList,
         modifier = Modifier,
         sessions = PreviewData.sessions,
         selectedSessionState = PreviewData.session1,
@@ -120,7 +121,7 @@ fun ManageSessionScreenPreview() {
 @Composable
 fun SessionScreenWithValuesPreview() {
     SessionsScreen(
-        sources = PreviewData.sources,
+        sources = PreviewData.sourceAndOrderList,
         modifier = Modifier,
         sessions = PreviewData.sessions,
         selectedSessionState = PreviewData.session1,

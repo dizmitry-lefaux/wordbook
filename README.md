@@ -19,7 +19,6 @@
 * add non-latin languages support
 * move strings to resources
 * make sources sortable
-* make remember sources order
 * make remember words order
 * make 'Edit word' screen translations removals revertable on 'Cancel' click
 * close 'Edit' popups with smooth recompose (close popup -> compose prev page)
@@ -33,6 +32,7 @@
 * add data import from claud vaults
 * add multiple profiles
 * create adapter: database entities <-> business objects
+* reflect words in alphabetical order in 'Words' and 'Session' screens
 
 #### ISSUES:
 * Pills:
@@ -41,3 +41,5 @@
   * rework workaround with re-composing words list on source select
 * 'Sessions' screen:
   * Session pill: update session with source words when add words to session source
+* Any 'Edit' screen:
+  * main navigation bar is not active on any 'Edit' screen
