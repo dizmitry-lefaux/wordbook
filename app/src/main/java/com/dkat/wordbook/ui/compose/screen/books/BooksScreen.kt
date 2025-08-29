@@ -28,12 +28,14 @@ fun BooksScreen(
     readLanguages: () -> List<LanguageAndOrder>,
     updateLanguageState: (language: Language) -> Unit,
     updateLanguagesOrder: (languages: List<LanguageAndOrder>) -> Unit,
+    updateIsEditLanguagePopupOpen: (isEditLanguagePopupOpen: Boolean) -> Unit,
 
     createSource: (source: Source) -> Unit,
     readSources: () -> List<SourceAndOrder>,
     deleteSource: (source: Source) -> Unit,
     updateSourceState: (source: Source) -> Unit,
     updateSourcesOrder: (sources: List<SourceAndOrder>) -> Unit,
+    updateIsEditSourcePopupOpen: (isEditSourcePopupOpen: Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column {
@@ -70,7 +72,8 @@ fun BooksScreen(
                                   deleteSource = deleteSource,
                                   readSources = readSources,
                                   updateSourceState = updateSourceState,
-                                  updateSourcesOrder = updateSourcesOrder
+                                  updateSourcesOrder = updateSourcesOrder,
+                                  updateIsEditSourcePopupOpen = updateIsEditSourcePopupOpen
                 )
             }
             if (!isBooksOpen) {
@@ -80,7 +83,8 @@ fun BooksScreen(
                                     deleteLanguage = deleteLanguage,
                                     readLanguages = readLanguages,
                                     updateLanguageState = updateLanguageState,
-                                    updateLanguagesOrder = updateLanguagesOrder
+                                    updateLanguagesOrder = updateLanguagesOrder,
+                                    updateIsEditLanguagePopupOpen = updateIsEditLanguagePopupOpen
                 )
             }
         }
@@ -107,6 +111,8 @@ fun BooksScreenOpenBooksPreview() {
         updateLanguageState = { _ -> },
         updateSourceState = { _ -> },
         updateSourcesOrder = {},
+        updateIsEditLanguagePopupOpen = { _ -> },
+        updateIsEditSourcePopupOpen = { _ -> },
         modifier = Modifier
     )
 }
@@ -131,6 +137,8 @@ fun BooksScreenOpenLanguagesPreview() {
         updateLanguageState = { _ -> },
         updateSourceState = { _ -> },
         updateSourcesOrder = {},
+        updateIsEditLanguagePopupOpen = { _ -> },
+        updateIsEditSourcePopupOpen = { _ -> },
         modifier = Modifier
     )
 }

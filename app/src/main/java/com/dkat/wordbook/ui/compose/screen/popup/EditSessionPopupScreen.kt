@@ -1,8 +1,10 @@
 package com.dkat.wordbook.ui.compose.screen.popup
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -19,6 +21,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.blur
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
@@ -45,6 +49,7 @@ fun EditSessionPopupScreen(
     sessions: List<Session>,
     sources: List<SourceAndOrder>,
     editSession: (session: Session, sources: List<Source>) -> Unit,
+    updateIsPopupOpen: (isActive: Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     var sessionNameInput by remember { mutableStateOf(editableSessionState.currentSession.name) }
@@ -69,156 +74,177 @@ fun EditSessionPopupScreen(
     var isSourceError by remember { mutableStateOf(false) }
     var sourceErrorText by remember { mutableStateOf("") }
 
-    Popup(properties = PopupProperties(focusable = true)) {
-        Column(modifier = modifier
-            .background(MaterialTheme.colorScheme.secondaryContainer)
-        ) {
-            CloseablePopupTitle(
-                navController = navController,
-                // TODO: move to string resources
-                titleText = "Edit session",
-            )
-            LazyColumn {
-                item {
-                    Column {
-                        Text(modifier = modifier.padding(start = 8.dp, top = 8.dp),
-                            // TODO: move to string resources
-                             text = "name:"
-                        )
-                        TextField(
-                            value = sessionNameInput,
-                            onValueChange = { currentSessionName ->
-                                sessionNameInput = currentSessionName
-                                isSessionError = false
-                                sessionErrorText = ""
-                                if (currentSessionName.isEmpty()) {
-                                    // TODO: move to string resources
-                                    sessionNameInput = "input session name"
-                                }
-                                if (sessions.map { session -> session.name }
-                                        .toList().contains(currentSessionName)
-                                    && currentSessionName != session.name
-                                ) {
-                                    isSessionError = true
-                                    sessionErrorText =
-                                        "session '$currentSessionName' already exists"
-                                }
-                            },
-                            placeholder = {
+    Popup(properties = PopupProperties(focusable = true,
+                                       dismissOnClickOutside = true)
+    ) {
+        Column {
+            Column(modifier = modifier
+                .background(MaterialTheme.colorScheme.secondaryContainer)
+            ) {
+                CloseablePopupTitle(
+                    navController = navController,
+                    // TODO: move to string resources
+                    titleText = "Edit session",
+                    onClickAction = {
+                        updateIsPopupOpen(false)
+                    }
+                )
+                LazyColumn {
+                    item {
+                        Column {
+                            Text(modifier = modifier.padding(start = 8.dp, top = 8.dp),
                                 // TODO: move to string resources
-                                Text("input session name")
-                            },
-                            modifier = modifier.padding(8.dp),
-                            isError = isSessionError,
-                            supportingText = {
-                                if (isSessionError) {
-                                    ErrorSupportingText(errorText = sessionErrorText)
+                                 text = "name:"
+                            )
+                            TextField(
+                                value = sessionNameInput,
+                                onValueChange = { currentSessionName ->
+                                    sessionNameInput = currentSessionName
+                                    isSessionError = false
+                                    sessionErrorText = ""
+                                    if (currentSessionName.isEmpty()) {
+                                        // TODO: move to string resources
+                                        sessionNameInput = "input session name"
+                                    }
+                                    if (sessions.map { session -> session.name }
+                                            .toList().contains(currentSessionName)
+                                        && currentSessionName != session.name
+                                    ) {
+                                        isSessionError = true
+                                        sessionErrorText =
+                                            "session '$currentSessionName' already exists"
+                                    }
+                                },
+                                placeholder = {
+                                    // TODO: move to string resources
+                                    Text("input session name")
+                                },
+                                modifier = modifier.padding(8.dp),
+                                isError = isSessionError,
+                                supportingText = {
+                                    if (isSessionError) {
+                                        ErrorSupportingText(errorText = sessionErrorText)
+                                    }
+                                },
+                            )
+                            HorizontalDivider(thickness = 2.dp)
+                            Text(modifier = modifier.padding(start = 8.dp, top = 8.dp),
+                                // TODO: move to string resources
+                                 text = "sources:"
+                            )
+                        }
+                    }
+
+                    items(items = selectedSources,
+                          key = { selectedSource -> selectedSource.index }
+                    ) { selectedSource ->
+                        ChooseSourceComponent(
+                            currentSource = selectedSource.source,
+                            sources = sources
+                                .sortedBy { it -> it.sourceOrder.order }
+                                .map { it -> it.source },
+                            getIdOnRemoveClick = {
+                                selectedSources.removeIf { src ->
+                                    src.source.id == it
                                 }
                             },
-                        )
-                        HorizontalDivider(thickness = 2.dp)
-                        Text(modifier = modifier.padding(start = 8.dp, top = 8.dp),
-                            // TODO: move to string resources
-                             text = "sources:"
+                            getValueOnChange = { changingSource ->
+                                var newSource = sources
+                                    .map { it.source }
+                                    .find { src -> src.id == changingSource.id }!!
+                                selectedSources.replaceAll { replaceableSource ->
+                                    if (selectedSource.index == replaceableSource.index) {
+                                        IndexedSource(replaceableSource.index, newSource)
+                                    } else replaceableSource
+                                }
+                            },
                         )
                     }
-                }
+                    item {
+                        EntityDropdownMenu(
+                            list = sources
+                                .sortedBy { it -> it.sourceOrder.order }
+                                .map { it -> it.source },
+                            defaultValue = "select source",
+                            onSelect = {
+                                var selectedSource = sources
+                                    .map { it -> it.source }
+                                    .findLast { src -> src.id == it.id }
+                                lastAddedSourceIndex += 1
+                                selectedSources.add(IndexedSource(lastAddedSourceIndex,
+                                                                  selectedSource!!
+                                ))
+                            },
+                            resetErrorStateOnClick = { isSourceError = it })
+                    }
 
-                items(items = selectedSources,
-                      key = { selectedSource -> selectedSource.index }
-                ) { selectedSource ->
-                    ChooseSourceComponent(
-                        currentSource = selectedSource.source,
-                        sources = sources
-                            .sortedBy { it -> it.sourceOrder.order }
-                            .map { it -> it.source },
-                        getIdOnRemoveClick = {
-                            selectedSources.removeIf { src ->
-                                src.source.id == it
+                    item {
+                        Row {
+                            Button(modifier = modifier.padding(8.dp), onClick = {
+                                // TODO: extract validations to separate method if possible
+                                if (sessions.map { it.name }.toList().contains(sessionNameInput)
+                                    && sessionNameInput != editableSessionState.currentSession.name
+                                ) {
+                                    isSessionError = true
+                                    // TODO: move to string resources
+                                    sessionErrorText = "session name not unique"
+                                }
+                                if (sessionNameInput.isEmpty()) {
+                                    isSessionError = true
+                                    // TODO: move to string resources
+                                    sessionErrorText = "session name should not be empty"
+                                }
+                                if (selectedSources.isEmpty()) {
+                                    isSourceError = true
+                                    sourceErrorText = "at least one source should be selected"
+                                }
+                                var uniqueSourceIds =
+                                    selectedSources.toList().map { source -> source.source.id }
+                                        .distinct()
+                                if (uniqueSourceIds.size != selectedSources.size) {
+                                    isSourceError = true
+                                    sourceErrorText = "sources should be unique across selected"
+                                }
+                                if (!isSessionError && !isSourceError) {
+                                    session = Session(id = sessionId, name = sessionNameInput)
+                                    editSession(session,
+                                                selectedSources.toList().map { src -> src.source })
+                                    navController.popBackStack()
+                                    updateIsPopupOpen(false)
+                                    sessionNameInput = ""
+                                    selectedSources.clear()
+                                    isSessionError = false
+                                    sessionErrorText = ""
+                                    isSourceError = false
+                                    sourceErrorText = ""
+                                }
+                            }) {
+                                // TODO: move to string resources
+                                ButtonText(buttonText = "Submit")
                             }
-                        },
-                        getValueOnChange = { changingSource ->
-                            var newSource = sources
-                                .map { it.source }
-                                .find { src -> src.id == changingSource.id }!!
-                            selectedSources.replaceAll { replaceableSource ->
-                                if (selectedSource.index == replaceableSource.index) {
-                                    IndexedSource(replaceableSource.index, newSource)
-                                } else replaceableSource
-                            }
-                        },
-                    )
-                }
-                item {
-                    EntityDropdownMenu(
-                        list = sources
-                            .sortedBy { it -> it.sourceOrder.order }
-                            .map { it -> it.source },
-                        defaultValue = "select source",
-                        onSelect = {
-                            var selectedSource = sources
-                                .map { it -> it.source }
-                                .findLast { src -> src.id == it.id }
-                            lastAddedSourceIndex += 1
-                            selectedSources.add(IndexedSource(lastAddedSourceIndex,
-                                                              selectedSource!!
-                            ))
-                        },
-                        resetErrorStateOnClick = { isSourceError = it })
-                }
-
-                item {
-                    Row {
-                        Button(modifier = modifier.padding(8.dp), onClick = {
-                            // TODO: extract validations to separate method if possible
-                            if (sessions.map { it.name }.toList().contains(sessionNameInput)
-                                && sessionNameInput != editableSessionState.currentSession.name
+                            Button(
+                                modifier = modifier.padding(8.dp),
+                                onClick = {
+                                    navController.popBackStack()
+                                    updateIsPopupOpen(false)
+                                }
                             ) {
-                                isSessionError = true
                                 // TODO: move to string resources
-                                sessionErrorText = "session name not unique"
+                                ButtonText(buttonText = "Cancel")
                             }
-                            if (sessionNameInput.isEmpty()) {
-                                isSessionError = true
-                                // TODO: move to string resources
-                                sessionErrorText = "session name should not be empty"
-                            }
-                            if (selectedSources.isEmpty()) {
-                                isSourceError = true
-                                sourceErrorText = "at least one source should be selected"
-                            }
-                            var uniqueSourceIds =
-                                selectedSources.toList().map { source -> source.source.id }
-                                    .distinct()
-                            if (uniqueSourceIds.size != selectedSources.size) {
-                                isSourceError = true
-                                sourceErrorText = "sources should be unique across selected"
-                            }
-                            if (!isSessionError && !isSourceError) {
-                                session = Session(id = sessionId, name = sessionNameInput)
-                                editSession(session,
-                                            selectedSources.toList().map { src -> src.source })
-                                sessionNameInput = ""
-                                selectedSources.clear()
-                                isSessionError = false
-                                sessionErrorText = ""
-                                isSourceError = false
-                                sourceErrorText = ""
-                            }
-                        }) {
-                            // TODO: move to string resources
-                            ButtonText(buttonText = "Submit")
-                        }
-                        Button(
-                            modifier = modifier.padding(8.dp),
-                            onClick = { navController.popBackStack() }
-                        ) {
-                            // TODO: move to string resources
-                            ButtonText(buttonText = "Cancel")
                         }
                     }
                 }
             }
+            Column(modifier = modifier
+                .fillMaxSize()
+                .background(color = Color.Black.copy(alpha = 0.3f))
+                .blur(radius = 2.dp)
+                .clickable(onClick = {
+                    updateIsPopupOpen(false)
+                    navController.popBackStack()
+                }))
+            {}
         }
     }
 }
@@ -244,5 +270,6 @@ fun EditSessionScreenPreview() {
         editSession = { _, _ -> },
         sessions = PreviewData.sessions,
         sources = PreviewData.sourceAndOrderList,
+        updateIsPopupOpen = { _ -> }
     )
 }

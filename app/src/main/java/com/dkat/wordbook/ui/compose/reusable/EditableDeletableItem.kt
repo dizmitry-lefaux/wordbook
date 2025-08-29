@@ -31,6 +31,7 @@ fun <EditableObjectType, DeletableObjectType> EditableDeletableItem(
 
     editableObject: EditableObjectType,
     updateEditableObject: (editObject: EditableObjectType) -> Unit,
+    updatePopupOpenState: ((isPopupOpen: Boolean) -> Unit)? = null,
     editDescription: String,
 
     deletableObject: DeletableObjectType?,
@@ -54,6 +55,7 @@ fun <EditableObjectType, DeletableObjectType> EditableDeletableItem(
                     // edit button
                     Button(
                         onClick = {
+                            updatePopupOpenState?.invoke(true)
                             updateEditableObject(editableObject)
                             navController.navigate(editRoute)
                         },

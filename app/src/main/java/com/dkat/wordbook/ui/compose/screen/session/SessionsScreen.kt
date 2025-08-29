@@ -22,6 +22,7 @@ fun SessionsScreen(
     sessionWordsWithTranslations: List<WordWithTranslations>,
     restartSession: () -> Unit,
     updateSession: () -> Unit,
+    updateIsEditSessionPopupOpen: (isEditSessionPopupOpen: Boolean) -> Unit,
 
     isSessionOpen: Boolean,
     isManageSessionOpen: Boolean,
@@ -83,6 +84,7 @@ fun SessionsScreen(
                                                  navController = navController,
                                                  deleteSession = deleteSession,
                                                  updateEditableSessionState = updateEditableSessionState,
+                                                 updateIsEditSessionPopupOpen = updateIsEditSessionPopupOpen,
                                                  readSourcesBySessionId = readSourcesBySessionId,
                                                  modifier = modifier
                 )
@@ -112,7 +114,8 @@ fun ManageSessionScreenPreview() {
         readSourcesBySessionId = { _ -> PreviewData.sources },
         sessionWordsWithTranslations = PreviewData.wordsWithTranslations,
         restartSession = { },
-        updateSession = { }
+        updateSession = { },
+        updateIsEditSessionPopupOpen = { _ -> }
     )
 }
 
@@ -138,7 +141,8 @@ fun SessionScreenWithValuesPreview() {
         readSourcesBySessionId = { _ -> PreviewData.sources },
         sessionWordsWithTranslations = PreviewData.wordsWithTranslations,
         restartSession = { },
-        updateSession = { }
+        updateSession = { },
+        updateIsEditSessionPopupOpen = { _ -> }
     )
 }
 
@@ -163,6 +167,7 @@ fun SessionScreenEmptyPreview() {
         readSourcesBySessionId = { _ -> PreviewData.sources },
         sessionWordsWithTranslations = PreviewData.wordsWithTranslations,
         restartSession = { },
-        updateSession = { }
+        updateSession = { },
+        updateIsEditSessionPopupOpen = { _ -> }
     )
 }

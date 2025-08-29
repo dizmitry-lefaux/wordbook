@@ -43,6 +43,7 @@ fun WordsScreen(
     readWords: (sourceId: Int) -> List<WordWithTranslations>,
     createWordWithTranslations: (word: Word, translations: List<Translation>) -> Unit,
     updateEditableWordState: (editableWordState: EditableWordState) -> Unit,
+    updateIsEditWordPopupOpen: (isEditWordPopupOpen: Boolean) -> Unit,
     onDeleteWordItemClick: (word: Word) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -112,6 +113,7 @@ fun WordsScreen(
                 },
                 readSourceById = readSource,
                 updateEditableWord = updateEditableWordState,
+                updateIsEditWordPopupOpen = updateIsEditWordPopupOpen,
                 modifier = modifier,
             )
         } else {
@@ -127,6 +129,7 @@ fun WordsScreen(
                 },
                 readSourceById = readSource,
                 updateEditableWord = updateEditableWordState,
+                updateIsEditWordPopupOpen = updateIsEditWordPopupOpen,
                 modifier = modifier,
             )
         }
@@ -145,6 +148,7 @@ fun WordsScreenPreview() {
         readWords = { _ -> PreviewData.wordsWithTranslations},
         createWordWithTranslations = { _, _ -> },
         updateEditableWordState = { _ -> },
+        updateIsEditWordPopupOpen = { _ -> },
         onDeleteWordItemClick = {},
     )
 }

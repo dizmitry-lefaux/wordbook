@@ -33,6 +33,7 @@ fun LanguagesPillScreen(
     readLanguages: () -> List<LanguageAndOrder>,
     updateLanguageState: (language: Language) -> Unit,
     updateLanguagesOrder: (languages: List<LanguageAndOrder>) -> Unit,
+    updateIsEditLanguagePopupOpen: (isEditLanguagePopupOpen: Boolean) -> Unit,
 ) {
     // workaround for recompose on add / move / remove language actions
     var recomposeTrigger by remember { mutableStateOf(true) }
@@ -75,6 +76,7 @@ fun LanguagesPillScreen(
                         sleep(100L)
                     }
                 },
+                updateIsEditLanguagePopupOpen = updateIsEditLanguagePopupOpen,
                 modifier = modifier
             )
         }
@@ -97,6 +99,7 @@ fun LanguagesPillScreen(
                         sleep(100L)
                     }
                 },
+                updateIsEditLanguagePopupOpen = updateIsEditLanguagePopupOpen,
                 modifier = modifier
             )
         }
@@ -112,5 +115,7 @@ fun LanguagesPillScreenPreview() {
                         deleteLanguage = { },
                         readLanguages = { -> PreviewData.languageAndOrderList },
                         updateLanguageState = { },
-                        updateLanguagesOrder = { _ -> })
+                        updateLanguagesOrder = { _ -> },
+                        updateIsEditLanguagePopupOpen = { _ -> },
+    )
 }

@@ -24,6 +24,7 @@ fun ManageSessionPillScreenComponent(
     sources: List<SourceAndOrder>,
     deleteSession: (session: Session) -> Unit,
     updateEditableSessionState: (editableSessionState: EditableSessionState) -> Unit,
+    updateIsEditSessionPopupOpen: (isEditSessionPopupOpen: Boolean) -> Unit,
     readSourcesBySessionId: (sessionId: Int) -> List<Source>,
     sessions: List<Session>,
     createSession: (sources: List<Source>, session: Session) -> Unit,
@@ -51,6 +52,7 @@ fun ManageSessionPillScreenComponent(
             sessions = sessions,
             deleteSession = deleteSession,
             updateEditableSessionState = updateEditableSessionState,
+            updateIsEditSessionPopupOpen = updateIsEditSessionPopupOpen,
             readSourcesBySessionId = readSourcesBySessionId,
             modifier = modifier
         )
@@ -66,6 +68,7 @@ fun ManageSessionScreenPillPreview() {
                                      updateEditableSessionState = { },
                                      readSourcesBySessionId = { _ -> PreviewData.sources },
                                      sessions = PreviewData.sessions,
-                                     createSession = { _, _ -> }
+                                     createSession = { _, _ -> },
+                                     updateIsEditSessionPopupOpen = { _ -> }
     )
 }

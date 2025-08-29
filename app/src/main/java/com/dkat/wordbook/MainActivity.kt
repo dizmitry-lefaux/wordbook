@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Devices.PIXEL_5
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
@@ -72,13 +73,17 @@ fun WordbookApp() {
             viewModel(factory = LanguageViewModelFactory(LanguageRepository(context = context)))
         val sourceViewModel: SourceViewModel =
             viewModel(factory = SourceViewModelFactory(SourceRepository(context = context)))
-        val editWordPopupScreenViewModel: EditWordPopupScreenViewModel = viewModel()
+        val editWordViewModel: EditWordPopupScreenViewModel = viewModel()
         val editLanguageViewModel: EditLanguagePopupScreenViewModel = viewModel()
         val editSourceViewModel: EditSourcePopupScreenViewModel = viewModel()
+        val editSessionViewModel: EditSessionPopupScreenViewModel = viewModel()
         val booksScreenViewModel: BooksScreenViewModel = viewModel()
         val wordsScreenViewModel: WordsScreenViewModel = viewModel()
         val sessionsScreenViewModel: SessionsScreenViewModel = viewModel()
-        val editSessionViewModel: EditSessionPopupScreenViewModel = viewModel()
+        val isEditSessionPopupOpen by editSessionViewModel.isPopupOpen.collectAsStateWithLifecycle()
+        val isEditLanguagePopupOpen by editLanguageViewModel.isPopupOpen.collectAsStateWithLifecycle()
+        val isEditSourcePopupOpen by editSourceViewModel.isPopupOpen.collectAsStateWithLifecycle()
+        val isEditWordPopupOpen by editWordViewModel.isPopupOpen.collectAsStateWithLifecycle()
 
         Scaffold(modifier = Modifier.fillMaxSize(),
                  topBar = {
@@ -88,6 +93,10 @@ fun WordbookApp() {
                      BottomBar(
                          navController = navController,
                          currentDestination = currentDestination,
+                         isBlurred = isEditSessionPopupOpen
+                                 || isEditLanguagePopupOpen
+                                 || isEditSourcePopupOpen
+                                 || isEditWordPopupOpen
                      )
                  }
         ) { innerPadding ->
@@ -96,7 +105,7 @@ fun WordbookApp() {
                             languageViewModel = languageViewModel,
                             sourceViewModel = sourceViewModel,
                             sessionViewModel = sessionViewModel,
-                            editWordPopupScreenViewModel = editWordPopupScreenViewModel,
+                            editWordViewModel = editWordViewModel,
                             editLanguageViewModel = editLanguageViewModel,
                             editSourceViewModel = editSourceViewModel,
                             booksScreenViewModel = booksScreenViewModel,

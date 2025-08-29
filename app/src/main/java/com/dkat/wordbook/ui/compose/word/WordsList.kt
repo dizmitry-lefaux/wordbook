@@ -43,6 +43,7 @@ fun WordsList(
     onDeleteEvent: () -> Unit,
     readSourceById: (sourceId: Int) -> Source,
     updateEditableWord: (editableWordState: EditableWordState) -> Unit,
+    updateIsEditWordPopupOpen: (isEditWordPopupOpen: Boolean) -> Unit,
     modifier: Modifier,
 ) {
     // HERE WE NEED TO SOMEHOW CHANGE REFERENCE TO THE LIST INSIDE OF mutableStateOf()
@@ -82,6 +83,7 @@ fun WordsList(
                             onDeleteEvent = onDeleteEvent,
                             readSourceById = readSourceById,
                             updateEditableWordState = updateEditableWord,
+                            updateIsEditWordPopupOpen = updateIsEditWordPopupOpen,
                             modifier = modifier
                                 .draggableHandle(
                                     interactionSource = interactionSource
@@ -106,6 +108,7 @@ fun WordsWithTranslationsListPreview(
         onDeleteWordClick = {},
         onDeleteEvent = {},
         readSourceById = { _ -> Source() },
+        updateIsEditWordPopupOpen = { _ -> },
         modifier = Modifier
     )
 }

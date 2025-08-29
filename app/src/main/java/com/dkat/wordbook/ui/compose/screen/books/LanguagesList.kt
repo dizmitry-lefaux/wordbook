@@ -41,6 +41,7 @@ fun LanguagesList(
     onMoveEvent: () -> Unit,
     updateLanguageState: (language: Language) -> Unit,
     updateLanguagesOrder: (languages: List<LanguageAndOrder>) -> Unit,
+    updateIsEditLanguagePopupOpen: (isEditLanguagePopupOpen: Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
     var list by remember { mutableStateOf(languages) }
@@ -85,6 +86,7 @@ fun LanguagesList(
                                 onDeleteEvent()
                             },
                             updateLanguageState = updateLanguageState,
+                            updateIsEditLanguagePopupOpen = updateIsEditLanguagePopupOpen,
                             modifier = modifier
                                 .draggableHandle(
                                     interactionSource = interactionSource,
@@ -122,6 +124,7 @@ fun LazyLanguagesListPreview() {
         onMoveEvent = {},
         updateLanguageState = {},
         updateLanguagesOrder = { _ -> },
+        updateIsEditLanguagePopupOpen = { _ -> },
         modifier = Modifier
     )
 }

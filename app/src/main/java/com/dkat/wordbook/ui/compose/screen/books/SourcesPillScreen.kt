@@ -33,7 +33,8 @@ fun SourcesPillScreen(modifier: Modifier,
                       deleteSource: (source: Source) -> Unit,
                       readSources: () -> List<SourceAndOrder>,
                       updateSourceState: (source: Source) -> Unit,
-                      updateSourcesOrder: (sources: List<SourceAndOrder>) -> Unit
+                      updateSourcesOrder: (sources: List<SourceAndOrder>) -> Unit,
+                      updateIsEditSourcePopupOpen: (isEditSourcePopupOpen: Boolean) -> Unit,
 ) {
     // workaround for recompose on add / move / remove language actions
     var recomposeTrigger by remember { mutableStateOf(true) }
@@ -80,7 +81,8 @@ fun SourcesPillScreen(modifier: Modifier,
                 sources = readSources(),
                 languages = languages,
                 updateSourceState = updateSourceState,
-                updateSourcesOrder = updateSourcesOrder
+                updateSourcesOrder = updateSourcesOrder,
+                updateIsEditSourcePopupOpen = updateIsEditSourcePopupOpen,
             )
         }
         if (!recomposeTrigger) {
@@ -103,7 +105,8 @@ fun SourcesPillScreen(modifier: Modifier,
                 sources = readSources(),
                 languages = languages,
                 updateSourceState = updateSourceState,
-                updateSourcesOrder = updateSourcesOrder
+                updateSourcesOrder = updateSourcesOrder,
+                updateIsEditSourcePopupOpen = updateIsEditSourcePopupOpen
             )
         }
     }
@@ -119,6 +122,7 @@ fun SourcesPillScreenComponentPreview() {
                       deleteSource = { },
                       readSources = { -> PreviewData.sourceAndOrderList },
                       updateSourceState = { },
-                      updateSourcesOrder = { _ -> }
+                      updateSourcesOrder = { _ -> },
+                      updateIsEditSourcePopupOpen = { _ -> },
     )
 }

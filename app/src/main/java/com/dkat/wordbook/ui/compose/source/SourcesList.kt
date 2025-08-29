@@ -43,6 +43,7 @@ fun SourcesList(
     onMoveEvent: () -> Unit,
     updateSourceState: (source: Source) -> Unit,
     updateSourcesOrder: (sources: List<SourceAndOrder>) -> Unit,
+    updateIsEditSourcePopupOpen: (isEditSourcePopupOpen: Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
     var list by remember { mutableStateOf(sources) }
@@ -87,6 +88,7 @@ fun SourcesList(
                             origLanguage = languages.findLast { it.id == source.source.mainOrigLangId }!!,
                             translationLanguage = languages.findLast { it.id == source.source.mainTranslationLangId }!!,
                             updateSourceState = updateSourceState,
+                            updateIsEditSourcePopupOpen = updateIsEditSourcePopupOpen,
                             modifier = modifier
                                 .draggableHandle(
                                     interactionSource = interactionSource,
@@ -124,6 +126,7 @@ fun SourcesListPreview() {
         onMoveEvent = {},
         updateSourceState = { _ -> },
         updateSourcesOrder = { _ -> },
+        updateIsEditSourcePopupOpen = { _ -> },
         languages = PreviewData.languages,
     )
 }

@@ -1,6 +1,5 @@
 package com.dkat.wordbook.viewModel.screen
 
-import androidx.lifecycle.ViewModel
 import com.dkat.wordbook.data.entity.Source
 import com.dkat.wordbook.data.entity.Translation
 import com.dkat.wordbook.data.entity.Word
@@ -8,7 +7,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-class EditWordPopupScreenViewModel : ViewModel() {
+class EditWordPopupScreenViewModel : PopupViewModel() {
     private val _editableWordState = MutableStateFlow(EditableWordState())
     val editableWordState: StateFlow<EditableWordState> = _editableWordState.asStateFlow()
 
