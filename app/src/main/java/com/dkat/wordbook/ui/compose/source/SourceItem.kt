@@ -26,6 +26,7 @@ fun SourceItem(
     origLanguage: Language,
     translationLanguage: Language,
     updateSourceState: (source: Source) -> Unit,
+    updateIsEditSourcePopupOpen: (isEditSourcePopupOpen: Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Card(modifier = modifier,
@@ -36,6 +37,7 @@ fun SourceItem(
                               titleValue = source.name,
                               editableObject = source,
                               updateEditableObject = updateSourceState,
+                              updatePopupOpenState = updateIsEditSourcePopupOpen,
                               editDescription = "edit source",
                               onDeleteEvent = onDeleteEvent,
                               deletableObject = source,
@@ -69,5 +71,6 @@ fun SourceItemPreview() {
         onDeleteSourceClick = {},
         onDeleteEvent = {},
         updateSourceState = { _ -> },
+        updateIsEditSourcePopupOpen = { _ -> },
     )
 }

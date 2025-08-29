@@ -21,6 +21,7 @@ fun LanguageItem(navController: NavController,
                  deleteLanguage: (language: Language) -> Unit,
                  onDeleteEvent: () -> Unit,
                  updateLanguageState: (language: Language) -> Unit,
+                 updateIsEditLanguagePopupOpen: (isEditLanguagePopupOpen: Boolean) -> Unit,
                  modifier: Modifier
 ) {
     Card(modifier = modifier,
@@ -31,6 +32,7 @@ fun LanguageItem(navController: NavController,
                               titleValue = language.name,
                               editableObject = language,
                               updateEditableObject = updateLanguageState,
+                              updatePopupOpenState = updateIsEditLanguagePopupOpen,
                               editDescription = "edit language",
                               onDeleteEvent = onDeleteEvent,
                               deletableObject = language,
@@ -50,6 +52,7 @@ fun WordItemPreview() {
                  deleteLanguage = { _ -> },
                  onDeleteEvent = { },
                  updateLanguageState = { _ -> },
+                 updateIsEditLanguagePopupOpen = { _ -> },
                  modifier = Modifier
     )
 }

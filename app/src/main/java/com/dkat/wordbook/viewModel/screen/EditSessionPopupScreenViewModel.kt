@@ -1,13 +1,12 @@
 package com.dkat.wordbook.viewModel.screen
 
-import androidx.lifecycle.ViewModel
 import com.dkat.wordbook.data.entity.Session
 import com.dkat.wordbook.data.entity.Source
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-class EditSessionPopupScreenViewModel : ViewModel() {
+class EditSessionPopupScreenViewModel : PopupViewModel() {
     private val _editableSessionState = MutableStateFlow(EditableSessionState())
     val editableSessionState: StateFlow<EditableSessionState> = _editableSessionState.asStateFlow()
 

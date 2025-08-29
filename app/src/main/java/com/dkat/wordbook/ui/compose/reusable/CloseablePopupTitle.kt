@@ -19,14 +19,18 @@ import androidx.navigation.compose.rememberNavController
 fun CloseablePopupTitle(
     navController: NavController,
     titleText: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onClickAction: (() -> Unit)?
 ) {
     Row(modifier = modifier.fillMaxWidth()) {
         Column {
             TitleText(titleText)
         }
         Column(modifier.fillMaxWidth(), horizontalAlignment = Alignment.End) {
-            IconButton(onClick = { navController.popBackStack() }) {
+            IconButton(onClick = {
+                onClickAction?.invoke()
+                navController.popBackStack()
+            }) {
                 Icon(
                     imageVector = Icons.Filled.Clear,
                     tint = Color.Black,
@@ -42,6 +46,7 @@ fun CloseablePopupTitle(
 fun CloseablePopupTitlePreview() {
     CloseablePopupTitle(navController = rememberNavController(),
                         titleText = "Edit word",
-                        modifier = Modifier
+                        modifier = Modifier,
+                        onClickAction = null
     )
 }

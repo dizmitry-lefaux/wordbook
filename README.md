@@ -8,8 +8,6 @@
   * change animated card design
   * convert 'Create session' actions to atomic transaction
   * implement weight dependent probability mechanism for already picked words
-* books:
-  * display source languages
 * Buttons: change design (preliminary rectangular with borders)
 * add 'Properties' screen
 * add validations for multiple translations inputs
@@ -32,7 +30,7 @@
 * add data import from claud vaults
 * add multiple profiles
 * create adapter: database entities <-> business objects
-* reflect words in alphabetical order in 'Words' and 'Session' screens
+* reflect words in alphabetical order in 'Words' screen
 
 #### ISSUES:
 * Pills:
@@ -41,5 +39,3 @@
   * rework workaround with re-composing words list on source select
 * 'Sessions' screen:
   * Session pill: update session with source words when add words to session source
-* Any 'Edit' screen:
-  * main navigation bar is not active on any 'Edit' screen

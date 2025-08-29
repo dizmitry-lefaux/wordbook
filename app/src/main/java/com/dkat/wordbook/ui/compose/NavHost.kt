@@ -44,7 +44,7 @@ fun WordbookNavHost(
     wordViewModel: WordViewModel,
     sourceViewModel: SourceViewModel,
     sessionViewModel: SessionViewModel,
-    editWordPopupScreenViewModel: EditWordPopupScreenViewModel,
+    editWordViewModel: EditWordPopupScreenViewModel,
     editLanguageViewModel: EditLanguagePopupScreenViewModel,
     editSourceViewModel: EditSourcePopupScreenViewModel,
     editSessionViewModel: EditSessionPopupScreenViewModel,
@@ -57,7 +57,7 @@ fun WordbookNavHost(
     val languages by languageViewModel.languages.collectAsStateWithLifecycle()
     val sessions by sessionViewModel.sessions.collectAsStateWithLifecycle()
 
-    val editableWordState by editWordPopupScreenViewModel.editableWordState.collectAsStateWithLifecycle()
+    val editableWordState by editWordViewModel.editableWordState.collectAsStateWithLifecycle()
     val editableLanguageState by editLanguageViewModel.editableLanguageState.collectAsStateWithLifecycle()
     val editableSourceState by editSourceViewModel.editableSourceState.collectAsStateWithLifecycle()
     val editableSessionState by editSessionViewModel.editableSessionState.collectAsStateWithLifecycle()
@@ -111,7 +111,10 @@ fun WordbookNavHost(
                 },
                 sessionWordsWithTranslations = sessionsScreenSessionWords,
                 restartSession = { sessionViewModel.restartSession() },
-                updateSession = { sessionViewModel.updateSession() }
+                updateSession = { sessionViewModel.updateSession() },
+                updateIsEditSessionPopupOpen = { isEditSessionPopupOpen: Boolean ->
+                    editSessionViewModel.updateIsPopupOpen(isPopupOpen = isEditSessionPopupOpen)
+                }
             )
         }
         composable(route = Screen.Words.route) {
@@ -135,7 +138,10 @@ fun WordbookNavHost(
                     wordViewModel.deleteWord(word)
                 },
                 updateEditableWordState = { editableWordState: EditableWordState ->
-                    editWordPopupScreenViewModel.updateEditableWordState(editableWordState)
+                    editWordViewModel.updateEditableWordState(editableWordState)
+                },
+                updateIsEditWordPopupOpen = { isEditWordPopupOpen: Boolean ->
+                    editWordViewModel.updateIsPopupOpen(isPopupOpen = isEditWordPopupOpen)
                 },
             )
         }
@@ -165,6 +171,9 @@ fun WordbookNavHost(
                 updateLanguagesOrder = { languages: List<LanguageAndOrder> ->
                     languageViewModel.updateLanguagesOrder(languages)
                 },
+                updateIsEditLanguagePopupOpen = { isEditLanguagePopupOpen: Boolean ->
+                    editLanguageViewModel.updateIsPopupOpen(isPopupOpen = isEditLanguagePopupOpen)
+                },
                 readSources = {
                     sourceViewModel.readSources()
                 },
@@ -176,6 +185,9 @@ fun WordbookNavHost(
                 },
                 updateSourcesOrder = { sources: List<SourceAndOrder> ->
                     sourceViewModel.updateSourcesOrder(sources)
+                },
+                updateIsEditSourcePopupOpen = { isEditSourcePopupOpen: Boolean ->
+                    editSourceViewModel.updateIsPopupOpen(isPopupOpen = isEditSourcePopupOpen)
                 }
             )
         }
@@ -186,6 +198,9 @@ fun WordbookNavHost(
                 editWordWithTranslations = { word: Word, translations: List<Translation> ->
                     wordViewModel.updateWordWithTranslations(word, translations)
                 },
+                updateIsPopupOpen = { isPopupOpen: Boolean ->
+                    editWordViewModel.updateIsPopupOpen(isPopupOpen = isPopupOpen)
+                }
             )
         }
         composable(route = Screen.EditLanguage.route) {
@@ -195,6 +210,9 @@ fun WordbookNavHost(
                 editLanguage = { language: Language ->
                     languageViewModel.updateLanguage(language)
                 },
+                updateIsPopupOpen = { isPopupOpen: Boolean ->
+                    editLanguageViewModel.updateIsPopupOpen(isPopupOpen = isPopupOpen)
+                }
             )
         }
         composable(route = Screen.EditSource.route) {
@@ -206,6 +224,9 @@ fun WordbookNavHost(
                 editSource = { source: Source ->
                     sourceViewModel.updateSource(source)
                 },
+                updateIsPopupOpen = { isPopupOpen: Boolean ->
+                    editSourceViewModel.updateIsPopupOpen(isPopupOpen = isPopupOpen)
+                }
             )
         }
         composable(route = Screen.EditSession.route) {
@@ -216,6 +237,9 @@ fun WordbookNavHost(
                 sources = sourceViewModel.readSources(),
                 editSession = { session: Session, sources: List<Source> ->
                     sessionViewModel.updateSessionWithSources(session, sources)
+                },
+                updateIsPopupOpen = { isPopupOpen: Boolean ->
+                    editSessionViewModel.updateIsPopupOpen(isPopupOpen = isPopupOpen)
                 }
             )
         }

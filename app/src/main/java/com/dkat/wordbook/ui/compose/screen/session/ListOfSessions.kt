@@ -14,6 +14,7 @@ fun ListOfSessions(navController: NavController,
                    sessions: List<Session>,
                    deleteSession: (session: Session) -> Unit,
                    updateEditableSessionState: (editableSessionState: EditableSessionState) -> Unit,
+                   updateIsEditSessionPopupOpen: (isEditSessionPopupOpen: Boolean) -> Unit,
                    readSourcesBySessionId: (sessionId: Int) -> List<Source>,
                    modifier: Modifier
 ) {
@@ -24,6 +25,7 @@ fun ListOfSessions(navController: NavController,
                 session = session,
                 deleteSession = deleteSession,
                 updateEditableSessionState = updateEditableSessionState,
+                updateIsEditSessionPopupOpen = updateIsEditSessionPopupOpen,
                 readSourcesBySessionId = readSourcesBySessionId,
                 modifier = modifier,
             )
